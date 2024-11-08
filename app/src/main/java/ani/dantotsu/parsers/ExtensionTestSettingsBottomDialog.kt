@@ -52,51 +52,41 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
                 else -> binding.animeChipButton.id
             }
         )
-        binding.testTypeRadioGroup.check(
+        binding.testTypeChipGroup.check(
             when (testType) {
-                "ping" -> binding.pingRadioButton.id
-                "basic" -> binding.basicRadioButton.id
-                "full" -> binding.fullRadioButton.id
-                else -> binding.pingRadioButton.id
+                "ping" -> binding.pingChipButton.id
+                "basic" -> binding.basicChipButton.id
+                "full" -> binding.fullChipButton.id
+                else -> binding.pingChipButton.id
             }
         )
-        binding.animeChipButton.setOnCheckedChangeListener { _, b ->
-            if (b) {
-                extensionType = "anime"
-                extensionsToTest.clear()
-                setupAdapter()
+        binding.extensionTypeChipGroup.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                binding.animeChipButton.id -> {
+                    extensionType = "anime"
+                    extensionsToTest.clear()
+                    setupAdapter()
+                }
+                binding.mangaChipButton.id -> {
+                    extensionType = "manga"
+                    extensionsToTest.clear()
+                    setupAdapter()
+                }
+                binding.novelsChipButton.id -> {
+                    extensionType = "novel"
+                    extensionsToTest.clear()
+                    setupAdapter()
+                }
             }
         }
-        binding.mangaChipButton.setOnCheckedChangeListener { _, b ->
-            if (b) {
-                extensionType = "manga"
-                extensionsToTest.clear()
-                setupAdapter()
-            }
-        }
-        binding.novelsChipButton.setOnCheckedChangeListener { _, b ->
-            if (b) {
-                extensionType = "novel"
-                extensionsToTest.clear()
-                setupAdapter()
-            }
-        }
-        binding.pingRadioButton.setOnCheckedChangeListener { _, b ->
-            if (b) {
-                testType = "ping"
-            }
-        }
-        binding.basicRadioButton.setOnCheckedChangeListener { _, b ->
-            if (b) {
-                testType = "basic"
-            }
-        }
-        binding.fullRadioButton.setOnCheckedChangeListener { _, b ->
-            if (b) {
-                testType = "full"
-            }
-        }
-        binding.extensionTypeTextView.setOnLongClickListener {
+         binding.testTypeChipGroup.setOnCheckedChangeListener { group, checkedId ->
+             when (checkedId) {
+                 binding.pingChipButton.id -> testType = "ping"
+                 binding.basicChipButton.id -> testType = "basic"
+                 binding.fullChipButton.id -> testType = "full"
+             }
+         }
+            binding.extensionTypeTextView.setOnLongClickListener {
             binding.searchTextView.visibility = View.VISIBLE
             binding.searchView.visibility = View.VISIBLE
             true

@@ -31,7 +31,7 @@
         android:text="@string/anime"
         android:textSize="16sp"
         app:checkedIconVisible="false"
-        app:chipBackgroundColor="?attr/colorSecondary"
+        app:chipBackgroundColor="@color/bg"
         android:checked="true" />
 
     <com.google.android.material.chip.Chip
@@ -41,7 +41,7 @@
         android:text="@string/manga"
         android:textSize="16sp"
         app:checkedIconVisible="false"
-        app:chipBackgroundColor="?attr/colorSecondary" />
+        app:chipBackgroundColor="@color/bg" />
 
     <com.google.android.material.chip.Chip
         android:id="@+id/novelsChipButton"
@@ -50,7 +50,7 @@
         android:text="@string/novels"
         android:textSize="16sp"
         app:checkedIconVisible="false"
-        app:chipBackgroundColor="?attr/colorSecondary" />
+        app:chipBackgroundColor="@color/bg" />
 
 </com.google.android.material.chip.ChipGroup>
     <TextView
@@ -64,38 +64,43 @@
         android:textAlignment="center"
         android:textSize="16sp" />
 
-    <RadioGroup
-        android:id="@+id/testTypeRadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <com.google.android.material.radiobutton.MaterialRadioButton
-            android:id="@+id/pingRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:checked="true"
-            android:text="@string/ping"
-            android:textSize="16sp" />
-
-        <com.google.android.material.radiobutton.MaterialRadioButton
-            android:id="@+id/basicRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="@string/basic"
-            android:textSize="16sp" />
-
-        <com.google.android.material.radiobutton.MaterialRadioButton
-            android:id="@+id/fullRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/full"
-            android:textSize="16sp" />
-
     </RadioGroup>
+<com.google.android.material.chip.ChipGroup
+    android:id="@+id/testTypeChipGroup"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    app:singleSelection="true">
 
+    <com.google.android.material.chip.Chip
+        android:id="@+id/pingChipButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ping"
+        android:textSize="16sp"
+        app:checkedIconVisible="false"
+        app:chipBackgroundColor="@color/bg" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/basicChipButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/basic"
+        android:textSize="16sp"
+        app:checkedIconVisible="false"
+        app:chipBackgroundColor="@color/bg"
+        android:checked="true" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/fullChipButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/full"
+        android:textSize="16sp"
+        app:checkedIconVisible="false"
+        app:chipBackgroundColor="@color/bg" />
+
+</com.google.android.material.chip.ChipGroup>
     <TextView
         android:id="@+id/searchTextView"
         android:layout_width="wrap_content"
