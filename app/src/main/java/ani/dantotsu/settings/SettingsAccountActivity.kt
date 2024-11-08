@@ -31,7 +31,7 @@ import ani.dantotsu.themes.ThemeManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.launch
-import com.zires.switchsegmentedcontrol.ZiresSwitchSegmentedControl
+import android.animation.ObjectAnimator
 
 class SettingsAccountActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsAccountsBinding
@@ -210,18 +210,28 @@ class SettingsAccountActivity : AppCompatActivity() {
             reload()
         }
 
-binding.ziresSwitch.setOnToggleSwitchChangeListener(object : 
-        ZiresSwitchSegmentedControl.OnSwitchChangeListener {
-        override fun onToggleSwitchChangeListener(isChecked: Boolean) {
+        binding.toggleGroupAccount.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
-                snackString("Button1")
-            } else {
-               snackString("Button2")
+                val targetX = when (checkedId) {
+                    binding.button1Account.id -> binding.button1Account.x
+                    binding.button2Account.id -> binding.button2Account.x
+                    else -> 0f
+                }
+
+                // Slide the indicator to the selected button's position
+                ObjectAnimator.ofFloat(binding.sliderAccount, "translationX", targetX).apply {
+                    duration = 300  // Adjust duration for smoother or faster animation
+                    start()
+                }
+
+                // Call specific functions based on selected button
+                when (checkedId) {
+                    binding.button1Account.id -> snackString("Button1")
+                    binding.button2Account.id -> snackString("Button2")
+                }
             }
         }
-    })
-
-
+ 
         binding.settingsRecyclerView.adapter = SettingsAdapter(
             arrayListOf(
                 Settings(

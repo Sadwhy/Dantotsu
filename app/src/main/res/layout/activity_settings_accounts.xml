@@ -292,23 +292,44 @@
 
         </LinearLayout>
 
-        <com.zires.switchsegmentedcontrol.ZiresSwitchSegmentedControl
-            android:id="@+id/zires_switch"
+        <FrameLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+    <!-- The Sliding Indicator -->
+    <View
+        android:id="@+id/sliderAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:background="@color/selectedColor"
+        android:elevation="4dp"
+        />
+
+    <!-- MaterialButtonToggleGroup -->
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/toggleGroupAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:singleSelection="true">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button1Account"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:activeBgColor="@color/green"
-            app:activeTextColor="@android:color/white"
-            app:backgroundColor="@android:color/white"
-            app:borderColor="@color/green"
-            app:inactiveTextColor="@android:color/darker_gray"
-            app:switchFontFamily="serif-monospace"
-            app:checked="true"
-            app:cornerRadius="50dp"
-            app:strokeWidth="2dp"
-            app:textSize="48sp"
-            app:textToggleLeft="OFF"
-            app:textToggleRight="ON" />
+            android:text="Option 1" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button2Account"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Option 2" />
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+</FrameLayout>
         <ani.dantotsu.FadingEdgeRecyclerView
             android:id="@+id/settingsRecyclerView"
             android:layout_width="match_parent"
