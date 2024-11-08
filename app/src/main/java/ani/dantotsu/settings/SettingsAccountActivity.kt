@@ -209,11 +209,11 @@ class SettingsAccountActivity : AppCompatActivity() {
             reload()
         }
 
-        binding.toggleGroupAccount.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            if (isChecked) {
-            when (checkedId) {
-            binding.button1Account.id -> snackString("Button1")
-            binding.button2Account.id -> snackString("Button2")
+binding.chipGroupAccount.setOnCheckedChangeListener { group, checkedId ->
+    if (checkedId != View.NO_ID) {
+        when (checkedId) {
+            binding.chip1Account.id -> snackString("Chip1")
+            binding.chip2Account.id -> snackString("Chip2")
         }
     }
 } 
