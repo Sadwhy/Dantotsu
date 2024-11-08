@@ -13,6 +13,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
+import ani.dantotsu.snackString
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.mal.MAL
@@ -30,6 +31,7 @@ import ani.dantotsu.themes.ThemeManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.launch
+import com.zires.switchsegmentedcontrol.ZiresSwitchSegmentedControl
 
 class SettingsAccountActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsAccountsBinding
@@ -207,6 +209,19 @@ class SettingsAccountActivity : AppCompatActivity() {
             }
             reload()
         }
+
+binding.ziresSwitch.setOnToggleSwitchChangeListener(object : 
+        ZiresSwitchSegmentedControl.OnSwitchChangeListener {
+        override fun onToggleSwitchChangeListener(isChecked: Boolean) {
+            if (isChecked) {
+                snackString("Button1")
+            } else {
+               snackString("Button2")
+            }
+        }
+    })
+
+
         binding.settingsRecyclerView.adapter = SettingsAdapter(
             arrayListOf(
                 Settings(

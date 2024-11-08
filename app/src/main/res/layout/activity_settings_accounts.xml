@@ -291,6 +291,24 @@
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
+
+        <com.zires.switchsegmentedcontrol.ZiresSwitchSegmentedControl
+            android:id="@+id/zires_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:activeBgColor="@color/green"
+            app:activeTextColor="@android:color/white"
+            app:backgroundColor="@android:color/white"
+            app:borderColor="@color/green"
+            app:inactiveTextColor="@android:color/darker_gray"
+            app:switchFontFamily="serif-monospace"
+            app:checked="true"
+            app:cornerRadius="50dp"
+            app:strokeWidth="2dp"
+            app:textSize="48sp"
+            app:textToggleLeft="OFF"
+            app:textToggleRight="ON" />
+
         <ani.dantotsu.FadingEdgeRecyclerView
             android:id="@+id/settingsRecyclerView"
             android:layout_width="match_parent"
