@@ -45,45 +45,56 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
             searchQuery = it.toString()
         }
         binding.extensionTypeToggleGroup.check(
-            when (extensionType) {
-                "anime" -> binding.animeToggleButton.id
-                "manga" -> binding.mangaToggleButton.id
-                "novel" -> binding.novelsToggleButton.id
-                else -> binding.animeToggleButton.id
-            }
-        )
-        binding.testTypeToggleGroup.check(
-            when (testType) {
-                "ping" -> binding.pingToggleButton.id
-                "basic" -> binding.basicToggleButton.id
-                "full" -> binding.fullToggleButton.id
-                else -> binding.pingToggleButton.id
-            }
-        )
-        binding.extensionTypeToggleGroup.setOnCheckedChangeListener { group, checkedId ->
-            when (checkedId) {
-                binding.animeToggleButton.id -> {
-                    extensionType = "anime"
-                    extensionsToTest.clear()
-                    setupAdapter()
-                }
-                binding.mangaToggleButton.id -> {
-                    extensionType = "manga"
-                    extensionsToTest.clear()
-                    setupAdapter()
-                }
-                binding.novelsToggleButton.id -> {
-                    extensionType = "novel"
-                    extensionsToTest.clear()
-                    setupAdapter()
-                }
-            }
-        }
-         binding.testTypeToggleGroup.setOnCheckedChangeListener { group, checkedId ->
-             when (checkedId) {
-                 binding.pingToggleButton.id -> testType = "ping"
-                 binding.basicToggleButton.id -> testType = "basic"
-                 binding.fullToggleButton.id -> testType = "full"
+             when (extensionType) {
+                 "anime" -> binding.animeToggleButton.id
+                 "manga" -> binding.mangaToggleButton.id
+                 "novel" -> binding.novelsToggleButton.id
+                 else -> binding.animeToggleButton.id
+             }
+         )
+         
+         binding.testTypeToggleGroup.check(
+             when (testType) {
+                 "ping" -> binding.pingToggleButton.id
+                 "basic" -> binding.basicToggleButton.id
+                 "full" -> binding.fullToggleButton.id
+                 else -> binding.pingToggleButton.id
+             }
+         )
+         
+         binding.extensionTypeToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+             if (!isChecked) {
+                 binding.extensionTypeToggleGroup.check(checkedId)
+             } else {
+                 when (checkedId) {
+                     binding.animeToggleButton.id -> {
+                         extensionType = "anime"
+                         extensionsToTest.clear()
+                         setupAdapter()
+                     }
+                     binding.mangaToggleButton.id -> {
+                         extensionType = "manga"
+                         extensionsToTest.clear()
+                         setupAdapter()
+                     }
+                     binding.novelsToggleButton.id -> {
+                         extensionType = "novel"
+                         extensionsToTest.clear()
+                         setupAdapter()
+                     }
+                 }
+             }
+         }
+         
+         binding.testTypeToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+             if (!isChecked) {
+                 binding.testTypeToggleGroup.check(checkedId)
+             } else {
+                 when (checkedId) {
+                     binding.pingToggleButton.id -> testType = "ping"
+                     binding.basicToggleButton.id -> testType = "basic"
+                     binding.fullToggleButton.id -> testType = "full"
+                 }
              }
          }
             binding.extensionTypeTextView.setOnLongClickListener {
