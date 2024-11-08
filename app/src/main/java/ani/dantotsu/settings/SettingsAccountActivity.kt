@@ -31,6 +31,7 @@ import ani.dantotsu.themes.ThemeManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.launch
+import android.animation.ObjectAnimator
 
 class SettingsAccountActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsAccountsBinding
@@ -209,14 +210,14 @@ class SettingsAccountActivity : AppCompatActivity() {
             reload()
         }
 
-                // Call specific functions based on selected button
-                when (checkedId) {
-                    binding.button1Account.id -> snackString("Button1")
-                    binding.button2Account.id -> snackString("Button2")
-                }
-            }
+        binding.toggleGroupAccount.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+            when (checkedId) {
+            binding.button1Account.id -> snackString("Button1")
+            binding.button2Account.id -> snackString("Button2")
         }
- 
+    }
+} 
         binding.settingsRecyclerView.adapter = SettingsAdapter(
             arrayListOf(
                 Settings(
