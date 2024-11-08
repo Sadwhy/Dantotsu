@@ -83,9 +83,11 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
                     }
                 }
             } else {
-                group.check(checkedId)
-            }
-        }
+                  if (group.checkedButtonId != checkedId) {
+                      group.check(checkedId)
+             }
+          }
+       }
         
         binding.testTypeToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             if (isChecked) {
@@ -95,9 +97,11 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
                     binding.fullToggleButton.id -> testType = "full"
                 }
             } else {
-                group.check(checkedId)
-            }
+                  if (group.checkedButtonId != checkedId) {
+                      group.check(checkedId)
         }
+     }
+  }
             binding.extensionTypeTextView.setOnLongClickListener {
             binding.searchTextView.visibility = View.VISIBLE
             binding.searchView.visibility = View.VISIBLE
