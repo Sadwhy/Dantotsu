@@ -25,7 +25,7 @@
     app:singleSelection="true">
 
     <com.google.android.material.chip.Chip
-        android:id="@+id/animeChip"
+        android:id="@+id/animeChipButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/anime"
@@ -35,7 +35,7 @@
         android:checked="true" />
 
     <com.google.android.material.chip.Chip
-        android:id="@+id/mangaChip"
+        android:id="@+id/mangaChipButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/manga"
@@ -44,7 +44,7 @@
         app:chipBackgroundColor="?attr/colorSecondary" />
 
     <com.google.android.material.chip.Chip
-        android:id="@+id/novelsChip"
+        android:id="@+id/novelsChipButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/novels"

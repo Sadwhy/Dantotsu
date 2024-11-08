@@ -48,7 +48,7 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
             when (extensionType) {
                 "anime" -> binding.animeChipButton.id
                 "manga" -> binding.mangaChipButton.id
-                "novel" -> binding.novelsChilButton.id
+                "novel" -> binding.novelsChipButton.id
                 else -> binding.animeChipButton.id
             }
         )
@@ -60,21 +60,21 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
                 else -> binding.pingRadioButton.id
             }
         )
-        binding.animeRadioButton.setOnCheckedChangeListener { _, b ->
+        binding.animeChipButton.setOnCheckedChangeListener { _, b ->
             if (b) {
                 extensionType = "anime"
                 extensionsToTest.clear()
                 setupAdapter()
             }
         }
-        binding.mangaRadioButton.setOnCheckedChangeListener { _, b ->
+        binding.mangaChipButton.setOnCheckedChangeListener { _, b ->
             if (b) {
                 extensionType = "manga"
                 extensionsToTest.clear()
                 setupAdapter()
             }
         }
-        binding.novelsRadioButton.setOnCheckedChangeListener { _, b ->
+        binding.novelsChipButton.setOnCheckedChangeListener { _, b ->
             if (b) {
                 extensionType = "novel"
                 extensionsToTest.clear()
