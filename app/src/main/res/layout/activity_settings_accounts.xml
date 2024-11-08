@@ -297,28 +297,19 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center">
 
-    <!-- The Sliding Indicator -->
-    <View
-        android:id="@+id/sliderAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:background="?attr/colorError"
-        android:elevation="4dp"
-        />
-
-    <!-- MaterialButtonToggleGroup -->
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/toggleGroupAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:singleSelection="true">
+        app:singleSelection="true"
+        app:selectionRequired="true">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button1Account"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="Option 1" />
 
         <com.google.android.material.button.MaterialButton
