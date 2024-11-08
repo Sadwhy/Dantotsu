@@ -83,7 +83,7 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
                     }
                 }
             } else {
-                group.check(CheckedId)
+                group.check(checkedId)
             }
         }
         
@@ -95,7 +95,7 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
                     binding.fullToggleButton.id -> testType = "full"
                 }
             } else {
-                group.check(CheckedId)
+                group.check(checkedId)
             }
         }
             binding.extensionTypeTextView.setOnLongClickListener {
