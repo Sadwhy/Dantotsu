@@ -83,7 +83,7 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
                     }
                 }
             } else {
-                  if (group.checkedButtonId == checkedId) {
+                  if (group.checkedButtonId == -1) {
                       group.check(checkedId)
              }
           }
@@ -97,7 +97,7 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
                     binding.fullToggleButton.id -> testType = "full"
                 }
             } else {
-                  if (group.checkedButtonId == checkedId) {
+                  if (group.checkedButtonId == -1) {
                       group.check(checkedId)
         }
      }
