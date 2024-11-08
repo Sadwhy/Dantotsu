@@ -44,12 +44,12 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
         binding.searchViewText.addTextChangedListener {
             searchQuery = it.toString()
         }
-        binding.extensionTypeRadioGroup.check(
+        binding.extensionTypeChipGroup.check(
             when (extensionType) {
-                "anime" -> binding.animeRadioButton.id
-                "manga" -> binding.mangaRadioButton.id
-                "novel" -> binding.novelsRadioButton.id
-                else -> binding.animeRadioButton.id
+                "anime" -> binding.animeChipButton.id
+                "manga" -> binding.mangaChipButton.id
+                "novel" -> binding.novelsChilButton.id
+                else -> binding.animeChipButton.id
             }
         )
         binding.testTypeRadioGroup.check(
