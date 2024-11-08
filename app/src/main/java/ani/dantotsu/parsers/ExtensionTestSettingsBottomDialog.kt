@@ -44,46 +44,46 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
         binding.searchViewText.addTextChangedListener {
             searchQuery = it.toString()
         }
-        binding.extensionTypeChipGroup.check(
+        binding.extensionTypeToggleGroup.check(
             when (extensionType) {
-                "anime" -> binding.animeChipButton.id
-                "manga" -> binding.mangaChipButton.id
-                "novel" -> binding.novelsChipButton.id
-                else -> binding.animeChipButton.id
+                "anime" -> binding.animeToggleButton.id
+                "manga" -> binding.mangaToggleButton.id
+                "novel" -> binding.novelsToggleButton.id
+                else -> binding.animeToggleButton.id
             }
         )
-        binding.testTypeChipGroup.check(
+        binding.testTypeToggleGroup.check(
             when (testType) {
-                "ping" -> binding.pingChipButton.id
-                "basic" -> binding.basicChipButton.id
-                "full" -> binding.fullChipButton.id
-                else -> binding.pingChipButton.id
+                "ping" -> binding.pingToggleButton.id
+                "basic" -> binding.basicToggleButton.id
+                "full" -> binding.fullToggleButton.id
+                else -> binding.pingToggleButton.id
             }
         )
-        binding.extensionTypeChipGroup.setOnCheckedChangeListener { group, checkedId ->
+        binding.extensionTypeToggleGroup.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
-                binding.animeChipButton.id -> {
+                binding.animeToggleButton.id -> {
                     extensionType = "anime"
                     extensionsToTest.clear()
                     setupAdapter()
                 }
-                binding.mangaChipButton.id -> {
+                binding.mangaToggleButton.id -> {
                     extensionType = "manga"
                     extensionsToTest.clear()
                     setupAdapter()
                 }
-                binding.novelsChipButton.id -> {
+                binding.novelsToggleButton.id -> {
                     extensionType = "novel"
                     extensionsToTest.clear()
                     setupAdapter()
                 }
             }
         }
-         binding.testTypeChipGroup.setOnCheckedChangeListener { group, checkedId ->
+         binding.testTypeToggleGroup.setOnCheckedChangeListener { group, checkedId ->
              when (checkedId) {
-                 binding.pingChipButton.id -> testType = "ping"
-                 binding.basicChipButton.id -> testType = "basic"
-                 binding.fullChipButton.id -> testType = "full"
+                 binding.pingToggleButton.id -> testType = "ping"
+                 binding.basicToggleButton.id -> testType = "basic"
+                 binding.fullToggleButton.id -> testType = "full"
              }
          }
             binding.extensionTypeTextView.setOnLongClickListener {

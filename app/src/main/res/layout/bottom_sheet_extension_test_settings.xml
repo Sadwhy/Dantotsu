@@ -17,89 +17,82 @@
         android:textAlignment="center"
         android:textSize="16sp" />
 
-<com.google.android.material.chip.ChipGroup
-    android:id="@+id/extensionTypeChipGroup"
+<com.google.android.material.button.MaterialButtonToggleGroup
+    android:id="@+id/extensionTypeToggleGroup"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     app:singleSelection="true">
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/animeChipButton"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/animeToggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/anime"
         android:textSize="16sp"
-        app:checkedIconVisible="false"
-        app:chipBackgroundColor="@color/bg"
-        android:checked="true" />
+        android:checked="true"
+        style="@style/Widget.ChipLikeToggleButton" />
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/mangaChipButton"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mangaToggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/manga"
         android:textSize="16sp"
-        app:checkedIconVisible="false"
-        app:chipBackgroundColor="@color/bg" />
+        style="@style/Widget.ChipLikeToggleButton" />
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/novelsChipButton"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/novelsToggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/novels"
         android:textSize="16sp"
-        app:checkedIconVisible="false"
-        app:chipBackgroundColor="@color/bg" />
+        style="@style/Widget.ChipLikeToggleButton" />
 
-</com.google.android.material.chip.ChipGroup>
-    <TextView
-        android:id="@+id/testTypeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/poppins_bold"
-        android:text="@string/test_type"
-        android:textAlignment="center"
-        android:textSize="16sp" />
+</com.google.android.material.button.MaterialButtonToggleGroup>
 
-<com.google.android.material.chip.ChipGroup
-    android:id="@+id/testTypeChipGroup"
+<TextView
+    android:id="@+id/testTypeTextView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical|center_horizontal"
+    android:layout_marginTop="16dp"
+    android:fontFamily="@font/poppins_bold"
+    android:text="@string/test_type"
+    android:textAlignment="center"
+    android:textSize="16sp" />
+
+<com.google.android.material.button.MaterialButtonToggleGroup
+    android:id="@+id/testTypeToggleGroup"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     app:singleSelection="true">
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/pingChipButton"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/pingToggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/ping"
         android:textSize="16sp"
-        app:checkedIconVisible="false"
-        app:chipBackgroundColor="@color/bg" />
+        style="@style/Widget.ChipLikeToggleButton" />
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/basicChipButton"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/basicToggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/basic"
         android:textSize="16sp"
-        app:checkedIconVisible="false"
-        app:chipBackgroundColor="@color/bg"
-        android:checked="true" />
+        android:checked="true"
+        style="@style/Widget.ChipLikeToggleButton" />
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/fullChipButton"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/fullToggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/full"
         android:textSize="16sp"
-        app:checkedIconVisible="false"
-        app:chipBackgroundColor="@color/bg" />
+        style="@style/Widget.ChipLikeToggleButton" />
 
-</com.google.android.material.chip.ChipGroup>
+</com.google.android.material.button.MaterialButtonToggleGroup>
     <TextView
         android:id="@+id/searchTextView"
         android:layout_width="wrap_content"
