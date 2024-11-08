@@ -7,21 +7,46 @@
     android:layout_marginVertical="16dp"
     android:orientation="vertical">
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="32dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="14dp"
+        app:cardBackgroundColor="?attr/colorPrimary"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="0dp" />
+
+    <TextView
+        android:id="@+id/extensionTestTitle"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="bottom|center_horizontal"
+        android:text="@string/extension_test"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:gravity="center_horizontal|center_vertical">
+
     <TextView
         android:id="@+id/extensionTypeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:fontFamily="@font/poppins_bold"
+        android:layout_gravity="bottom|left"
+        android:fontFamily="@font/poppins_medium"
         android:text="@string/extension_type"
         android:textAlignment="center"
         android:textSize="16sp" />
 
-<com.google.android.material.button.MaterialButtonToggleGroup
-    android:id="@+id/extensionTypeToggleGroup"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:singleSelection="true">
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/extensionTypeToggleGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:singleSelection="true">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/animeToggleButton"
@@ -30,7 +55,7 @@
         android:text="@string/anime"
         android:textSize="16sp"
         android:checked="true"
-        style="@style/Widget.ChipLikeToggleButton" />
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mangaToggleButton"
@@ -38,7 +63,7 @@
         android:layout_height="wrap_content"
         android:text="@string/manga"
         android:textSize="16sp"
-        style="@style/Widget.ChipLikeToggleButton" />
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/novelsToggleButton"
@@ -46,17 +71,17 @@
         android:layout_height="wrap_content"
         android:text="@string/novels"
         android:textSize="16sp"
-        style="@style/Widget.ChipLikeToggleButton" />
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
-</com.google.android.material.button.MaterialButtonToggleGroup>
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 
 <TextView
     android:id="@+id/testTypeTextView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical|center_horizontal"
+    android:layout_gravity="bottom|left"
     android:layout_marginTop="16dp"
-    android:fontFamily="@font/poppins_bold"
+    android:fontFamily="@font/poppins_medium"
     android:text="@string/test_type"
     android:textAlignment="center"
     android:textSize="16sp" />
@@ -73,7 +98,7 @@
         android:layout_height="wrap_content"
         android:text="@string/ping"
         android:textSize="16sp"
-        style="@style/Widget.ChipLikeToggleButton" />
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/basicToggleButton"
@@ -82,7 +107,7 @@
         android:text="@string/basic"
         android:textSize="16sp"
         android:checked="true"
-        style="@style/Widget.ChipLikeToggleButton" />
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/fullToggleButton"
@@ -90,7 +115,7 @@
         android:layout_height="wrap_content"
         android:text="@string/full"
         android:textSize="16sp"
-        style="@style/Widget.ChipLikeToggleButton" />
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
 </com.google.android.material.button.MaterialButtonToggleGroup>
     <TextView
@@ -141,6 +166,8 @@
             android:textSize="14sp"
             tools:ignore="LabelFor,TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
+
+ </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/extensionSelectionRecyclerView"
