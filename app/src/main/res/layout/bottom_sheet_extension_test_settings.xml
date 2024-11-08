@@ -44,7 +44,7 @@
 
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/extensionTypeToggleGroup"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:singleSelection="true">
 
@@ -88,7 +88,7 @@
 
 <com.google.android.material.button.MaterialButtonToggleGroup
     android:id="@+id/testTypeToggleGroup"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:singleSelection="true">
 

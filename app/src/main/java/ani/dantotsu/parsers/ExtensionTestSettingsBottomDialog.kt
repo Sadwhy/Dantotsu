@@ -45,8 +45,6 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
             searchQuery = it.toString()
         }
         
-        var lastCheckedId = binding.extensionTypeToggleGroup.checkedButtonId
-        
         binding.extensionTypeToggleGroup.check(
             when (extensionType) {
                 "anime" -> binding.animeToggleButton.id
@@ -67,7 +65,6 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
         
         binding.extensionTypeToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             if (isChecked) {
-                lastCheckedId = checkedId
                 when (checkedId) {
                     binding.animeToggleButton.id -> {
                         extensionType = "anime"
@@ -86,20 +83,19 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
                     }
                 }
             } else {
-                group.check(lastCheckedId)
+                group.check(CheckedId)
             }
         }
         
         binding.testTypeToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             if (isChecked) {
-                lastCheckedId = checkedId
                 when (checkedId) {
                     binding.pingToggleButton.id -> testType = "ping"
                     binding.basicToggleButton.id -> testType = "basic"
                     binding.fullToggleButton.id -> testType = "full"
                 }
             } else {
-                group.check(lastCheckedId)
+                group.check(CheckedId)
             }
         }
             binding.extensionTypeTextView.setOnLongClickListener {
