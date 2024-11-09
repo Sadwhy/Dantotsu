@@ -71,7 +71,7 @@ class SettingsAdapter(private val settings: ArrayList<Settings>) :
                 val b = (holder as SettingsSwitchViewHolder).binding
                 setAnimation(b.root.context, b.root)
 
-                b.settingsButton.text = settings.name
+                b.settingsTitle.text = settings.name
                 b.settingsDesc.text = settings.desc
                 b.settingsIcon.setImageDrawable(
                     ContextCompat.getDrawable(
