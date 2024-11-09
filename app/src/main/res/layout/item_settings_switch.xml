@@ -13,7 +13,7 @@
         android:id="@+id/settingsIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@drawable/ic_circle_add"
+        app:srcCompat="@drawable/ic_circle_add"
         android:layout_marginVertical="24dp"
         android:layout_marginEnd="24dp"
         app:tint="?attr/colorPrimary"
@@ -44,13 +44,24 @@
             android:textColor="?attr/colorOnSurfaceVariant" />
     </LinearLayout>
 
-    <com.google.android.material.materialswitch.MaterialSwitch
-        android:id="@+id/settingsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="-200dp"
-        android:layout_weight="1"
-        app:showText="false"
-        app:thumbTint="@color/button_switch_track" />
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/settingsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="-200dp"
+                android:layout_weight="1"
+                app:showText="false"
+                app:thumbTint="@color/button_switch_track" />
 
+            <ImageView
+                android:id="@+id/settingsExtraIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="top"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="12dp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_circle_add"
+                app:tint="?attr/colorPrimary"
+                tools:ignore="ContentDescription" />
 </LinearLayout>
