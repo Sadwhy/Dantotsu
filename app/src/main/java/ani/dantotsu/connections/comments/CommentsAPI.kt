@@ -35,6 +35,7 @@ object CommentsAPI {
     var isAdmin: Boolean = false
     var isMod: Boolean = false
     var totalVotes: Int = 0
+    var commentsEnabled = PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1
 
     suspend fun getCommentsForId(
         id: Int,
@@ -42,6 +43,7 @@ object CommentsAPI {
         tag: Int?,
         sort: String?
     ): CommentResponse? {
+        if (!commentsEnabled) return null
         var url = "$ADDRESS/comments/$id/$page"
         val request = requestBuilder()
         tag?.let {
@@ -71,6 +73,7 @@ object CommentsAPI {
     }
 
     suspend fun getRepliesFromId(id: Int, page: Int = 1): CommentResponse? {
+        if (!commentsEnabled) return null
         val url = "$ADDRESS/comments/parent/$id/$page"
         val request = requestBuilder()
         val json = try {
@@ -94,6 +97,7 @@ object CommentsAPI {
     }
 
     suspend fun getSingleComment(id: Int): Comment? {
+        if (!commentsEnabled) return null
         val url = "$ADDRESS/comments/$id"
         val request = requestBuilder()
         val json = try {
@@ -117,6 +121,7 @@ object CommentsAPI {
     }
 
     suspend fun vote(commentId: Int, voteType: Int): Boolean {
+        if (!commentsEnabled) return false
         val url = "$ADDRESS/comments/vote/$commentId/$voteType"
         val request = requestBuilder()
         val json = try {
@@ -134,6 +139,7 @@ object CommentsAPI {
     }
 
     suspend fun comment(mediaId: Int, parentCommentId: Int?, content: String, tag: Int?): Comment? {
+        if (!commentsEnabled) return null
         val url = "$ADDRESS/comments"
         val body = FormBody.Builder()
             .add("user_id", userId ?: return null)
@@ -184,6 +190,7 @@ object CommentsAPI {
     }
 
     suspend fun deleteComment(commentId: Int): Boolean {
+        if (!commentsEnabled) return false
         val url = "$ADDRESS/comments/$commentId"
         val request = requestBuilder()
         val json = try {
@@ -201,6 +208,7 @@ object CommentsAPI {
     }
 
     suspend fun editComment(commentId: Int, content: String): Boolean {
+        if (!commentsEnabled) return false
         val url = "$ADDRESS/comments/$commentId"
         val body = FormBody.Builder()
             .add("content", content)
@@ -221,6 +229,7 @@ object CommentsAPI {
     }
 
     suspend fun banUser(userId: String): Boolean {
+        if (!commentsEnabled) return false
         val url = "$ADDRESS/ban/$userId"
         val request = requestBuilder()
         val json = try {
@@ -243,6 +252,7 @@ object CommentsAPI {
         mediaTitle: String,
         reportedId: String
     ): Boolean {
+        if (!commentsEnabled) return false
         val url = "$ADDRESS/report/$commentId"
         val body = FormBody.Builder()
             .add("username", username)
@@ -266,6 +276,7 @@ object CommentsAPI {
     }
 
     suspend fun getNotifications(client: OkHttpClient): NotificationResponse? {
+        if (!commentsEnabled) return null
         val url = "$ADDRESS/notification/reply"
         val request = requestBuilder(client)
         val json = try {
@@ -286,151 +297,151 @@ object CommentsAPI {
         return parsed
     }
 
-    private suspend fun getUserDetails(client: OkHttpClient? = null): User? {
-        val url = "$ADDRESS/user"
-        val request = if (client != null) requestBuilder(client) else requestBuilder()
-        val json = try {
-            request.get(url)
-        } catch (e: IOException) {
-            return null
-        }
-        if (json.code == 200) {
-            val parsed = try {
-                Json.decodeFromString<UserResponse>(json.text)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                return null
-            }
-            isBanned = parsed.user.isBanned ?: false
-            isAdmin = parsed.user.isAdmin ?: false
-            isMod = parsed.user.isMod ?: false
-            totalVotes = parsed.user.totalVotes
-            return parsed.user
-        }
-        return null
+      private suspend fun getUserDetails(client: OkHttpClient? = null): User? {
+          val url = "$ADDRESS/user"
+          val request = client?.let { requestBuilder(it) } ?: requestBuilder()
+          val json = try {
+              request.get(url)
+          } catch (e: IOException) {
+              Logger.log(e)
+              return null
+          }
+      
+          if (json.code == 200) {
+              val parsed = try {
+                  Json.decodeFromString<UserResponse>(json.text)
+              } catch (e: Exception) {
+                  Logger.log(e)
+                  return null
+              }
+              isBanned = parsed.user.isBanned ?: false
+              isAdmin = parsed.user.isAdmin ?: false
+              isMod = parsed.user.isMod ?: false
+              totalVotes = parsed.user.totalVotes
+              return parsed.user
+          }
+          return null
+      }
+      
+      suspend fun fetchAuthToken(context: Context, client: OkHttpClient? = null) {
+          isOnline = isOnline(context)
+          if (authToken != null) return
+      
+          val MAX_RETRIES = 5
+          val tokenLifetime: Long = 1000 * 60 * 60 * 24 * 6 // 6 days
+          val tokenExpiry = PrefManager.getVal<Long>(PrefName.CommentTokenExpiry)
+          if (tokenExpiry < System.currentTimeMillis() + tokenLifetime) {
+              val commentResponse = PrefManager.getNullableVal<AuthResponse>(PrefName.CommentAuthResponse, null)
+              if (commentResponse != null) {
+                  authToken = commentResponse.authToken
+                  userId = commentResponse.user.id
+                  isBanned = commentResponse.user.isBanned ?: false
+                  isAdmin = commentResponse.user.isAdmin ?: false
+                  isMod = commentResponse.user.isMod ?: false
+                  totalVotes = commentResponse.user.totalVotes
+                  if (getUserDetails(client) != null) return
+              }
+          }
+      
+          val url = "$ADDRESS/authenticate"
+          val token = PrefManager.getVal(PrefName.AnilistToken, null as String?) ?: return
+          repeat(MAX_RETRIES) {
+              try {
+                  val json = authRequest(token, url, client)
+                  if (json.code == 200) {
+                      if (!json.text.startsWith("{")) throw IOException("Invalid response")
+                      val parsed = try {
+                          Json.decodeFromString<AuthResponse>(json.text)
+                      } catch (e: Exception) {
+                          Logger.log(e)
+                          errorMessage("Failed to login to comments API: ${e.message}")
+                          return
+                      }
+                      PrefManager.setVal(PrefName.CommentAuthResponse, parsed)
+                      PrefManager.setVal(
+                          PrefName.CommentTokenExpiry,
+                          System.currentTimeMillis() + tokenLifetime
+                      )
+                      authToken = parsed.authToken
+                      userId = parsed.user.id
+                      isBanned = parsed.user.isBanned ?: false
+                      isAdmin = parsed.user.isAdmin ?: false
+                      isMod = parsed.user.isMod ?: false
+                      totalVotes = parsed.user.totalVotes
+                      return
+                  } else if (json.code != 429) {
+                      errorReason(json.code, json.text)
+                      return
+                  }
+              } catch (e: IOException) {
+                  Logger.log(e)
+                  errorMessage("Failed to login to comments API")
+                  return
+              }
+              kotlinx.coroutines.delay(60000)
+          }
+          errorMessage("Failed to login after multiple attempts")
+      }
+      
+      private fun errorMessage(reason: String) {
+          Logger.log(reason)
+          if (isOnline && commentsEnabled) snackString(reason)
+      }
+      
+      fun logout() {
+          PrefManager.removeVal(PrefName.CommentAuthResponse)
+          PrefManager.removeVal(PrefName.CommentTokenExpiry)
+          authToken = null
+          userId = null
+          isBanned = false
+          isAdmin = false
+          isMod = false
+          totalVotes = 0
+      }
+      
+      private suspend fun authRequest(
+          token: String,
+          url: String,
+          client: OkHttpClient? = null
+      ): NiceResponse {
+          val body = FormBody.Builder()
+              .add("token", token)
+              .build()
+          val request = client?.let { requestBuilder(it) } ?: requestBuilder()
+          return request.post(url, requestBody = body)
+      }
+      
+      private fun headerBuilder(): Map<String, String> {
+          return mutableMapOf<String, String>().apply {
+              put("appauth", "6*45Qp%W2RS@t38jkXoSKY588Ynj%n")
+              authToken?.let { put("Authorization", it) }
+          }
+      }
+      
+      private fun requestBuilder(client: OkHttpClient = Injekt.get<NetworkHelper>().client): Requests {
+          return Requests(
+              client,
+              headerBuilder()
+          )
+      }
+      
+      private fun errorReason(code: Int, reason: String? = null) {
+          val error = when (code) {
+              429 -> "Rate limited. :("
+              else -> "Failed to connect"
+          }
+          val parsed = reason?.let {
+              try {
+                  Json.decodeFromString<ErrorResponse>(it)
+              } catch (e: Exception) {
+                  null
+              }
+          }
+          val message = parsed?.message ?: reason ?: error
+          val fullMessage = if (code == 500) message else "$code: $message"
+          toast(fullMessage)
+       }
     }
-
-    suspend fun fetchAuthToken(context: Context, client: OkHttpClient? = null) {
-        isOnline = isOnline(context)
-        if (authToken != null) return
-        val MAX_RETRIES = 5
-        val tokenLifetime: Long = 1000 * 60 * 60 * 24 * 6 // 6 days
-        val tokenExpiry = PrefManager.getVal<Long>(PrefName.CommentTokenExpiry)
-        if (tokenExpiry < System.currentTimeMillis() + tokenLifetime) {
-            val commentResponse =
-                PrefManager.getNullableVal<AuthResponse>(PrefName.CommentAuthResponse, null)
-            if (commentResponse != null) {
-                authToken = commentResponse.authToken
-                userId = commentResponse.user.id
-                isBanned = commentResponse.user.isBanned ?: false
-                isAdmin = commentResponse.user.isAdmin ?: false
-                isMod = commentResponse.user.isMod ?: false
-                totalVotes = commentResponse.user.totalVotes
-                if (getUserDetails(client) != null) return
-            }
-
-        }
-        val url = "$ADDRESS/authenticate"
-        val token = PrefManager.getVal(PrefName.AnilistToken, null as String?) ?: return
-        repeat(MAX_RETRIES) {
-            try {
-                val json = authRequest(token, url, client)
-                if (json.code == 200) {
-                    if (!json.text.startsWith("{")) throw IOException("Invalid response")
-                    val parsed = try {
-                        Json.decodeFromString<AuthResponse>(json.text)
-                    } catch (e: Exception) {
-                        Logger.log(e)
-                        errorMessage("Failed to login to comments API: ${e.printStackTrace()}")
-                        return
-                    }
-                    PrefManager.setVal(PrefName.CommentAuthResponse, parsed)
-                    PrefManager.setVal(
-                        PrefName.CommentTokenExpiry,
-                        System.currentTimeMillis() + tokenLifetime
-                    )
-                    authToken = parsed.authToken
-                    userId = parsed.user.id
-                    isBanned = parsed.user.isBanned ?: false
-                    isAdmin = parsed.user.isAdmin ?: false
-                    isMod = parsed.user.isMod ?: false
-                    totalVotes = parsed.user.totalVotes
-                    return
-                } else if (json.code != 429) {
-                    errorReason(json.code, json.text)
-                    return
-                }
-            } catch (e: IOException) {
-                Logger.log(e)
-                errorMessage("Failed to login to comments API")
-                return
-            }
-            kotlinx.coroutines.delay(60000)
-        }
-        errorMessage("Failed to login after multiple attempts")
-    }
-
-    private fun errorMessage(reason: String) {
-        Logger.log(reason)
-        if (isOnline) snackString(reason)
-    }
-
-    fun logout() {
-        PrefManager.removeVal(PrefName.CommentAuthResponse)
-        PrefManager.removeVal(PrefName.CommentTokenExpiry)
-        authToken = null
-        userId = null
-        isBanned = false
-        isAdmin = false
-        isMod = false
-        totalVotes = 0
-    }
-
-    private suspend fun authRequest(
-        token: String,
-        url: String,
-        client: OkHttpClient? = null
-    ): NiceResponse {
-        val body: FormBody = FormBody.Builder()
-            .add("token", token)
-            .build()
-        val request = if (client != null) requestBuilder(client) else requestBuilder()
-        return request.post(url, requestBody = body)
-    }
-
-    private fun headerBuilder(): Map<String, String> {
-        val map = mutableMapOf(
-            "appauth" to "6*45Qp%W2RS@t38jkXoSKY588Ynj%n"
-        )
-        if (authToken != null) {
-            map["Authorization"] = authToken!!
-        }
-        return map
-    }
-
-    private fun requestBuilder(client: OkHttpClient = Injekt.get<NetworkHelper>().client): Requests {
-        return Requests(
-            client,
-            headerBuilder()
-        )
-    }
-
-    private fun errorReason(code: Int, reason: String? = null) {
-        val error = when (code) {
-            429 -> "Rate limited. :("
-            else -> "Failed to connect"
-        }
-        val parsed = try {
-            Json.decodeFromString<ErrorResponse>(reason!!)
-        } catch (e: Exception) {
-            null
-        }
-        val message = parsed?.message ?: reason ?: error
-        val fullMessage = if (code == 500) message else "$code: $message"
-
-        toast(fullMessage)
-    }
-}
 
 @Serializable
 data class ErrorResponse(
