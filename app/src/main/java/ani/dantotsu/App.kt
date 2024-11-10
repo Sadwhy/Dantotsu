@@ -105,7 +105,7 @@ class App : MultiDexApplication() {
             LogcatLogger.install(AndroidLogcatLogger(LogPriority.VERBOSE))
         }
 
-        if (PrefManager.getVal(PrefName.CommentsEnabled) == 0)) {
+        if (PrefManager.getVal(PrefName.CommentsEnabled) == 0) {
             if (Anilist.token == null && BuildConfig.FLAVOR.contains("google")) {
               PrefManager.setVal(PrefName.CommentsEnabled, 1)
             } else {
