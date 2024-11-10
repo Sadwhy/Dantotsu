@@ -26,7 +26,7 @@ class NotificationActivity : AppCompatActivity() {
     lateinit var binding: ActivityNotificationBinding
     private var selected: Int = 0
     lateinit var navBar: AnimatedBottomBar
-    private val CommentsEnabled = PrefManager.getVal<int>(PrefName.CommentsEnabled) == 1
+    private val CommentsEnabled = PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

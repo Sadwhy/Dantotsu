@@ -105,8 +105,8 @@ class App : MultiDexApplication() {
             LogcatLogger.install(AndroidLogcatLogger(LogPriority.VERBOSE))
         }
 
-        if (PrefManager.getVal<int>(PrefName.CommentsEnabled) == 0) {
-            if (Anilist.token == null && BuildConfig.FLAVOR.contains("google")) {
+        if (PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 0) {
+            if (BuildConfig.FLAVOR.contains("google")) {
               PrefManager.setVal(PrefName.CommentsEnabled, 1)
             } else {
               PrefManager.setVal(PrefName.CommentsEnabled, 2)
@@ -136,7 +136,7 @@ class App : MultiDexApplication() {
             downloadAddonManager = Injekt.get()
             torrentAddonManager.init()
             downloadAddonManager.init()
-            if (PrefManager.getVal<int>(PrefName.CommentsEnabled) == 1) { 
+            if (PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1) { 
                 CommentsAPI.fetchAuthToken(this@App)
              }
 
