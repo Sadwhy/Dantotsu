@@ -235,10 +235,10 @@ class SettingsAccountActivity : AppCompatActivity() {
                 ),
                 Settings(
                         type = 2,
-                        name = getString(R.string.enable_comments),
-                        desc = getString(R.string.enable_comments_desc),
+                        name = getString(R.string.comments_button),
+                        desc = getString(R.string.comments_button_desc),
                         icon = R.drawable.ic_round_comment_24,
-                        isChecked = PrefManager.getVal(PrefName.CommentsEnabled) == 1,
+                        isChecked = PrefManager.getVal<int>(PrefName.CommentsEnabled) == 1,
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.CommentsEnabled, if (isChecked) 1 else 2 )
                         },
