@@ -746,6 +746,8 @@
     <string name="restore_settings">Import Settings</string>
     <string name="restore_settings_underline"><u>Restore Settings</u></string>
     <string name="try_internal_cast_experimental">Try Internal Cast (Experimental)</string>
+    <string name="comments_button">Enable Comments</string>    
+    <string name="comments_button_desc">Dantotsu\'s very own comments server</string>
 
     <string name="comments">Comments</string>
     <string name="newest">Newest</string>

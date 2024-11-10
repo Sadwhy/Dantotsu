@@ -21,10 +21,12 @@ class AlarmManagerScheduler(private val context: Context) : TaskScheduler {
         }
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = when (taskType) {
+            if (PrefManager.getVal(PrefName.CommentsEnabled) == 1) {
             TaskType.COMMENT_NOTIFICATION -> Intent(
                 context,
                 CommentNotificationReceiver::class.java
             )
+          }
 
             TaskType.ANILIST_NOTIFICATION -> Intent(
                 context,
@@ -65,10 +67,12 @@ class AlarmManagerScheduler(private val context: Context) : TaskScheduler {
     override fun cancelTask(taskType: TaskType) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = when (taskType) {
+            if (PrefManager.getVal(PrefName.CommentsEnabled) == 1) {
             TaskType.COMMENT_NOTIFICATION -> Intent(
                 context,
                 CommentNotificationReceiver::class.java
             )
+          }
 
             TaskType.ANILIST_NOTIFICATION -> Intent(
                 context,

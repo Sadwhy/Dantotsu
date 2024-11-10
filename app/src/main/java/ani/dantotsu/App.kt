@@ -105,6 +105,14 @@ class App : MultiDexApplication() {
             LogcatLogger.install(AndroidLogcatLogger(LogPriority.VERBOSE))
         }
 
+        if (PrefManager.getVal(PrefName.CommentsEnabled) == 0)) {
+            if (Anilist.token == null && BuildConfig.FLAVOR.contains("google")) {
+              PrefManager.setVal(PrefName.CommentsEnabled, 1)
+            } else {
+              PrefManager.setVal(PrefName.CommentsEnabled, 2)
+            }
+        }
+
         CoroutineScope(Dispatchers.IO).launch {
             animeExtensionManager = Injekt.get()
             animeExtensionManager.findAvailableExtensions()
@@ -128,7 +136,9 @@ class App : MultiDexApplication() {
             downloadAddonManager = Injekt.get()
             torrentAddonManager.init()
             downloadAddonManager.init()
-            CommentsAPI.fetchAuthToken(this@App)
+            if (PrefManager.getVal(PrefName.CommentsEnabled)) { 
+                CommentsAPI.fetchAuthToken(this@App)
+             }
 
             val useAlarmManager = PrefManager.getVal<Boolean>(PrefName.UseAlarmManager)
             val scheduler = TaskScheduler.create(this@App, useAlarmManager)
