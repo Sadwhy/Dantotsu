@@ -323,6 +323,7 @@
     <string name="fav_anime">Favourite Anime</string>
     <string name="fav_manga">Favourite Manga</string>
     <string name="restart_app">Restart the app?</string>
+    <string name="restart_app_extra">Restart the app to apply changes</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="current_page">Current Page</string>

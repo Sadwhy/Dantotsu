@@ -24,7 +24,9 @@ import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.snackString
 import ani.dantotsu.startMainActivity
+import ani.dantotsu.restartApp
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import io.noties.markwon.Markwon
@@ -241,7 +243,7 @@ class SettingsAccountActivity : AppCompatActivity() {
                         isChecked = PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1,
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.CommentsEnabled, if (isChecked) 1 else 2 )
-                            restartMainActivity.isEnabled = true
+                            reload()
                         },
                         isVisible = Anilist.token != null
                    ),
@@ -251,4 +253,12 @@ class SettingsAccountActivity : AppCompatActivity() {
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
     }
+    fun reload() {
+                snackString(R.string.restart_app_extra)
+                    ?.setDuration(Snackbar.LENGTH_LONG)
+                    ?.setAction(R.string.do_it) {
+                        restartApp()
+                    }
+    }
 }
+
