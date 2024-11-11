@@ -257,7 +257,7 @@ class SettingsAccountActivity : AppCompatActivity() {
                 snackString(R.string.restart_app_extra)
                     ?.setDuration(Snackbar.LENGTH_LONG)
                     ?.setAction(R.string.do_it) {
-                        startMainActivity()
+                        startMainActivity(this@SettingsAccountActivity)
                     }
     }
 }
