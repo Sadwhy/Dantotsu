@@ -31,7 +31,7 @@ object CommentsAPI {
     private const val LOCAL_HOST: String = "https://127.0.0.1"
     private var isOnline: Boolean = true
     private var commentsEnabled = PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1
-    private var ADDRESS: String get() = if (commentsEnabled) API_ADDRESS else LOCAL_HOST
+    private val ADDRESS: String get() = if (commentsEnabled) API_ADDRESS else LOCAL_HOST
     var authToken: String? = null
     var userId: String? = null
     var isBanned: Boolean = false
@@ -372,7 +372,6 @@ object CommentsAPI {
         }
         errorMessage("Failed to login after multiple attempts")
     }
-
     private fun errorMessage(reason: String) {
         if (commentsEnabled) Logger.log(reason)
         if (isOnline && commentsEnabled) snackString(reason)
