@@ -26,7 +26,6 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.startMainActivity
-import ani.dantotsu.restartApp
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.snackbar.Snackbar
@@ -258,7 +257,7 @@ class SettingsAccountActivity : AppCompatActivity() {
                 snackString(R.string.restart_app_extra)
                     ?.setDuration(Snackbar.LENGTH_LONG)
                     ?.setAction(R.string.do_it) {
-                        restartApp()
+                        startMainActivity()
                     }
     }
 }
