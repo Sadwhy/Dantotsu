@@ -106,10 +106,10 @@ class App : MultiDexApplication() {
         }
 
         if (PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 0) {
-            if (BuildConfig.FLAVOR.contains("google")) {
-              PrefManager.setVal(PrefName.CommentsEnabled, 1)
-            } else {
+            if (BuildConfig.FLAVOR.contains("fdroid")) {
               PrefManager.setVal(PrefName.CommentsEnabled, 2)
+            } else {
+              PrefManager.setVal(PrefName.CommentsEnabled, 1)
             }
         }
 

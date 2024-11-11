@@ -254,11 +254,12 @@ class SettingsAccountActivity : AppCompatActivity() {
 
     }
     fun reload() {
-                snackString(R.string.restart_app_extra)
-                    ?.setDuration(Snackbar.LENGTH_LONG)
-                    ?.setAction(R.string.do_it) {
-                        startMainActivity(this@SettingsAccountActivity)
-                    }
+                snackString(context.getString(R.string.restart_app_extra))
+                //snackString(R.string.restart_app_extra)
+                    //?.setDuration(Snackbar.LENGTH_LONG)
+                    //?.setAction(R.string.do_it) {
+                        //startMainActivity(this@SettingsAccountActivity)
+                    //} Disabled for now. Doesn't update the ADDRESS even after this
     }
 }
 
