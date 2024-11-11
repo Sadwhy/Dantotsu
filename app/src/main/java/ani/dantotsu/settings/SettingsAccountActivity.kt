@@ -241,6 +241,7 @@ class SettingsAccountActivity : AppCompatActivity() {
                         isChecked = PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1,
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.CommentsEnabled, if (isChecked) 1 else 2 )
+                            restartMainActivity.isEnabled = true
                         },
                         isVisible = Anilist.token != null
                    ),
