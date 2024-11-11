@@ -28,7 +28,6 @@ import ani.dantotsu.snackString
 import ani.dantotsu.startMainActivity
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import com.google.android.material.snackbar.Snackbar
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.launch
@@ -254,7 +253,7 @@ class SettingsAccountActivity : AppCompatActivity() {
 
     }
     fun reload() {
-                snackString(context.getString(R.string.restart_app_extra))
+                snackString(getString(R.string.restart_app_extra))
                 //snackString(R.string.restart_app_extra)
                     //?.setDuration(Snackbar.LENGTH_LONG)
                     //?.setAction(R.string.do_it) {
