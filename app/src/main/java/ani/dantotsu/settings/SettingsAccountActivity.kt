@@ -29,6 +29,7 @@ import ani.dantotsu.startMainActivity
 import ani.dantotsu.restartApp
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import com.google.android.material.snackbar.Snackbar
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.launch
