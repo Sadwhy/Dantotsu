@@ -3,8 +3,15 @@ name: Build APK and Notify Discord
 
 on:
   push:
-    branches:
-      - master
+    branches-ignore:
+      - main
+      - l10n_dev_crowdin
+      - custom-download-location
+    paths-ignore:
+      - '**/README.md'
+    tags:
+    - "v*.*.*"
+
 jobs:
   build:
     runs-on: ubuntu-latest
