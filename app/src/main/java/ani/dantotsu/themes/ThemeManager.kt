@@ -14,7 +14,7 @@ import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.DynamicColorsOptions
 
 
-class ThemeManager(private val context: Activity) 
+class ThemeManager(private val context: Activity) {
     fun applyTheme(fromImage: Bitmap? = null) {
         val useOLED = PrefManager.getVal(PrefName.UseOLED) && isDarkThemeActive(context)
         val useCustomTheme: Boolean = PrefManager.getVal(PrefName.UseCustomTheme)
