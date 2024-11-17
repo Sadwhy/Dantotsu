@@ -56,7 +56,6 @@ class ThemeManager(private val context: Activity) {
         }
 
         val window = context.window
-        window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             @Suppress("DEPRECATION")
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -64,6 +63,7 @@ class ThemeManager(private val context: Activity) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = 0x00000000
         context.setTheme(themeToApply)
+        window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
     }
 
     fun setWindowFlag(activity: Activity, bits: Int, on: Boolean) {
