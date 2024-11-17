@@ -338,7 +338,6 @@ open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
         super.onStart()
         dialog?.window?.let { window ->
             WindowCompat.setDecorFitsSystemWindows(window, false)
-            window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
             val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)
             if (immersiveMode) {
                 WindowInsetsControllerCompat(
