@@ -31,6 +31,7 @@
     <style name="ModalBottomSheetDialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
         <item name="backgroundTint">?android:colorBackground</item>
         <item name="shapeAppearance">@style/ShapeAppearanceOverlay.Demo</item>
+        <item name="android:layoutDirection">ltr</item>
     </style>
 
     <style name="ShapeAppearanceOverlay.Demo" parent="Theme.AppCompat.DayNight.NoActionBar">
