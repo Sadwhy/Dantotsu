@@ -14,7 +14,7 @@ import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.DynamicColorsOptions
 
 
-class ThemeManager(private val context: Activity) {
+class ThemeManager(private val context: Activity) 
     fun applyTheme(fromImage: Bitmap? = null) {
         val useOLED = PrefManager.getVal(PrefName.UseOLED) && isDarkThemeActive(context)
         val useCustomTheme: Boolean = PrefManager.getVal(PrefName.UseCustomTheme)
@@ -55,6 +55,7 @@ class ThemeManager(private val context: Activity) {
         }
 
         val window = context.window
+        window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             @Suppress("DEPRECATION")
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)

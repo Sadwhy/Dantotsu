@@ -91,8 +91,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemeManager(this).applyTheme()
 
-        window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
-
         super.onCreate(savedInstanceState)
 
         //get FRAGMENT_CLASS_NAME from intent
