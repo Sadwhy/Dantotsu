@@ -26,9 +26,9 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
-                android:layout_weight="7"
+                android:layout_weight="5"
                 android:layout_marginEnd="8dp"
-                android:hint="@string/score"
+                android:hint="HOST"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
@@ -36,9 +36,7 @@
                 app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:endIconMode="none"
                 app:hintAnimationEnabled="true"
-                app:startIconDrawable="@drawable/ic_round_star_24"
-                app:suffixText="@string/score_suffix"
-                app:suffixTextAppearance="@style/Suffix">
+                app:startIconDrawable="@drawable/ic_round_star_24">
 
                 <AutoCompleteTextView
                     android:id="@+id/proxyHost"
@@ -59,7 +57,7 @@
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_weight="3"
-                android:hint="Port"
+                android:hint="PORT"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
@@ -67,9 +65,7 @@
                 app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:endIconMode="none"
                 app:hintAnimationEnabled="true"
-                app:startIconDrawable="@drawable/ic_round_star_24"
-                app:suffixText="@string/score_suffix"
-                app:suffixTextAppearance="@style/Suffix">
+                app:startIconDrawable="@drawable/ic_round_star_24">
 
                 <AutoCompleteTextView
                     android:id="@+id/proxyPort"
@@ -85,11 +81,12 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <com.google.android.material.materialswitch.MaterialSwitch
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/proxyAuthentication"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_bold"
+            android:layout_marginTop="16dp"
             android:text="Authentication" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -98,7 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginTop="16dp"
-            android:hint="Username"
+            android:hint="USERNAME"
             app:boxCornerRadiusBottomEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusTopEnd="16dp"
@@ -106,9 +103,7 @@
             app:boxStrokeColor="@color/text_input_layout_stroke_color"
             app:endIconMode="none"
             app:hintAnimationEnabled="true"
-            app:startIconDrawable="@drawable/ic_round_star_24"
-            app:suffixText="@string/score_suffix"
-            app:suffixTextAppearance="@style/Suffix">
+            app:startIconDrawable="@drawable/ic_round_star_24">
 
             <AutoCompleteTextView
                 android:id="@+id/proxyUsername"
@@ -137,9 +132,7 @@
             app:boxStrokeColor="@color/text_input_layout_stroke_color"
             app:endIconMode="password_toggle"
             app:hintAnimationEnabled="true"
-            app:startIconDrawable="@drawable/ic_round_star_24"
-            app:suffixText="@string/score_suffix"
-            app:suffixTextAppearance="@style/Suffix">
+            app:startIconDrawable="@drawable/ic_round_star_24">
 
             <AutoCompleteTextView
                 android:id="@+id/proxyPassword"
