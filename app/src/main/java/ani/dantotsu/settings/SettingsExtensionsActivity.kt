@@ -26,6 +26,7 @@ import ani.dantotsu.parsers.ParserTestActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
+import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.util.customAlertDialog
 import eu.kanade.domain.base.BasePreferences
@@ -293,6 +294,15 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                         isChecked = PrefManager.getVal(PrefName.SkipExtensionIcons),
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.SkipExtensionIcons, isChecked)
+                        }
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.devs),
+                        desc = getString(R.string.devs_desc),
+                        icon = R.drawable.ic_round_accessible_forward_24,
+                        onClick = {
+                            ProxyDialogFragment().show(supportFragmentManager, "dialog")
                         }
                     ),
                     Settings(

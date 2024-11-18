@@ -18,98 +18,72 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
 
-            <TextView
-                android:id="@+id/proxyTitle"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/proxyHostLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="0dp"
-                android:layout_height="54dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/poppins"
-                android:gravity="center_vertical"
-                android:text="Proxy Setup"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:layout_height="56dp"
+                android:layout_weight="7"
+                android:layout_marginEnd="8dp"
+                android:hint="@string/score"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                app:endIconMode="none"
+                app:hintAnimationEnabled="true"
+                app:startIconDrawable="@drawable/ic_round_star_24"
+                app:suffixText="@string/score_suffix"
+                app:suffixTextAppearance="@style/Suffix">
 
-        </LinearLayout>
+                <AutoCompleteTextView
+                    android:id="@+id/proxyHost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:inputType="textUri"
+                    android:padding="8dp"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor,TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/proxyPortLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="3"
+                android:hint="Port"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                app:endIconMode="none"
+                app:hintAnimationEnabled="true"
+                app:startIconDrawable="@drawable/ic_round_star_24"
+                app:suffixText="@string/score_suffix"
+                app:suffixTextAppearance="@style/Suffix">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/proxyHostLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="16dp"
-            android:hint="@string/score"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxStrokeColor="@color/text_input_layout_stroke_color"
-            app:endIconMode="none"
-            app:hintAnimationEnabled="true"
-            app:startIconDrawable="@drawable/ic_round_star_24"
-            app:suffixText="@string/score_suffix"
-            app:suffixTextAppearance="@style/Suffix">
-
-            <AutoCompleteTextView
-                android:id="@+id/proxyHost"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/poppins_bold"
-                android:inputType="numberDecimal"
-                android:padding="8dp"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="14sp"
-                tools:ignore="LabelFor,TextContrastCheck" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-            <View
-                android:layout_width="8dp"
-                android:layout_height="match_parent" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/proxyPortLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="16dp"
-            android:hint="Port"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxStrokeColor="@color/text_input_layout_stroke_color"
-            app:endIconMode="none"
-            app:hintAnimationEnabled="true"
-            app:startIconDrawable="@drawable/ic_round_star_24"
-            app:suffixText="@string/score_suffix"
-            app:suffixTextAppearance="@style/Suffix">
-
-            <AutoCompleteTextView
-                android:id="@+id/proxyPort"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/poppins_bold"
-                android:inputType="numberDecimal"
-                android:padding="8dp"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="14sp"
-                tools:ignore="LabelFor,TextContrastCheck" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
+                <AutoCompleteTextView
+                    android:id="@+id/proxyPort"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:inputType="number"
+                    android:padding="8dp"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor,TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <com.google.android.material.materialswitch.MaterialSwitch
@@ -143,12 +117,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/poppins_bold"
-                android:inputType="numberDecimal"
+                android:inputType="text"
                 android:padding="8dp"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="14sp"
                 tools:ignore="LabelFor,TextContrastCheck" />
-
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -163,7 +136,7 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusTopStart="16dp"
             app:boxStrokeColor="@color/text_input_layout_stroke_color"
-            app:endIconMode="none"
+            app:endIconMode="passwordToggle"
             app:hintAnimationEnabled="true"
             app:startIconDrawable="@drawable/ic_round_star_24"
             app:suffixText="@string/score_suffix"
@@ -175,18 +148,16 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/poppins_bold"
-                android:inputType="numberDecimal"
+                android:inputType="textPassword"
                 android:padding="8dp"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="14sp"
                 tools:ignore="LabelFor,TextContrastCheck" />
-
         </com.google.android.material.textfield.TextInputLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
@@ -213,9 +184,5 @@
         android:layout_marginTop="14dp"
         app:cardBackgroundColor="?attr/colorPrimary"
         app:cardCornerRadius="2dp"
-        app:cardElevation="0dp">
-
-    </androidx.cardview.widget.CardView>
-
-
+        app:cardElevation="0dp" />
 </FrameLayout>
