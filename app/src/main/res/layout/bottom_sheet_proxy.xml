@@ -136,7 +136,7 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusTopStart="16dp"
             app:boxStrokeColor="@color/text_input_layout_stroke_color"
-            app:endIconMode="passwordToggle"
+            app:endIconMode="password_toggle"
             app:hintAnimationEnabled="true"
             app:startIconDrawable="@drawable/ic_round_star_24"
             app:suffixText="@string/score_suffix"
