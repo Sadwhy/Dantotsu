@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.databinding.BottomSheetProxyBinding
 
-class EmptyDialogFragment : BottomSheetDialogFragment() {
+class ProxyDialogFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetProxyBinding? = null
     private val binding get() = _binding!!
 
