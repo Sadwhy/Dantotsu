@@ -270,7 +270,7 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                             }.show()
                         }
                     ),
-                    Settings(
+                    Settings( 
                         type = 2,
                         name = getString(R.string.force_legacy_installer),
                         desc = getString(R.string.force_legacy_installer_desc),

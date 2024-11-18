@@ -17,6 +17,12 @@ import okhttp3.brotli.BrotliInterceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
 import java.util.concurrent.TimeUnit
+import java.net.InetSocketAddress
+import java.net.Proxy
+import okhttp3.Authenticator
+import okhttp3.Credentials
+import okhttp3.Response
+import okhttp3.Route
 
 class NetworkHelper(
     context: Context
@@ -47,11 +53,9 @@ class NetworkHelper(
             }
         }
 
-
         if (PrefManager.getVal<Boolean>(PrefName.VerboseLogging)) {
             val httpLoggingInterceptor = HttpLoggingInterceptor(ConsoleLogger()).apply {
                 level = HttpLoggingInterceptor.Level.BASIC
-
             }
             builder.addNetworkInterceptor(httpLoggingInterceptor)
         }
@@ -76,6 +80,28 @@ class NetworkHelper(
             PREF_DOH_LIBREDNS -> builder.dohLibreDNS()
         }
 
+        // Add SOCKS5 proxy if enabled
+        if (PrefManager.getVal<Boolean>(PrefName.EnableSocks5Proxy)) {
+            val proxyHost = PrefManager.getVal<String>(PrefName.Socks5ProxyHost) ?: "127.0.0.1"
+            val proxyPort = PrefManager.getVal<Int>(PrefName.Socks5ProxyPort) ?: 1080
+            val proxyUsername = PrefManager.getVal<String>(PrefName.Socks5ProxyUsername)
+            val proxyPassword = PrefManager.getVal<String>(PrefName.Socks5ProxyPassword)
+        
+            // Set up the proxy
+            val proxy = Proxy(Proxy.Type.SOCKS, InetSocketAddress(proxyHost, proxyPort))
+            builder.proxy(proxy)
+        
+            // Only set proxy authenticator if both username and password are provided
+            if (!proxyUsername.isNullOrEmpty() && !proxyPassword.isNullOrEmpty()) {
+                val authenticator = Authenticator { _: Route?, response: Response ->
+                    val credential = Credentials.basic(proxyUsername, proxyPassword)
+                    response.request.newBuilder()
+                        .header("Proxy-Authorization", credential)
+                        .build()
+                }
+                builder.proxyAuthenticator(authenticator)
+            }
+        }
         builder.build()
     }
 
