@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="32dp"
-        android:visibility="invisible"
-        tools:visibility="visible">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -201,7 +201,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     Socks5ProxyPort(Pref(Location.Protected, Int::class, 0)),
     Socks5ProxyUsername(Pref(Location.Protected, String::class, "")),
     Socks5ProxyPassword(Pref(Location.Protected, String::class, "")),
-    EnableSocks5Proxy(Pref(Location.Irrelevant, Boolean::class, true)),
+    EnableSocks5Proxy(Pref(Location.Irrelevant, Boolean::class, false)),
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class, "")),
