@@ -82,8 +82,8 @@ class NetworkHelper(
 
         // Add SOCKS5 proxy if enabled
         if (PrefManager.getVal<Boolean>(PrefName.EnableSocks5Proxy)) {
-            val proxyHost = PrefManager.getVal<String>(PrefName.Socks5ProxyHost) ?: "127.0.0.1"
-            val proxyPort = PrefManager.getVal<Int>(PrefName.Socks5ProxyPort) ?: 1080
+            val proxyHost = PrefManager.getVal<String>(PrefName.Socks5ProxyHost)
+            val proxyPort = PrefManager.getVal<Int>(PrefName.Socks5ProxyPort)
             val proxyUsername = PrefManager.getVal<String>(PrefName.Socks5ProxyUsername)
             val proxyPassword = PrefManager.getVal<String>(PrefName.Socks5ProxyPassword)
         
