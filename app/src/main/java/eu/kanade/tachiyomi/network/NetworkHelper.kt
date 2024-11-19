@@ -80,19 +80,19 @@ class NetworkHelper(
             PREF_DOH_LIBREDNS -> builder.dohLibreDNS()
         }
 
-        // Add SOCKS5 proxy if enabled
-        if (PrefManager.getVal<Boolean>(PrefName.EnableSocks5Proxy)) {
+        val proxyEnabled = PrefManager.getVal<Boolean>(PrefName.EnableSocks5Proxy)
+        val proxyAuthEnabled = PrefManager.getVal<Boolean>(PrefName.ProxyAuthEnabled)
+        
+        if (proxyEnabled) {
             val proxyHost = PrefManager.getVal<String>(PrefName.Socks5ProxyHost)
             val proxyPort = PrefManager.getVal<Int>(PrefName.Socks5ProxyPort)
             val proxyUsername = PrefManager.getVal<String>(PrefName.Socks5ProxyUsername)
             val proxyPassword = PrefManager.getVal<String>(PrefName.Socks5ProxyPassword)
         
-            // Set up the proxy
             val proxy = Proxy(Proxy.Type.SOCKS, InetSocketAddress(proxyHost, proxyPort))
             builder.proxy(proxy)
-        
-            // Only set proxy authenticator if both username and password are provided
-            if (!proxyUsername.isNullOrEmpty() && !proxyPassword.isNullOrEmpty()) {
+            
+            if (!proxyUsername.isNullOrEmpty() && !proxyPassword.isNullOrEmpty() && proxyAuthEnabled) {
                 val authenticator = Authenticator { _: Route?, response: Response ->
                     val credential = Credentials.basic(proxyUsername, proxyPassword)
                     response.request.newBuilder()

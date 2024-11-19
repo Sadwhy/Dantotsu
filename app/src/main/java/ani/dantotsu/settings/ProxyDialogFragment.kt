@@ -20,6 +20,7 @@ class ProxyDialogFragment : BottomSheetDialogFragment() {
     private var proxyUsername: String? = PrefManager.getVal<String>(PrefName.Socks5ProxyUsername) ?: ""
     private var proxyPassword: String? = PrefManager.getVal<String>(PrefName.Socks5ProxyPassword) ?: ""
     private var authEnabled: Boolean = PrefManager.getVal<Boolean>(PrefName.ProxyAuthEnabled)
+    private val proxyEnabled: Boolean = PrefManager.getVal<Boolean>(PrefName.EnableSocks5Proxy)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,30 +40,28 @@ class ProxyDialogFragment : BottomSheetDialogFragment() {
         binding.proxyPassword.setText(proxyPassword)
         binding.proxyAuthentication.isChecked = authEnabled
 
-        // Save Button
         binding.proxySave.setOnClickListener {
             proxyHost = binding.proxyHost.text.toString() ?: ""
-
-            // Parse port, treat blank or invalid as 0
             val portInput = binding.proxyPort.text.toString()
             proxyPort = portInput.toIntOrNull() ?: 0
-
             proxyUsername = binding.proxyUsername.text.toString() ?: ""
             proxyPassword = binding.proxyPassword.text.toString() ?: ""
 
-            // Save to PrefManager
             PrefManager.setVal(PrefName.Socks5ProxyHost, proxyHost)
             PrefManager.setVal(PrefName.Socks5ProxyPort, proxyPort) // Save 0 if blank
             PrefManager.setVal(PrefName.Socks5ProxyUsername, proxyUsername)
             PrefManager.setVal(PrefName.Socks5ProxyPassword, proxyPassword)
 
             dismiss()
-            //activity?.restartApp()
+            if (proxyEnabled) activity?.restartApp()
         }
 
-        // MaterialCheckBox
         binding.proxyAuthentication.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.ProxyAuthEnabled, isChecked)
+            binding.proxyUsername.isEnabled = isChecked
+            binding.proxyPassword.isEnabled = isChecked
+            binding.proxyUsernameLayout.isEnabled = isChecked
+            binding.proxyPasswordLayout.isEnabled = isChecked
         }
     }
 

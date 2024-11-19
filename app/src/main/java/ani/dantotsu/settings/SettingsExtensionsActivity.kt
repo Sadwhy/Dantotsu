@@ -297,10 +297,20 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                         }
                     ),
                     Settings(
+                        type = 2,
+                        name = getString(R.string.NSFWExtention),
+                        desc = getString(R.string.NSFWExtention_desc),
+                        icon = R.drawable.swap_horizontal_circle_24,
+                        isChecked = PrefManager.getVal(PrefName.NSFWExtension),
+                        switch = { isChecked, _ ->
+                            PrefManager.setVal(PrefName.EnableSocks5Proxy, isChecked)
+                        }
+                    ),
+                    Settings(
                         type = 1,
                         name = getString(R.string.devs),
                         desc = getString(R.string.devs_desc),
-                        icon = R.drawable.ic_round_accessible_forward_24,
+                        icon = R.drawable.lan_24,
                         onClick = {
                             ProxyDialogFragment().show(supportFragmentManager, "dialog")
                         }
