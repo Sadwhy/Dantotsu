@@ -272,6 +272,26 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                             }.show()
                         }
                     ),
+                    Settings(
+                        type = 2,
+                        name = getString(R.string.proxy),
+                        desc = getString(R.string.proxy_desc),
+                        icon = R.drawable.swap_horizontal_circle_24,
+                        isChecked = PrefManager.getVal(PrefName.EnableSocks5Proxy),
+                        switch = { isChecked, _ ->
+                            PrefManager.setVal(PrefName.EnableSocks5Proxy, isChecked)
+                            restartApp()
+                        }
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.proxy_setup),
+                        desc = getString(R.string.proxy_setup_desc),
+                        icon = R.drawable.lan_24,
+                        onClick = {
+                            ProxyDialogFragment().show(supportFragmentManager, "dialog")
+                        }
+                    ),
                     Settings( 
                         type = 2,
                         name = getString(R.string.force_legacy_installer),
@@ -295,26 +315,6 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                         isChecked = PrefManager.getVal(PrefName.SkipExtensionIcons),
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.SkipExtensionIcons, isChecked)
-                        }
-                    ),
-                    Settings(
-                        type = 2,
-                        name = getString(R.string.proxy),
-                        desc = getString(R.string.proxy_desc),
-                        icon = R.drawable.swap_horizontal_circle_24,
-                        isChecked = PrefManager.getVal(PrefName.EnableSocks5Proxy),
-                        switch = { isChecked, _ ->
-                            PrefManager.setVal(PrefName.EnableSocks5Proxy, isChecked)
-                            restartApp()
-                        }
-                    ),
-                    Settings(
-                        type = 1,
-                        name = getString(R.string.proxy_setup),
-                        desc = getString(R.string.proxy_setup_desc),
-                        icon = R.drawable.lan_24,
-                        onClick = {
-                            ProxyDialogFragment().show(supportFragmentManager, "dialog")
                         }
                     ),
                     Settings(
