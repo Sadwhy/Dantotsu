@@ -40,10 +40,10 @@ class ProxyDialogFragment : BottomSheetDialogFragment() {
 
         // Save Button
         binding.proxySave.setOnClickListener {
-            proxyHost = binding.proxyHost.text.toString()
-            proxyPort = binding.proxyPort.text.toString().toInt()
-            proxyUsername = binding.proxyUsername.text.toString()
-            proxyPassword = binding.proxyPassword.text.toString()
+            proxyHost = binding.proxyHost.text.toString() ?: ""
+            proxyPort = binding.proxyPort.text.toString().toInt() ?: 0
+            proxyUsername = binding.proxyUsername.text.toString() ?: ""
+            proxyPassword = binding.proxyPassword.text.toString() ?: ""
 
             val combinedString = """
                 Host: $proxyHost, Port: $proxyPort,
