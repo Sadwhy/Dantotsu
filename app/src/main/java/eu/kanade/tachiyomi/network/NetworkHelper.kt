@@ -19,7 +19,9 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 import java.net.InetSocketAddress
 import java.net.Proxy
-import okhttp3.Authenticator
+import java.net.Authenticator
+import java.net.PasswordAuthentication
+import java.util.prefs.Preferences
 import okhttp3.Credentials
 import okhttp3.Response
 import okhttp3.Route
@@ -27,6 +29,41 @@ import okhttp3.Route
 class NetworkHelper(
     context: Context
 ) {
+
+   init {
+     
+   }
+
+private fun setupSocks5Proxy() {
+        val proxyEnabled = PrefManager.getVal<Boolean>(PrefName.EnableSocks5Proxy)
+
+        if (proxyEnabled) {
+            // Get proxy details from preferences
+            val proxyHost = PrefManager.getVal<String>(PrefName.Socks5ProxyHost)
+            val proxyPort = PrefManager.getVal<Int>(PrefName.Socks5ProxyPort)
+
+            // Set system-wide SOCKS5 proxy
+            System.setProperty("socksProxyHost", proxyHost)
+            System.setProperty("socksProxyPort", proxyPort.toString())
+
+            if (PrefManager.getVal<Boolean>(PrefName.ProxyAuthEnabled)) {
+                val proxyUsername = PrefManager.getVal<String>(PrefName.Socks5ProxyUsername)
+                val proxyPassword = PrefManager.getVal<String>(PrefName.Socks5ProxyPassword)
+
+                // Configure proxy authentication
+                Authenticator.setDefault(object : Authenticator() {
+                    override fun getPasswordAuthentication(): PasswordAuthentication {
+                        return PasswordAuthentication(proxyUsername, proxyPassword.toCharArray())
+                    }
+                })
+            }
+        } else {
+            // Disable proxy
+            System.clearProperty("socksProxyHost")
+            System.clearProperty("socksProxyPort")
+            Authenticator.setDefault(null)
+        }
+    }
 
     val cookieJar = AndroidCookieJar()
 
@@ -79,31 +116,8 @@ class NetworkHelper(
             PREF_DOH_SHECAN -> builder.dohShecan()
             PREF_DOH_LIBREDNS -> builder.dohLibreDNS()
         }
-
-        val proxyEnabled = PrefManager.getVal<Boolean>(PrefName.EnableSocks5Proxy)
-        val proxyAuthEnabled = PrefManager.getVal<Boolean>(PrefName.ProxyAuthEnabled)
-        
-        if (proxyEnabled) {
-            val proxyHost = PrefManager.getVal<String>(PrefName.Socks5ProxyHost)
-            val proxyPort = PrefManager.getVal<Int>(PrefName.Socks5ProxyPort)
-            val proxyUsername = PrefManager.getVal<String>(PrefName.Socks5ProxyUsername)
-            val proxyPassword = PrefManager.getVal<String>(PrefName.Socks5ProxyPassword)
-        
-            val proxy = Proxy(Proxy.Type.SOCKS, InetSocketAddress(proxyHost, proxyPort))
-            builder.proxy(proxy)
-            
-            if (!proxyUsername.isNullOrEmpty() && !proxyPassword.isNullOrEmpty() && proxyAuthEnabled) {
-                val authenticator = Authenticator { _: Route?, response: Response ->
-                    val credential = Credentials.basic(proxyUsername, proxyPassword)
-                    response.request.newBuilder()
-                        .header("Proxy-Authorization", credential)
-                        .build()
-                }
-                builder.proxyAuthenticator(authenticator)
-            }
-        }
-        builder.build()
-    }
+      builder.build()
+     }
 
     val downloadClient = client.newBuilder().callTimeout(20, TimeUnit.MINUTES).build()
 
