@@ -302,9 +302,10 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                         name = getString(R.string.NSFWExtention),
                         desc = getString(R.string.NSFWExtention_desc),
                         icon = R.drawable.swap_horizontal_circle_24,
-                        isChecked = PrefManager.getVal(PrefName.NSFWExtension),
+                        isChecked = PrefManager.getVal(PrefName.EnableSocks5Proxy),
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.EnableSocks5Proxy, isChecked)
+                            restartApp()
                         }
                     ),
                     Settings(
@@ -314,7 +315,6 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                         icon = R.drawable.lan_24,
                         onClick = {
                             ProxyDialogFragment().show(supportFragmentManager, "dialog")
-                            restartApp()
                         }
                     ),
                     Settings(
