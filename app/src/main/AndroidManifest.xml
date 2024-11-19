@@ -158,7 +158,7 @@
         <activity
             android:name=".settings.SettingsExtensionsActivity"
             android:parentActivityName=".MainActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".settings.SettingsAddonActivity"
             android:parentActivityName=".MainActivity" />

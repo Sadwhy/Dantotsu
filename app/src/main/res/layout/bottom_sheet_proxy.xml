@@ -116,6 +116,7 @@
             android:layout_height="56dp"
             android:layout_marginTop="10dp"
             android:hint="@string/username"
+            android:enabled="false"
             app:boxCornerRadiusBottomEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusTopEnd="16dp"
@@ -135,6 +136,7 @@
                 android:padding="8dp"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="14sp"
+                android:enabled="false"
                 tools:ignore="LabelFor,TextContrastCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -145,6 +147,7 @@
             android:layout_height="56dp"
             android:layout_marginTop="16dp"
             android:hint="@string/password"
+            android:enabled="false"
             app:boxCornerRadiusBottomEnd="16dp"
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusTopEnd="16dp"
@@ -164,6 +167,7 @@
                 android:padding="8dp"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="14sp"
+                android:enabled="false"
                 tools:ignore="LabelFor,TextContrastCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
