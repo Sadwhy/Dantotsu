@@ -23,6 +23,7 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.parsers.ParserTestActivity
+import ani.dantotsu.restartApp
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
@@ -313,6 +314,7 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                         icon = R.drawable.lan_24,
                         onClick = {
                             ProxyDialogFragment().show(supportFragmentManager, "dialog")
+                            restartApp()
                         }
                     ),
                     Settings(
