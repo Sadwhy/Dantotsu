@@ -9,6 +9,7 @@ import ani.dantotsu.databinding.BottomSheetProxyBinding
 import ani.dantotsu.snackString
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.restartApp
 
 class ProxyDialogFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetProxyBinding? = null
@@ -51,6 +52,8 @@ class ProxyDialogFragment : BottomSheetDialogFragment() {
                 Authentication: $authEnabled
             """.trimIndent()
 
+            dismiss()
+            restartApp()
             snackString(combinedString)
         }
 
