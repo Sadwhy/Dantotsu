@@ -31,7 +31,7 @@ class NetworkHelper(
 ) {
 
    init {
-     
+     setupSocks5Proxy()
    }
 
 private fun setupSocks5Proxy() {
