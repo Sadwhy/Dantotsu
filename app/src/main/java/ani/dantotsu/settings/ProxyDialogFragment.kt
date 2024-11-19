@@ -34,7 +34,7 @@ class ProxyDialogFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.proxyHost.setText(proxyHost)
-        binding.proxyPort.setText(proxyPort.toString()) // Ensure port is a string
+        binding.proxyPort.setText(if (proxyPort == 0) "" else proxyPort.toString()) // Display empty if 0
         binding.proxyUsername.setText(proxyUsername)
         binding.proxyPassword.setText(proxyPassword)
         binding.proxyAuthentication.isChecked = authEnabled
@@ -42,28 +42,27 @@ class ProxyDialogFragment : BottomSheetDialogFragment() {
         // Save Button
         binding.proxySave.setOnClickListener {
             proxyHost = binding.proxyHost.text.toString() ?: ""
-            proxyPort = binding.proxyPort.text.toString().toInt() ?: 0
+
+            // Parse port, treat blank or invalid as 0
+            val portInput = binding.proxyPort.text.toString()
+            proxyPort = portInput.toIntOrNull() ?: 0
+
             proxyUsername = binding.proxyUsername.text.toString() ?: ""
             proxyPassword = binding.proxyPassword.text.toString() ?: ""
 
-            val combinedString = """
-                Host: $proxyHost, Port: $proxyPort,
-                Username: $proxyUsername, Password: $proxyPassword,
-                Authentication: $authEnabled
-            """.trimIndent()
+            // Save to PrefManager
+            PrefManager.setVal(PrefName.Socks5ProxyHost, proxyHost)
+            PrefManager.setVal(PrefName.Socks5ProxyPort, proxyPort) // Save 0 if blank
+            PrefManager.setVal(PrefName.Socks5ProxyUsername, proxyUsername)
+            PrefManager.setVal(PrefName.Socks5ProxyPassword, proxyPassword)
 
             dismiss()
-            activity?.restartApp()
-            snackString(combinedString)
+            //activity?.restartApp()
         }
 
         // MaterialCheckBox
         binding.proxyAuthentication.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-              PrefManager.setVal(PrefName.ProxyAuthEnabled, true)
-            } else {
-              PrefManager.setVal(PrefName.ProxyAuthEnabled, false) 
-            }
+            PrefManager.setVal(PrefName.ProxyAuthEnabled, isChecked)
         }
     }
 
