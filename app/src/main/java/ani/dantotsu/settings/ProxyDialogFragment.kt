@@ -53,7 +53,7 @@ class ProxyDialogFragment : BottomSheetDialogFragment() {
             """.trimIndent()
 
             dismiss()
-            restartApp()
+            activity?.restartApp()
             snackString(combinedString)
         }
 
