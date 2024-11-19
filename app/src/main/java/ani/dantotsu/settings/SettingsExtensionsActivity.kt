@@ -299,8 +299,8 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                     ),
                     Settings(
                         type = 2,
-                        name = getString(R.string.NSFWExtention),
-                        desc = getString(R.string.NSFWExtention_desc),
+                        name = getString(R.string.proxy),
+                        desc = getString(R.string.proxy_desc),
                         icon = R.drawable.swap_horizontal_circle_24,
                         isChecked = PrefManager.getVal(PrefName.EnableSocks5Proxy),
                         switch = { isChecked, _ ->
@@ -310,8 +310,8 @@ class SettingsExtensionsActivity : AppCompatActivity() {
                     ),
                     Settings(
                         type = 1,
-                        name = getString(R.string.devs),
-                        desc = getString(R.string.devs_desc),
+                        name = getString(R.string.proxy_setup),
+                        desc = getString(R.string.proxy_setup_desc),
                         icon = R.drawable.lan_24,
                         onClick = {
                             ProxyDialogFragment().show(supportFragmentManager, "dialog")

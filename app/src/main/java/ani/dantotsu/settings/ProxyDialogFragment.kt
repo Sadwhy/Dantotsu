@@ -16,7 +16,7 @@ class ProxyDialogFragment : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     private var proxyHost: String? = PrefManager.getVal<String>(PrefName.Socks5ProxyHost) ?: ""
-    private var proxyPort: Int = PrefManager.getVal<Int>(PrefName.Socks5ProxyPort) ?: 0
+    private var proxyPort: String? = PrefManager.getVal<String>(PrefName.Socks5ProxyPort) ?: ""
     private var proxyUsername: String? = PrefManager.getVal<String>(PrefName.Socks5ProxyUsername) ?: ""
     private var proxyPassword: String? = PrefManager.getVal<String>(PrefName.Socks5ProxyPassword) ?: ""
     private var authEnabled: Boolean = PrefManager.getVal<Boolean>(PrefName.ProxyAuthEnabled)
@@ -35,20 +35,19 @@ class ProxyDialogFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.proxyHost.setText(proxyHost)
-        binding.proxyPort.setText(if (proxyPort == 0) "" else proxyPort.toString()) // Display empty if 0
+        binding.proxyPort.setText(proxyPort)
         binding.proxyUsername.setText(proxyUsername)
         binding.proxyPassword.setText(proxyPassword)
         binding.proxyAuthentication.isChecked = authEnabled
 
         binding.proxySave.setOnClickListener {
             proxyHost = binding.proxyHost.text.toString() ?: ""
-            val portInput = binding.proxyPort.text.toString()
-            proxyPort = portInput.toIntOrNull() ?: 0
+            proxyPort = binding.proxyPort.text.toString() ?: ""
             proxyUsername = binding.proxyUsername.text.toString() ?: ""
             proxyPassword = binding.proxyPassword.text.toString() ?: ""
 
             PrefManager.setVal(PrefName.Socks5ProxyHost, proxyHost)
-            PrefManager.setVal(PrefName.Socks5ProxyPort, proxyPort) // Save 0 if blank
+            PrefManager.setVal(PrefName.Socks5ProxyPort, proxyPort)
             PrefManager.setVal(PrefName.Socks5ProxyUsername, proxyUsername)
             PrefManager.setVal(PrefName.Socks5ProxyPassword, proxyPassword)
 
