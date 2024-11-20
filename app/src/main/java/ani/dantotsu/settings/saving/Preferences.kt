@@ -199,8 +199,6 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     RefreshStatus(Pref(Location.Irrelevant, Boolean::class, false)),
     rpcEnabled(Pref(Location.Irrelevant, Boolean::class, true)),
 
-    //testing 
-
     //Protected
     DiscordToken(Pref(Location.Protected, String::class, "")),
     DiscordId(Pref(Location.Protected, String::class, "")),
