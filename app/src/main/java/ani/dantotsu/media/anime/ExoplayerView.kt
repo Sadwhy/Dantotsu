@@ -320,111 +320,137 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }
     }
 
-    private fun setupSubFormatting(playerView: PlayerView) {
-        val primaryColor = when (PrefManager.getVal<Int>(PrefName.PrimaryColor)) {
-            0 -> Color.BLACK
-            1 -> Color.DKGRAY
-            2 -> Color.GRAY
-            3 -> Color.LTGRAY
-            4 -> Color.WHITE
-            5 -> Color.RED
-            6 -> Color.YELLOW
-            7 -> Color.GREEN
-            8 -> Color.CYAN
-            9 -> Color.BLUE
-            10 -> Color.MAGENTA
-            11 -> Color.TRANSPARENT
-            else -> Color.WHITE
-        }
-        val secondaryColor = when (PrefManager.getVal<Int>(PrefName.SecondaryColor)) {
-            0 -> Color.BLACK
-            1 -> Color.DKGRAY
-            2 -> Color.GRAY
-            3 -> Color.LTGRAY
-            4 -> Color.WHITE
-            5 -> Color.RED
-            6 -> Color.YELLOW
-            7 -> Color.GREEN
-            8 -> Color.CYAN
-            9 -> Color.BLUE
-            10 -> Color.MAGENTA
-            11 -> Color.TRANSPARENT
-            else -> Color.BLACK
-        }
-        val outline = when (PrefManager.getVal<Int>(PrefName.Outline)) {
-            0 -> EDGE_TYPE_OUTLINE // Normal
-            1 -> EDGE_TYPE_DEPRESSED // Shine
-            2 -> EDGE_TYPE_DROP_SHADOW // Drop shadow
-            3 -> EDGE_TYPE_NONE // No outline
-            else -> EDGE_TYPE_OUTLINE // Normal
-        }
-        val subBackground = when (PrefManager.getVal<Int>(PrefName.SubBackground)) {
-            0 -> Color.TRANSPARENT
-            1 -> Color.BLACK
-            2 -> Color.DKGRAY
-            3 -> Color.GRAY
-            4 -> Color.LTGRAY
-            5 -> Color.WHITE
-            6 -> Color.RED
-            7 -> Color.YELLOW
-            8 -> Color.GREEN
-            9 -> Color.CYAN
-            10 -> Color.BLUE
-            11 -> Color.MAGENTA
-            else -> Color.TRANSPARENT
-        }
-        val subWindow = when (PrefManager.getVal<Int>(PrefName.SubWindow)) {
-            0 -> Color.TRANSPARENT
-            1 -> Color.BLACK
-            2 -> Color.DKGRAY
-            3 -> Color.GRAY
-            4 -> Color.LTGRAY
-            5 -> Color.WHITE
-            6 -> Color.RED
-            7 -> Color.YELLOW
-            8 -> Color.GREEN
-            9 -> Color.CYAN
-            10 -> Color.BLUE
-            11 -> Color.MAGENTA
-            else -> Color.TRANSPARENT
-        }
-        val font = when (PrefManager.getVal<Int>(PrefName.Font)) {
-            0 -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
-            1 -> ResourcesCompat.getFont(this, R.font.poppins_bold)
-            2 -> ResourcesCompat.getFont(this, R.font.poppins)
-            3 -> ResourcesCompat.getFont(this, R.font.poppins_thin)
-            4 -> ResourcesCompat.getFont(this, R.font.century_gothic_regular)
-            5 -> ResourcesCompat.getFont(this, R.font.levenim_mt_bold)
-            6 -> ResourcesCompat.getFont(this, R.font.blocky)
-            else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
-        }
-        val fontSize = PrefManager.getVal<Int>(PrefName.FontSize).toFloat()
-
-        playerView.subtitleView?.let { subtitles ->
-            subtitles.setApplyEmbeddedStyles(false)
-            subtitles.setApplyEmbeddedFontSizes(false)
-            subtitles.setBottomPaddingFraction(.1F)
-
-            subtitles.setStyle(
-                CaptionStyleCompat(
-                    primaryColor,
-                    subBackground,
-                    subWindow,
-                    outline,
-                    secondaryColor,
-                    font
-                )
-            )
-
-            subtitles.alpha =
-                when (PrefManager.getVal<Boolean>(PrefName.Subtitles)) {
-                    true -> PrefManager.getVal(PrefName.SubAlpha)
-                    false -> 0f
-                }
-
-            subtitles.setFixedTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
-        }
+private fun setupSubFormatting(playerView: PlayerView) {
+    val primaryColor = when (PrefManager.getVal<Int>(PrefName.PrimaryColor)) {
+        0 -> Color.BLACK
+        1 -> Color.DKGRAY
+        2 -> Color.GRAY
+        3 -> Color.LTGRAY
+        4 -> Color.WHITE
+        5 -> Color.RED
+        6 -> Color.YELLOW
+        7 -> Color.GREEN
+        8 -> Color.CYAN
+        9 -> Color.BLUE
+        10 -> Color.MAGENTA
+        11 -> Color.TRANSPARENT
+        else -> Color.WHITE
     }
+    val secondaryColor = when (PrefManager.getVal<Int>(PrefName.SecondaryColor)) {
+        0 -> Color.BLACK
+        1 -> Color.DKGRAY
+        2 -> Color.GRAY
+        3 -> Color.LTGRAY
+        4 -> Color.WHITE
+        5 -> Color.RED
+        6 -> Color.YELLOW
+        7 -> Color.GREEN
+        8 -> Color.CYAN
+        9 -> Color.BLUE
+        10 -> Color.MAGENTA
+        11 -> Color.TRANSPARENT
+        else -> Color.BLACK
+    }
+    val outline = when (PrefManager.getVal<Int>(PrefName.Outline)) {
+        0 -> EDGE_TYPE_OUTLINE // Normal
+        1 -> EDGE_TYPE_DEPRESSED // Shine
+        2 -> EDGE_TYPE_DROP_SHADOW // Drop shadow
+        3 -> EDGE_TYPE_NONE // No outline
+        else -> EDGE_TYPE_OUTLINE // Normal
+    }
+    val subBackground = when (PrefManager.getVal<Int>(PrefName.SubBackground)) {
+        0 -> Color.TRANSPARENT
+        1 -> Color.BLACK
+        2 -> Color.DKGRAY
+        3 -> Color.GRAY
+        4 -> Color.LTGRAY
+        5 -> Color.WHITE
+        6 -> Color.RED
+        7 -> Color.YELLOW
+        8 -> Color.GREEN
+        9 -> Color.CYAN
+        10 -> Color.BLUE
+        11 -> Color.MAGENTA
+        else -> Color.TRANSPARENT
+    }
+    val subWindow = when (PrefManager.getVal<Int>(PrefName.SubWindow)) {
+        0 -> Color.TRANSPARENT
+        1 -> Color.BLACK
+        2 -> Color.DKGRAY
+        3 -> Color.GRAY
+        4 -> Color.LTGRAY
+        5 -> Color.WHITE
+        6 -> Color.RED
+        7 -> Color.YELLOW
+        8 -> Color.GREEN
+        9 -> Color.CYAN
+        10 -> Color.BLUE
+        11 -> Color.MAGENTA
+        else -> Color.TRANSPARENT
+    }
+    val font = when (PrefManager.getVal<Int>(PrefName.Font)) {
+        0 -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
+        1 -> ResourcesCompat.getFont(this, R.font.poppins_bold)
+        2 -> ResourcesCompat.getFont(this, R.font.poppins)
+        3 -> ResourcesCompat.getFont(this, R.font.poppins_thin)
+        4 -> ResourcesCompat.getFont(this, R.font.century_gothic_regular)
+        5 -> ResourcesCompat.getFont(this, R.font.levenim_mt_bold)
+        6 -> ResourcesCompat.getFont(this, R.font.blocky)
+        else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
+    }
+    val fontSize = PrefManager.getVal<Int>(PrefName.FontSize).toFloat()
+
+    playerView.subtitleView?.let { subtitles ->
+        subtitles.setApplyEmbeddedStyles(false)
+        subtitles.setApplyEmbeddedFontSizes(false)
+        subtitles.setBottomPaddingFraction(.1F)
+
+        subtitles.setStyle(
+            CaptionStyleCompat(
+                primaryColor,
+                subBackground,
+                subWindow,
+                outline,
+                secondaryColor,
+                font
+            )
+        )
+
+        subtitles.alpha =
+            when (PrefManager.getVal<Boolean>(PrefName.Subtitles)) {
+                true -> PrefManager.getVal(PrefName.SubAlpha)
+                false -> 0f
+            }
+
+        subtitles.setFixedTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
+
+        // Adjusting subtitle margins and translationY for visual normalization
+        val normalMarginDp = 16 // Normal margin in dp
+        val elevatedMarginDp = 32 // Elevated margin in dp
+
+        // Extreme multiplier for exaggerating the margin difference
+        val extremeFactor = 50 // You can change this factor to control exaggeration
+        val extremeMarginDp = normalMarginDp * extremeFactor
+
+        // Convert dp to px
+        val context = subtitles.context
+        val density = context.resources.displayMetrics.density
+        val extremeMarginPx = (extremeMarginDp * density).toInt()
+        val normalMarginPx = (normalMarginDp * density).toInt()
+        val elevatedMarginPx = (elevatedMarginDp * density).toInt()
+
+        // Apply extreme margin to the subtitle view
+        subtitles.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            bottomMargin = extremeMarginPx
+        }
+
+        // Calculate the translationY to balance the position
+        val translationY = (normalMarginPx - elevatedMarginPx) * (extremeFactor / 100f)
+
+        // Apply the translationY to the SubtitleView to normalize both positions
+        subtitles.translationY = translationY
+    }
+}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -524,6 +550,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 it.visibility = View.GONE
             }
         }
+        setupSubFormatting(playerView)
 
         if (savedInstanceState != null) {
             currentWindow = savedInstanceState.getInt(resumeWindow)
