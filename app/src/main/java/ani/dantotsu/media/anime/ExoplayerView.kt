@@ -403,6 +403,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         playerView.subtitleView?.let { subtitles ->
             subtitles.setApplyEmbeddedStyles(false)
             subtitles.setApplyEmbeddedFontSizes(false)
+            subtitles.setBottomPaddingFraction(.1F)
 
             subtitles.setStyle(
                 CaptionStyleCompat(
