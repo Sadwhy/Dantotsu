@@ -429,7 +429,7 @@ private fun setupSubFormatting(playerView: PlayerView) {
     }
 }
 
-private fun applySubtitleStyles() {
+private fun applySubtitleStyles(textView: TextView) {
     val primaryColor = when (PrefManager.getVal<Int>(PrefName.PrimaryColor)) {
         0 -> Color.BLACK
         1 -> Color.DKGRAY
@@ -1577,7 +1577,7 @@ private fun applySubtitleStyles() {
             ext.onVideoPlayed(video)
         }
 
-          applySubtitleStyles()
+          applySubtitleStyles(customSubtitleView)
 
         val httpClient = okHttpClient.newBuilder().apply {
             ignoreAllSSLErrors()
