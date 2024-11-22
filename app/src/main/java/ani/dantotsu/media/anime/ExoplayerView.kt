@@ -520,17 +520,17 @@ private fun applyOutline(textView: TextView) {
     paint.style = Paint.Style.STROKE
     paint.strokeWidth = 4f
     paint.color = Color.BLACK // Outline color
-    textView.setTextColor(Color.TRANSPARENT) // Make the text itself transparent so the outline is visible
 }
 
 // Function to apply shine effect (gradient effect)
 private fun applyShine(textView: TextView) {
     val paint = textView.paint
     val width = textView.width.toFloat()
+    val height = textView.height.toFloat()
 
-    // Create a gradient from black to white to simulate a 3D shine effect
+    // Create a gradient from black at the top-left to white at the bottom-right for a 3D shine effect
     val shader = LinearGradient(
-        0f, 0f, width, 0f,
+        0f, 0f, width, height, // Start at top-left (0,0) and end at bottom-right (width, height)
         intArrayOf(Color.BLACK, Color.WHITE), // Black to white gradient
         null,
         Shader.TileMode.CLAMP
@@ -538,7 +538,6 @@ private fun applyShine(textView: TextView) {
 
     paint.shader = shader
 }
-
 // Function to apply drop shadow
 private fun applyDropShadow(textView: TextView) {
     textView.setShadowLayer(8f, 4f, 4f, Color.BLACK) // Apply a black drop shadow
