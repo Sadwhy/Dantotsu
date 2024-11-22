@@ -430,6 +430,7 @@ private fun setupSubFormatting(playerView: PlayerView) {
 }
 
 private fun applySubtitleStyles(textView: TextView) {
+    // Set the primary color based on user preferences
     val primaryColor = when (PrefManager.getVal<Int>(PrefName.PrimaryColor)) {
         0 -> Color.BLACK
         1 -> Color.DKGRAY
@@ -445,13 +446,17 @@ private fun applySubtitleStyles(textView: TextView) {
         11 -> Color.TRANSPARENT
         else -> Color.WHITE
     }
+
+    // Select the outline style based on user preferences
     val outlineStyle = when (PrefManager.getVal<Int>(PrefName.Outline)) {
-            0 -> R.drawable.outline // Normal outline
-            1 -> R.drawable.shine // Shine effect
-            2 -> R.drawable.drop_shadow // Drop shadow
-            3 -> R.drawable.none // No outline
-            else -> R.drawable.outline // Default to normal outline
-        }
+        0 -> R.drawable.outline // Normal outline
+        1 -> R.drawable.shine // Shine effect
+        2 -> R.drawable.drop_shadow // Drop shadow
+        3 -> R.drawable.none // No outline
+        else -> R.drawable.outline // Default to normal outline
+    }
+
+    // Set the background color based on user preferences
     val subBackground = when (PrefManager.getVal<Int>(PrefName.SubBackground)) {
         0 -> Color.TRANSPARENT
         1 -> Color.BLACK
@@ -468,6 +473,7 @@ private fun applySubtitleStyles(textView: TextView) {
         else -> Color.TRANSPARENT
     }
 
+    // Set the font based on user preferences
     val font = when (PrefManager.getVal<Int>(PrefName.Font)) {
         0 -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
         1 -> ResourcesCompat.getFont(this, R.font.poppins_bold)
@@ -479,18 +485,27 @@ private fun applySubtitleStyles(textView: TextView) {
         else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
     }
 
+    // Set the font size
     val fontSize = PrefManager.getVal<Int>(PrefName.FontSize).toFloat()
 
+    // Apply the background, text color, font, and size
     textView.setBackgroundColor(subBackground)
     textView.setTextColor(primaryColor)
     textView.setBackgroundResource(outlineStyle)
     textView.typeface = font
     textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
 
-    // Optional: Apply transparency based on user settings
+    // Apply transparency if subtitles are enabled
     textView.alpha = when (PrefManager.getVal<Boolean>(PrefName.Subtitles)) {
         true -> PrefManager.getVal(PrefName.SubAlpha)
         false -> 0f
+    }
+
+    // Apply the drop shadow if required (by adding the shadow layer programmatically)
+    if (PrefManager.getVal<Int>(PrefName.Outline) == 2) { // Check if drop shadow is selected
+        textView.setShadowLayer(8f, 4f, 4f, Color.BLACK) // Apply a black drop shadow
+    } else {
+        textView.setShadowLayer(0f, 0f, 0f, Color.TRANSPARENT) // Remove shadow if not selected
     }
 }
 
