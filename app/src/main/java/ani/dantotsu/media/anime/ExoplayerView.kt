@@ -498,7 +498,7 @@ private fun applySubtitleStyles(textView: TextView) {
     if (PrefManager.getVal<Int>(PrefName.Outline) == 0) { // Normal outline
         applyOutline(textView)
     } else {
-        textView.paint.style = Paint.Style.FILL // Remove outline if not selected
+        textView.paint.style = Paint.Style.FILL // Reset to fill style for text
     }
 
     // Apply the shine effect if required
@@ -506,8 +506,8 @@ private fun applySubtitleStyles(textView: TextView) {
         applyShine(textView)
     }
 
-    // Apply the drop shadow if required (by adding the shadow layer programmatically)
-    if (PrefManager.getVal<Int>(PrefName.Outline) == 2) { // Check if drop shadow is selected
+    // Apply the drop shadow if required
+    if (PrefManager.getVal<Int>(PrefName.Outline) == 2) { // Drop shadow
         applyDropShadow(textView)
     } else {
         textView.setShadowLayer(0f, 0f, 0f, Color.TRANSPARENT) // Remove shadow if not selected
@@ -520,6 +520,7 @@ private fun applyOutline(textView: TextView) {
     paint.style = Paint.Style.STROKE
     paint.strokeWidth = 4f
     paint.color = Color.BLACK // Outline color
+    textView.setTextColor(Color.TRANSPARENT) // Make the text itself transparent so the outline is visible
 }
 
 // Function to apply shine effect (gradient effect)
@@ -527,9 +528,10 @@ private fun applyShine(textView: TextView) {
     val paint = textView.paint
     val width = textView.width.toFloat()
 
+    // Create a gradient from black to white to simulate a 3D shine effect
     val shader = LinearGradient(
         0f, 0f, width, 0f,
-        intArrayOf(Color.YELLOW, Color.WHITE, Color.YELLOW),
+        intArrayOf(Color.BLACK, Color.WHITE), // Black to white gradient
         null,
         Shader.TileMode.CLAMP
     )
