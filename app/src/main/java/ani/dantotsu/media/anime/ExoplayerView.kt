@@ -517,9 +517,15 @@ private fun applySubtitleStyles(textView: TextView) {
 // Function to apply outline (stroke effect)
 private fun applyOutline(textView: TextView) {
     val paint = textView.paint
+    val originalTextColor = textView.currentTextColor
+    
+    // Set outline properties
     paint.style = Paint.Style.STROKE
     paint.strokeWidth = 4f
     paint.color = Color.BLACK // Outline color
+    
+    // Preserve the original text color
+    textView.setTextColor(originalTextColor)
 }
 
 // Function to apply shine effect (gradient effect)
