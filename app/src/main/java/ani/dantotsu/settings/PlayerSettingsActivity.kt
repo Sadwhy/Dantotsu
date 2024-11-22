@@ -267,14 +267,19 @@ class PlayerSettingsActivity : AppCompatActivity() {
             PrefManager.setVal(PrefName.Cast, isChecked)
         }
 
+        binding.playerSettingsRotate.isChecked = PrefManager.getVal(PrefName.RotationPlayer)
+        binding.playerSettingsRotate.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.RotationPlayer, isChecked)
+        }
+
         binding.playerSettingsInternalCast.isChecked = PrefManager.getVal(PrefName.UseInternalCast)
         binding.playerSettingsInternalCast.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.UseInternalCast, isChecked)
         }
 
-        binding.playerSettingsRotate.isChecked = PrefManager.getVal(PrefName.RotationPlayer)
-        binding.playerSettingsRotate.setOnCheckedChangeListener { _, isChecked ->
-            PrefManager.setVal(PrefName.RotationPlayer, isChecked)
+        binding.playerSettingsAdditionalCodec.isChecked = PrefManager.getVal(PrefName.UseAdditionalCodec)
+        binding.playerSettingsAdditionalCodec.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.UseAdditionalCodec, isChecked)
         }
 
         val resizeModes = arrayOf("Original", "Zoom", "Stretch")
