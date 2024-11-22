@@ -52,6 +52,17 @@
         android:layout_weight="1"
         android:adjustViewBounds="true">
 
+    <TextView
+        android:id="@+id/customSubtitleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#80000000"
+        android:padding="8dp"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
     </androidx.media3.ui.SubtitleView>
 
     <androidx.constraintlayout.widget.ConstraintLayout

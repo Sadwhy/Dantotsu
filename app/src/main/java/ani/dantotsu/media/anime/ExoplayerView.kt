@@ -497,6 +497,7 @@ private fun setupSubFormatting(playerView: PlayerView) {
         skipTimeButton = playerView.findViewById(R.id.exo_skip_timestamp)
         skipTimeText = skipTimeButton.findViewById(R.id.exo_skip_timestamp_text)
         timeStampText = playerView.findViewById(R.id.exo_time_stamp_text)
+        val customSubtitleView: TextView = binding.root.findViewById(R.id.customSubtitleView)
 
         animeTitle = playerView.findViewById(R.id.exo_anime_title)
         episodeTitle = playerView.findViewById(R.id.exo_ep_sel)
@@ -1782,6 +1783,18 @@ private fun setupSubFormatting(playerView: PlayerView) {
             .setTrackTypeDisabled(TRACK_TYPE_TEXT, isDisabled)
             .build()
     }
+
+exoPlayer.addListener(object : Player.Listener {
+    override fun onCues(cues: List<Cue>) {
+        if (cues.isNotEmpty()) {
+            customSubtitleView.visibility = View.VISIBLE
+            customSubtitleView.text = cues.joinToString("\n") { it.text.toString() }
+        } else {
+            customSubtitleView.visibility = View.GONE
+            customSubtitleView.text = ""
+        }
+    }
+})
 
     private fun releasePlayer() {
         isPlayerPlaying = exoPlayer.playWhenReady
