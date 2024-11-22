@@ -516,29 +516,21 @@ private fun applySubtitleStyles(textView: TextView) {
 
 // Function to apply outline (stroke effect)
 private fun applyOutline(textView: TextView) {
-    val paint = textView.paint
-    val originalTextColor = textView.currentTextColor
-    
-    // Set outline properties
-    paint.style = Paint.Style.STROKE
-    paint.strokeWidth = 4f
-    paint.color = Color.BLACK // Outline color
-    
-    // Preserve the original text color
-    textView.setTextColor(originalTextColor)
-}
+    val density = textView.context.resources.displayMetrics.density
+    val shadowRadius = 1 * density // 1 dp to pixels
+    val dx = shadowRadius // Horizontal offset
+    val dy = shadowRadius // Vertical offset
 
+    textView.setShadowLayer(shadowRadius * 2, dx, dy, Color.BLACK) // Apply a black drop shadow with a slight outline effect
+}
 // Function to apply shine effect (gradient effect)
 private fun applyShine(textView: TextView) {
-    textView.post {
         textView.paint.shader = LinearGradient(
             0f, 0f, textView.width.toFloat(), 0f,
-            intArrayOf(Color.TRANSPARENT, Color.WHITE, Color.TRANSPARENT),
+            intArrayOf(Color.BLACK, Color.WHITE, Color.WHITE),
             null,
             Shader.TileMode.CLAMP
         )
-        textView.invalidate()
-    }
 }
 // Function to apply drop shadow
 private fun applyDropShadow(textView: TextView) {
