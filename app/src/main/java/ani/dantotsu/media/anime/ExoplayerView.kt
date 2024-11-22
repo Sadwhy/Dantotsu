@@ -452,7 +452,7 @@ private fun applySubtitleStyles(textView: TextView) {
         0 -> R.drawable.outline // Normal outline
         1 -> R.drawable.shine // Shine effect
         2 -> R.drawable.drop_shadow // Drop shadow
-        3 -> null // No outline
+        3 -> R.drawable.none// No outline
         else -> R.drawable.outline // Default to normal outline
     }
 
