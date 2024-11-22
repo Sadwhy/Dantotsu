@@ -445,7 +445,13 @@ private fun applySubtitleStyles(textView: TextView) {
         11 -> Color.TRANSPARENT
         else -> Color.WHITE
     }
-
+    val outlineStyle = when (PrefManager.getVal<Int>(PrefName.Outline)) {
+            0 -> R.drawable.outline // Normal outline
+            1 -> R.drawable.shine // Shine effect
+            2 -> R.drawable.drop_shadow // Drop shadow
+            3 -> R.drawable.none // No outline
+            else -> R.drawable.outline // Default to normal outline
+        }
     val subBackground = when (PrefManager.getVal<Int>(PrefName.SubBackground)) {
         0 -> Color.TRANSPARENT
         1 -> Color.BLACK
@@ -477,6 +483,7 @@ private fun applySubtitleStyles(textView: TextView) {
 
     textView.setBackgroundColor(subBackground)
     textView.setTextColor(primaryColor)
+    textView.setBackgroundResource(outlineStyle)
     textView.typeface = font
     textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
 
