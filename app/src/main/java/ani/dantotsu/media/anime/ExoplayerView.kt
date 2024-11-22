@@ -14,6 +14,9 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.Animatable
+import android.graphics.LinearGradient
+import android.graphics.Paint
+import android.graphics.Shader
 import android.hardware.SensorManager
 import android.media.AudioManager
 import android.media.AudioManager.AUDIOFOCUS_GAIN
