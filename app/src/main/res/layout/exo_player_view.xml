@@ -56,12 +56,13 @@
         android:id="@+id/customSubtitleView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_gravity="center"
         android:background="#80000000"
         android:padding="8dp"
+        android:adjustViewBounds="true"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     </androidx.media3.ui.SubtitleView>
 

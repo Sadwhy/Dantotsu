@@ -426,32 +426,6 @@ private fun setupSubFormatting(playerView: PlayerView) {
             }
 
         subtitles.setFixedTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
-
-        // Adjusting subtitle margins and translationY for visual normalization
-        val normalMarginDp = 16 // Normal margin in dp
-        val elevatedMarginDp = 32 // Elevated margin in dp
-
-        // Extreme multiplier for exaggerating the margin difference
-        val extremeFactor = 50 // You can change this factor to control exaggeration
-        val extremeMarginDp = normalMarginDp * extremeFactor
-
-        // Convert dp to px
-        val context = subtitles.context
-        val density = context.resources.displayMetrics.density
-        val extremeMarginPx = (extremeMarginDp * density).toInt()
-        val normalMarginPx = (normalMarginDp * density).toInt()
-        val elevatedMarginPx = (elevatedMarginDp * density).toInt()
-
-        // Apply extreme margin to the subtitle view
-        subtitles.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            bottomMargin = extremeMarginPx
-        }
-
-        // Calculate the translationY to balance the position
-        val translationY = (normalMarginPx - elevatedMarginPx) * (extremeFactor / 100f)
-
-        // Apply the translationY to the SubtitleView to normalize both positions
-        subtitles.translationY = translationY
     }
 }
 
