@@ -429,6 +429,64 @@ private fun setupSubFormatting(playerView: PlayerView) {
     }
 }
 
+private fun applySubtitleStyles(textView: TextView) {
+    val primaryColor = when (PrefManager.getVal<Int>(PrefName.PrimaryColor)) {
+        0 -> Color.BLACK
+        1 -> Color.DKGRAY
+        2 -> Color.GRAY
+        3 -> Color.LTGRAY
+        4 -> Color.WHITE
+        5 -> Color.RED
+        6 -> Color.YELLOW
+        7 -> Color.GREEN
+        8 -> Color.CYAN
+        9 -> Color.BLUE
+        10 -> Color.MAGENTA
+        11 -> Color.TRANSPARENT
+        else -> Color.WHITE
+    }
+
+    val subBackground = when (PrefManager.getVal<Int>(PrefName.SubBackground)) {
+        0 -> Color.TRANSPARENT
+        1 -> Color.BLACK
+        2 -> Color.DKGRAY
+        3 -> Color.GRAY
+        4 -> Color.LTGRAY
+        5 -> Color.WHITE
+        6 -> Color.RED
+        7 -> Color.YELLOW
+        8 -> Color.GREEN
+        9 -> Color.CYAN
+        10 -> Color.BLUE
+        11 -> Color.MAGENTA
+        else -> Color.TRANSPARENT
+    }
+
+    val font = when (PrefManager.getVal<Int>(PrefName.Font)) {
+        0 -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
+        1 -> ResourcesCompat.getFont(this, R.font.poppins_bold)
+        2 -> ResourcesCompat.getFont(this, R.font.poppins)
+        3 -> ResourcesCompat.getFont(this, R.font.poppins_thin)
+        4 -> ResourcesCompat.getFont(this, R.font.century_gothic_regular)
+        5 -> ResourcesCompat.getFont(this, R.font.levenim_mt_bold)
+        6 -> ResourcesCompat.getFont(this, R.font.blocky)
+        else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
+    }
+
+    val fontSize = PrefManager.getVal<Int>(PrefName.FontSize).toFloat()
+
+    textView.setBackgroundColor(subBackground)
+    textView.setTextColor(primaryColor)
+    textView.typeface = font
+    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
+
+    // Optional: Apply transparency based on user settings
+    textView.alpha = when (PrefManager.getVal<Boolean>(PrefName.Subtitles)) {
+        true -> PrefManager.getVal(PrefName.SubAlpha)
+        false -> 0f
+    }
+}
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -1519,6 +1577,8 @@ private fun setupSubFormatting(playerView: PlayerView) {
             ext.onVideoPlayed(video)
         }
 
+          applySubtitleStyles()
+
         val httpClient = okHttpClient.newBuilder().apply {
             ignoreAllSSLErrors()
             followRedirects(true)
@@ -1693,6 +1753,8 @@ private fun setupSubFormatting(playerView: PlayerView) {
             dialog.window?.setDimAmount(0.8f)
         } else buildExoplayer()
     }
+
+     
 
     private fun buildExoplayer() {
         //Player
