@@ -447,15 +447,6 @@ private fun applySubtitleStyles(textView: TextView) {
         else -> Color.WHITE
     }
 
-    // Select the outline style based on user preferences
-    val outlineStyle = when (PrefManager.getVal<Int>(PrefName.Outline)) {
-        0 -> R.drawable.outline // Normal outline
-        1 -> R.drawable.shine // Shine effect
-        2 -> R.drawable.drop_shadow // Drop shadow
-        3 -> R.drawable.none// No outline
-        else -> R.drawable.outline // Default to normal outline
-    }
-
     // Set the background color based on user preferences
     val subBackground = when (PrefManager.getVal<Int>(PrefName.SubBackground)) {
         0 -> Color.TRANSPARENT
@@ -491,7 +482,6 @@ private fun applySubtitleStyles(textView: TextView) {
     // Apply the background, text color, font, and size
     textView.setBackgroundColor(subBackground)
     textView.setTextColor(primaryColor)
-    textView.setBackgroundResource(outlineStyle)
     textView.typeface = font
     textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
 
@@ -501,12 +491,52 @@ private fun applySubtitleStyles(textView: TextView) {
         false -> 0f
     }
 
+    // Apply the outline effect if required
+    if (PrefManager.getVal<Int>(PrefName.Outline) == 0) { // Normal outline
+        applyOutline(textView)
+    } else {
+        textView.paint.style = Paint.Style.FILL // Remove outline if not selected
+    }
+
+    // Apply the shine effect if required
+    if (PrefManager.getVal<Int>(PrefName.Outline) == 1) { // Shine effect
+        applyShine(textView)
+    }
+
     // Apply the drop shadow if required (by adding the shadow layer programmatically)
     if (PrefManager.getVal<Int>(PrefName.Outline) == 2) { // Check if drop shadow is selected
-        textView.setShadowLayer(8f, 4f, 4f, Color.BLACK) // Apply a black drop shadow
+        applyDropShadow(textView)
     } else {
         textView.setShadowLayer(0f, 0f, 0f, Color.TRANSPARENT) // Remove shadow if not selected
     }
+}
+
+// Function to apply outline (stroke effect)
+private fun applyOutline(textView: TextView) {
+    val paint = textView.paint
+    paint.style = Paint.Style.STROKE
+    paint.strokeWidth = 4f
+    paint.color = Color.BLACK // Outline color
+}
+
+// Function to apply shine effect (gradient effect)
+private fun applyShine(textView: TextView) {
+    val paint = textView.paint
+    val width = textView.width.toFloat()
+
+    val shader = LinearGradient(
+        0f, 0f, width, 0f,
+        intArrayOf(Color.YELLOW, Color.WHITE, Color.YELLOW),
+        null,
+        Shader.TileMode.CLAMP
+    )
+
+    paint.shader = shader
+}
+
+// Function to apply drop shadow
+private fun applyDropShadow(textView: TextView) {
+    textView.setShadowLayer(8f, 4f, 4f, Color.BLACK) // Apply a black drop shadow
 }
 
     override fun onCreate(savedInstanceState: Bundle?) {
