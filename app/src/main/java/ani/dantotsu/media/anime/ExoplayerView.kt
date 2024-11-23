@@ -516,7 +516,7 @@ private fun applySubtitleStyles(textView: TextView) {
 
 // Function to apply outline (stroke effect)
 private fun applyOutline(textView: TextView) {
-    textView.setShadowLayer(1.6f, 2f, 2f, Color.BLACK)  // Adjust the radius and offset for outline effect
+    textView.setShadowLayer(2f, 4f, 4f, Color.BLACK)  // Adjust the radius and offset for outline effect
 }
 // Function to apply shine effect (gradient effect)
 private fun applyShine(textView: TextView) {
