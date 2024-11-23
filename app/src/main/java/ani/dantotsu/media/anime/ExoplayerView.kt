@@ -30,6 +30,10 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings.System
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.CharacterStyle
+import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.Rational
 import android.util.TypedValue
