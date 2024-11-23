@@ -66,12 +66,7 @@ class Xubtitle @JvmOverloads constructor(
           if (isShineEffectApplied) {
               applyShineEffect(canvas)
           }
-      
-          // Apply depressed effect if enabled
-          if (isDepressedEffectApplied) {
-              applyDepressedEffect(canvas)
-          }
-      
+
           // Apply drop shadow effect if enabled
           if (isDropShadowApplied) {
               applyDropShadow(canvas)
