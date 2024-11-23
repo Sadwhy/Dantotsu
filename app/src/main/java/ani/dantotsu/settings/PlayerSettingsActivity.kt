@@ -322,6 +322,11 @@ class PlayerSettingsActivity : AppCompatActivity() {
             PrefManager.setVal(PrefName.Subtitles, isChecked)
             toggleSubOptions(isChecked)
         }
+        binding.subTextSwitch.isChecked = PrefManager.getVal(PrefName.TextviewSubtitles)
+        binding.subTextSwitch.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.TextviewSubtitles, isChecked)
+            toggleSubOptions(isChecked)
+        }
         toggleSubOptions(binding.subSwitch.isChecked)
         val subLanguages = arrayOf(
             "Albanian",

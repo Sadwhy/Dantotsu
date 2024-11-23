@@ -15,7 +15,7 @@ class Xubtitle @JvmOverloads constructor(
 ) : AppCompatTextView(context, attrs, defStyleAttr) {
 
     private var outlineStrokeColor: Int = Color.BLACK
-    private var outlineThickness: Float = 4f
+    private var outlineThickness: Float = 0f
     private var effectColor: Int = currentTextColor
     private var currentEffect: Effect = Effect.NONE
 
@@ -83,7 +83,9 @@ class Xubtitle @JvmOverloads constructor(
                 )
                 textPaint.shader = shader
             }
-            else -> {}
+            else -> {
+                textPaint.shader = null // Reset shader for other effects
+            }
         }
 
         // Create StaticLayout for line breaks and proper text alignment
@@ -109,7 +111,7 @@ class Xubtitle @JvmOverloads constructor(
 
         canvas.restore()
 
-        // Reset paint properties
+        // Reset paint properties after drawing
         textPaint.shader = null
         if (currentEffect == Effect.DROP_SHADOW) {
             textPaint.clearShadowLayer()
@@ -121,14 +123,14 @@ class Xubtitle @JvmOverloads constructor(
         this.outlineStrokeColor = outlineStrokeColor
         this.outlineThickness = outlineThickness
         currentEffect = Effect.OUTLINE
-        //invalidate()
+        invalidate()
     }
 
     // Apply shine effect with custom gradient colors
     fun applyShineEffect(color: Int) {
         this.effectColor = color
         currentEffect = Effect.SHINE
-        //invalidate()
+        invalidate()
     }
 
     // Apply drop shadow with custom shadow color
@@ -136,6 +138,6 @@ class Xubtitle @JvmOverloads constructor(
         this.effectColor = color
         paint.setShadowLayer(8f, 4f, 4f, color)
         currentEffect = Effect.DROP_SHADOW
-        //invalidate()
+        invalidate()
     }
 }

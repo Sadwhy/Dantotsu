@@ -515,16 +515,16 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         else -> Color.BLACK
     }
 
-customSubtitleView.apply {
-      when (PrefManager.getVal<Int>(PrefName.Outline)) {
-          0 -> applyOutline(secondaryColor, 6f)  // Apply outline effect
-          1 -> applyShineEffect(secondaryColor)  // Apply shine (gradient) effect
-          2 -> applyDropShadow(secondaryColor)  // Apply drop shadow effect
-          3 -> {}
-          else -> applyOutline(secondaryColor, 6f)  // Default to outline effect
-      }
-   } 
-}
+    customSubtitleView.apply {
+          when (PrefManager.getVal<Int>(PrefName.Outline)) {
+              0 -> applyOutline(secondaryColor, 4f)
+              1 -> applyShineEffect(secondaryColor)
+              2 -> applyDropShadow(secondaryColor)
+              3 -> {}
+              else -> applyOutline(secondaryColor, 4f)
+          }
+       }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -1561,9 +1561,10 @@ customSubtitleView.apply {
             }
 
         //Subtitles
+        val useTextViewSubs = PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)
         hasExtSubtitles = ext.subtitles.isNotEmpty()
         if (hasExtSubtitles) {
-            exoSubtitle.isVisible = hasExtSubtitles
+          if (!useTextViewSubs) exoSubtitle.isVisible = hasExtSubtitles
             exoSubtitle.setOnClickListener {
                 subClick()
             }
@@ -1840,7 +1841,7 @@ customSubtitleView.apply {
 
       exoPlayer.addListener(object : Player.Listener {
               override fun onCues(cues: List<Cue>) {
-                  if (cues.isNotEmpty()) {
+                  if (cues.isNotEmpty() && useTextViewSubs) {
                       customSubtitleView.visibility = View.VISIBLE
                       customSubtitleView.text = cues.joinToString("\n") { it.text.toString() }
                   } else {
