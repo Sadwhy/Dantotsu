@@ -9,8 +9,6 @@ import android.graphics.Shader
 import android.graphics.LinearGradient
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
-import android.content.Context
-import android.util.AttributeSet
 import android.widget.LinearLayout
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.children
@@ -68,5 +66,14 @@ class Xubtitle @JvmOverloads constructor(
         setLayerType(LAYER_TYPE_SOFTWARE, null) // Required for shadow effects
         paint.setShadowLayer(8f, 4f, 4f, Color.BLACK)
         invalidate()
+    }
+
+    // Custom XML attributes for outline properties
+    fun setOutlineStrokeColor(color: Int) {
+        outlineStrokeColor = color
+    }
+
+    fun setOutlineThickness(thickness: Float) {
+        outlineThickness = thickness
     }
 }

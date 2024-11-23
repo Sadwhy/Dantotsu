@@ -236,7 +236,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     private lateinit var animeTitle: TextView
     private lateinit var videoInfo: TextView
     private lateinit var episodeTitle: Spinner
-    private lateinit var customSubtitleView: TextView
+    private lateinit var customSubtitleView: Xubtitle
 
     private var orientationListener: OrientationEventListener? = null
 
@@ -437,7 +437,7 @@ private fun setupSubFormatting(playerView: PlayerView) {
     }
 }
 
-private fun applySubtitleStyles(textView: TextView) {
+private fun applySubtitleStyles(textView: Xubtitle) {
     // Set the primary color based on user preferences
     val primaryColor = when (PrefManager.getVal<Int>(PrefName.PrimaryColor)) {
         0 -> Color.BLACK
@@ -499,31 +499,31 @@ private fun applySubtitleStyles(textView: TextView) {
         false -> 0f
     }
 
-    val outlineType = when (PrefManager.getVal<Int>(PrefName.Outline)) {
-        0 -> EDGE_TYPE_OUTLINE  // Normal outline
-        1 -> EDGE_TYPE_DEPRESSED  // Shine effect
-        2 -> EDGE_TYPE_DROP_SHADOW  // Drop shadow
-        3 -> EDGE_TYPE_NONE  // No outline
-        else -> EDGE_TYPE_OUTLINE  // Default to normal outline
-    }
-    
-    textView.apply {
-        when (outlineType) {
-            EDGE_TYPE_OUTLINE -> {
-                applyOutline(outlineStrokeColor = Color.BLACK, outlineThickness = 6f)  // Apply outline effect
-            }
-            EDGE_TYPE_DEPRESSED -> {
-                applyShine()  // Apply shine (gradient) effect
-            }
-            EDGE_TYPE_DROP_SHADOW -> {
-                applyDropShadow()  // Apply drop shadow effect
-            }
-            EDGE_TYPE_NONE -> {
-                // No effect, just regular text
-            }
+val outlineType = when (PrefManager.getVal<Int>(PrefName.Outline)) {
+    0 -> EDGE_TYPE_OUTLINE  // Normal outline
+    1 -> EDGE_TYPE_DEPRESSED  // Shine effect
+    2 -> EDGE_TYPE_DROP_SHADOW  // Drop shadow
+    3 -> EDGE_TYPE_NONE  // No outline
+    else -> EDGE_TYPE_OUTLINE  // Default to normal outline
+}
+
+customSubtitleView.apply {
+    when (outlineType) {
+        EDGE_TYPE_OUTLINE -> {
+            applyOutline(outlineStrokeColor = Color.BLACK, outlineThickness = 6f)  // Apply outline effect
         }
-     }
-  }
+        EDGE_TYPE_DEPRESSED -> {
+            applyShineEffect()  // Apply shine (gradient) effect
+        }
+        EDGE_TYPE_DROP_SHADOW -> {
+            applyDropShadow()  // Apply drop shadow effect
+        }
+        EDGE_TYPE_NONE -> {
+            // No effect, just regular text
+        }
+    }
+  } 
+}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

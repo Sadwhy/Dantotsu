@@ -52,15 +52,17 @@
         android:layout_weight="1"
         android:adjustViewBounds="true">
 
-    <ani.dantotsu.others.Xubtitle
-        android:id="@+id/customSubtitleView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
-        android:padding="8dp"
-        android:adjustViewBounds="true"
-        android:layout_weight="1"
-        android:visibility="gone" />
+<ani.dantotsu.others.Xubtitle
+    android:id="@+id/customSubtitleView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal|bottom"
+    android:padding="8dp"
+    android:adjustViewBounds="true"
+    android:layout_weight="1"
+    android:visibility="gone"
+    app:outlineStrokeColor="@android:color/black"
+    app:outlineThickness="6dp" />
 
     </androidx.media3.ui.SubtitleView>
 
