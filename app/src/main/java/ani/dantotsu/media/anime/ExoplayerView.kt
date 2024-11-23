@@ -515,31 +515,15 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         else -> Color.BLACK
     }
 
-
-val outlineType = when (PrefManager.getVal<Int>(PrefName.Outline)) {
-    0 -> EDGE_TYPE_OUTLINE
-    1 -> EDGE_TYPE_SHINE
-    2 -> EDGE_TYPE_DROP_SHADOW
-    3 -> EDGE_TYPE_NONE
-    else -> EDGE_TYPE_OUTLINE
-}
-
 customSubtitleView.apply {
-    when (outlineType) {
-        EDGE_TYPE_OUTLINE -> {
-            applyOutline(secondaryColor, 6f)  // Apply outline effect
-        }
-        EDGE_TYPE_SHINE -> {
-            applyShineEffect(secondaryColor)  // Apply shine (gradient) effect
-        }
-        EDGE_TYPE_DROP_SHADOW -> {
-            applyDropShadow(secondaryColor)  // Apply drop shadow effect
-        }
-        EDGE_TYPE_NONE -> {
-           
-        }
-    }
-  } 
+      when (PrefManager.getVal<Int>(PrefName.Outline)) {
+          0 -> applyOutline(secondaryColor, 6f)  // Apply outline effect
+          1 -> applyShineEffect(secondaryColor)  // Apply shine (gradient) effect
+          2 -> applyDropShadow(secondaryColor)  // Apply drop shadow effect
+          3 -> {}
+          else -> applyOutline(secondaryColor, 6f)  // Default to outline effect
+      }
+   } 
 }
 
     override fun onCreate(savedInstanceState: Bundle?) {
