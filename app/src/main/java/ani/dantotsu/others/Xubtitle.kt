@@ -45,9 +45,36 @@ class Xubtitle @JvmOverloads constructor(
         when (currentEffect) {
             Effect.DROP_SHADOW -> {
                 setLayerType(LAYER_TYPE_SOFTWARE, null)
-                textPaint.setShadowLayer(8f, 4f, 4f, Color.BLACK)
+                // Apply a regular shadow (no gradient here)
+                textPaint.setShadowLayer(8f, 4f, 4f, effectColor)
             }
             Effect.SHINE -> {
+                // Create a gradient for the shadow under the text (shine effect)
+                val shadowShader = LinearGradient(
+                    0f, 0f, width.toFloat(), height.toFloat(),
+                    intArrayOf(Color.WHITE, effectColor, Color.BLACK),
+                    null,
+                    Shader.TileMode.CLAMP
+                )
+
+                // Create a paint for the shadow with the gradient shader
+                val shadowPaint = Paint().apply {
+                    isAntiAlias = true
+                    style = Paint.Style.FILL
+                    textSize = textPaint.textSize
+                    typeface = textPaint.typeface
+                    shader = shadowShader
+                }
+
+                // Draw the shadow manually with an offset
+                canvas.drawText(
+                    text,
+                    x + 4f,  // Shadow offset X (adjust as needed)
+                    y + 4f,  // Shadow offset Y (adjust as needed)
+                    shadowPaint
+                )
+
+                // Apply the shine gradient to the text
                 val shader = LinearGradient(
                     0f, 0f, width.toFloat(), height.toFloat(),
                     intArrayOf(effectColor, Color.WHITE, Color.WHITE),
@@ -56,9 +83,7 @@ class Xubtitle @JvmOverloads constructor(
                 )
                 textPaint.shader = shader
             }
-            else -> {
-                // No special configuration needed for NONE or OUTLINE
-            }
+            else -> {}
         }
 
         // Create StaticLayout for line breaks and proper text alignment
@@ -96,20 +121,21 @@ class Xubtitle @JvmOverloads constructor(
         this.outlineStrokeColor = outlineStrokeColor
         this.outlineThickness = outlineThickness
         currentEffect = Effect.OUTLINE
-        invalidate()
+        //invalidate()
     }
 
     // Apply shine effect with custom gradient colors
     fun applyShineEffect(color: Int) {
-        currentEffect = Effect.SHINE
         this.effectColor = color
-        invalidate()
+        currentEffect = Effect.SHINE
+        //invalidate()
     }
 
     // Apply drop shadow with custom shadow color
-    fun applyDropShadow(shadowColor: Int) {
-        paint.setShadowLayer(8f, 4f, 4f, shadowColor)
+    fun applyDropShadow(color: Int) {
+        this.effectColor = color
+        paint.setShadowLayer(8f, 4f, 4f, color)
         currentEffect = Effect.DROP_SHADOW
-        invalidate()
+        //invalidate()
     }
 }
