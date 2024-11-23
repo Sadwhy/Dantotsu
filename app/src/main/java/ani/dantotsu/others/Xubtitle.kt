@@ -16,6 +16,7 @@ class Xubtitle @JvmOverloads constructor(
 
     private var outlineStrokeColor: Int = Color.BLACK
     private var outlineThickness: Float = 4f
+    private var effectColor: Int = currentTextColor
     private var currentEffect: Effect = Effect.NONE
 
     enum class Effect {
@@ -49,7 +50,7 @@ class Xubtitle @JvmOverloads constructor(
             Effect.SHINE -> {
                 val shader = LinearGradient(
                     0f, 0f, width.toFloat(), height.toFloat(),
-                    intArrayOf(Color.BLACK, Color.WHITE, Color.BLACK),
+                    intArrayOf(effectColor, Color.WHITE, Color.WHITE),
                     null,
                     Shader.TileMode.CLAMP
                 )
@@ -99,13 +100,14 @@ class Xubtitle @JvmOverloads constructor(
     }
 
     // Apply shine effect with custom gradient colors
-    fun applyShineEffect(colors: IntArray = intArrayOf(Color.BLACK, Color.WHITE, Color.BLACK)) {
+    fun applyShineEffect(color: Int) {
         currentEffect = Effect.SHINE
+        this.effectColor = color
         invalidate()
     }
 
     // Apply drop shadow with custom shadow color
-    fun applyDropShadow(shadowColor: Int = Color.BLACK) {
+    fun applyDropShadow(shadowColor: Int) {
         paint.setShadowLayer(8f, 4f, 4f, shadowColor)
         currentEffect = Effect.DROP_SHADOW
         invalidate()
