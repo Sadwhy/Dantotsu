@@ -526,7 +526,6 @@ private fun applyOutline(textView: TextView) {
         strokeWidth = 4f // Outline thickness
         color = Color.BLACK // Outline color
     }
-    textView.setTextColor(Color.WHITE) // Text fill color
 }
 // Function to apply shine effect (gradient effect)
 private fun applyShine(textView: TextView) {
