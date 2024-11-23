@@ -4,4 +4,8 @@
         <attr name="appWidgetInnerRadius" format="dimension" />
         <attr name="appWidgetRadius" format="dimension" />
     </declare-styleable>
+    <declare-styleable name="Xubtitle">
+        <attr name="outlineColor" format="color" />
+        <attr name="outlineThickness" format="dimension" />
+    </declare-styleable>
 </resources>

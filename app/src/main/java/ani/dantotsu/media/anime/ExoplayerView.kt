@@ -146,6 +146,7 @@ import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.HAnimeSources
 import ani.dantotsu.parsers.Subtitle
+import ani.dantotsu.others.Xubtitle
 import ani.dantotsu.parsers.SubtitleType
 import ani.dantotsu.parsers.Video
 import ani.dantotsu.parsers.VideoExtractor
@@ -498,23 +499,29 @@ private fun applySubtitleStyles(textView: TextView) {
         false -> 0f
     }
 
-    // Apply the outline effect if required
-    if (PrefManager.getVal<Int>(PrefName.Outline) == 0) { // Normal outline
-        applyOutline(textView)
-    } else {
-        textView.paint.style = Paint.Style.FILL // Reset to fill style for text
+    val outlineType = when (PrefManager.getVal<Int>(PrefName.Outline)) {
+        0 -> EDGE_TYPE_OUTLINE  // Normal outline
+        1 -> EDGE_TYPE_DEPRESSED  // Shine effect
+        2 -> EDGE_TYPE_DROP_SHADOW  // Drop shadow
+        3 -> EDGE_TYPE_NONE  // No outline
+        else -> EDGE_TYPE_OUTLINE  // Default to normal outline
     }
-
-    // Apply the shine effect if required
-    if (PrefManager.getVal<Int>(PrefName.Outline) == 1) { // Shine effect
-        applyShine(textView)
-    }
-
-    // Apply the drop shadow if required
-    if (PrefManager.getVal<Int>(PrefName.Outline) == 2) { // Drop shadow
-        applyDropShadow(textView)
-    } else {
-        textView.setShadowLayer(0f, 0f, 0f, Color.TRANSPARENT) // Remove shadow if not selected
+    
+    textView.apply {
+        when (outlineType) {
+            EDGE_TYPE_OUTLINE -> {
+                applyOutline(outlineColor = Color.BLACK, outlineThickness = 6f)  // Apply outline effect
+            }
+            EDGE_TYPE_DEPRESSED -> {
+                applyShine()  // Apply shine (gradient) effect
+            }
+            EDGE_TYPE_DROP_SHADOW -> {
+                applyDropShadow()  // Apply drop shadow effect
+            }
+            EDGE_TYPE_NONE -> {
+                // No effect, just regular text
+            }
+        }
     }
 }
 
