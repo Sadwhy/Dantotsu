@@ -43,23 +43,20 @@ class Xubtitle @JvmOverloads constructor(
             .setLineSpacing(0f, 1f)
             .build()
 
-        // Draw text with outline only if applied
+        // Draw text with effects based on applied flags
+        canvas.save()
         if (isOutlineApplied) {
             textPaint.style = Paint.Style.STROKE
             textPaint.strokeWidth = outlineThickness
             textPaint.color = outlineStrokeColor
-            canvas.save()
-            canvas.translate(0f, 0f)  // Adjust the position to avoid clipping
-            staticLayout.draw(canvas)
-            canvas.restore()
+            staticLayout.draw(canvas) // Draw only outline
         }
 
-        // Draw text with default fill color (no outline unless applied)
+        // Draw the fill color (default text color)
         textPaint.style = Paint.Style.FILL
         textPaint.color = currentTextColor
-        canvas.save()
-        canvas.translate(0f, 0f)  // Adjust the position to avoid clipping
-        staticLayout.draw(canvas)
+        staticLayout.draw(canvas)  // Draw the filled text
+
         canvas.restore()
 
         // Apply shine effect if enabled
@@ -88,7 +85,6 @@ class Xubtitle @JvmOverloads constructor(
         )
         paint.shader = shader
         canvas.save()
-        canvas.translate(0f, 0f)
         paint.color = currentTextColor
         canvas.drawText(text.toString(), 0f, baseline.toFloat(), paint)
         canvas.restore()
@@ -99,7 +95,6 @@ class Xubtitle @JvmOverloads constructor(
         setLayerType(LAYER_TYPE_SOFTWARE, null)
         paint.setShadowLayer(10f, 4f, 4f, Color.DKGRAY)  // Darker shadow to simulate depression
         canvas.save()
-        canvas.translate(0f, 0f)
         paint.color = currentTextColor
         canvas.drawText(text.toString(), 0f, baseline.toFloat(), paint)
         canvas.restore()
@@ -110,7 +105,6 @@ class Xubtitle @JvmOverloads constructor(
         setLayerType(LAYER_TYPE_SOFTWARE, null)
         paint.setShadowLayer(8f, 4f, 4f, Color.BLACK)  // Standard drop shadow
         canvas.save()
-        canvas.translate(0f, 0f)
         paint.color = currentTextColor
         canvas.drawText(text.toString(), 0f, baseline.toFloat(), paint)
         canvas.restore()
