@@ -1,11 +1,10 @@
 package ani.dantotsu.others
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Shader
-import android.graphics.LinearGradient
+import android.graphics.*
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextPaint
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import ani.dantotsu.R
@@ -20,7 +19,7 @@ class Xubtitle @JvmOverloads constructor(
     private var outlineThickness: Float = 4f
     private var isOutlineApplied: Boolean = false
     private var isShineEffectApplied: Boolean = false
-    private var isDropShadowApplied: Boolean = false
+    private var isDepressedEffectApplied: Boolean = false
 
     init {
         context.theme.obtainStyledAttributes(attrs, R.styleable.Xubtitle, 0, 0).apply {
@@ -37,53 +36,67 @@ class Xubtitle @JvmOverloads constructor(
         val text = text.toString()
         val textPaint = paint
 
+        // Create StaticLayout for line breaks and proper text alignment
+        val staticLayout = StaticLayout.Builder.obtain(text, 0, text.length, textPaint, width)
+            .setAlignment(Layout.Alignment.ALIGN_CENTER)  // Center-align text
+            .setLineSpacing(0f, 1f)
+            .build()
+
         // Draw text with outline only if applied
         if (isOutlineApplied) {
             textPaint.style = Paint.Style.STROKE
             textPaint.strokeWidth = outlineThickness
             textPaint.color = outlineStrokeColor
-            canvas.drawText(text, 0f, baseline.toFloat(), textPaint)
+            canvas.save()
+            canvas.translate(0f, 0f)  // Adjust the position to avoid clipping
+            staticLayout.draw(canvas)
+            canvas.restore()
         }
 
         // Draw text with default fill color (no outline unless applied)
         textPaint.style = Paint.Style.FILL
         textPaint.color = currentTextColor
-        canvas.drawText(text, 0f, baseline.toFloat(), textPaint)
+        canvas.save()
+        canvas.translate(0f, 0f)  // Adjust the position to avoid clipping
+        staticLayout.draw(canvas)
+        canvas.restore()
 
         // Apply shine effect if enabled
         if (isShineEffectApplied) {
-            applyShineEffect()
+            applyShineEffect(canvas)
         }
 
-        // Apply drop shadow if enabled
-        if (isDropShadowApplied) {
-            applyDropShadow()
+        // Apply depressed effect if enabled
+        if (isDepressedEffectApplied) {
+            applyDepressedEffect(canvas)
         }
     }
 
-    // Apply shine effect
-    fun applyShineEffect() {
-        if (!isShineEffectApplied) {
-            val shader = LinearGradient(
-                0f, 0f, width.toFloat(), height.toFloat(),
-                intArrayOf(Color.BLACK, Color.WHITE, Color.WHITE),
-                null,
-                Shader.TileMode.CLAMP
-            )
-            paint.shader = shader
-            isShineEffectApplied = true
-            invalidate()
-        }
+    // Apply shine effect (gradient effect)
+    private fun applyShineEffect(canvas: Canvas) {
+        val shader = LinearGradient(
+            0f, 0f, width.toFloat(), height.toFloat(),
+            intArrayOf(Color.BLACK, Color.WHITE, Color.BLACK),
+            null,
+            Shader.TileMode.CLAMP
+        )
+        paint.shader = shader
+        canvas.save()
+        canvas.translate(0f, 0f)
+        paint.color = currentTextColor
+        canvas.drawText(text.toString(), 0f, baseline.toFloat(), paint)
+        canvas.restore()
     }
 
-    // Apply drop shadow effect
-    fun applyDropShadow() {
-        if (!isDropShadowApplied) {
-            setLayerType(LAYER_TYPE_SOFTWARE, null)
-            paint.setShadowLayer(8f, 4f, 4f, Color.BLACK)
-            isDropShadowApplied = true
-            invalidate()
-        }
+    // Apply depressed (embossed) effect
+    private fun applyDepressedEffect(canvas: Canvas) {
+        setLayerType(LAYER_TYPE_SOFTWARE, null)
+        paint.setShadowLayer(10f, 5f, 5f, Color.BLACK)
+        canvas.save()
+        canvas.translate(0f, 0f)
+        paint.color = currentTextColor
+        canvas.drawText(text.toString(), 0f, baseline.toFloat(), paint)
+        canvas.restore()
     }
 
     // Apply outline effect (only draws outline when called)
@@ -94,32 +107,15 @@ class Xubtitle @JvmOverloads constructor(
         invalidate()  // Redraw with outline
     }
 
-    // Custom XML attributes for outline properties
-    fun setOutlineStrokeColor(color: Int) {
-        outlineStrokeColor = color
-    }
-
-    fun setOutlineThickness(thickness: Float) {
-        outlineThickness = thickness
-    }
-
-    // New method to remove outline
-    fun removeOutline() {
-        isOutlineApplied = false  // Disable outline drawing
+    // Enable shine effect
+    fun applyShineEffect() {
+        isShineEffectApplied = true
         invalidate()
     }
 
-    // New method to remove shine effect
-    fun removeShineEffect() {
-        isShineEffectApplied = false
-        paint.shader = null  // Remove the shader
-        invalidate()
-    }
-
-    // New method to remove drop shadow
-    fun removeDropShadow() {
-        isDropShadowApplied = false
-        paint.clearShadowLayer()  // Remove shadow layer
+    // Enable depressed effect
+    fun applyDepressedEffect() {
+        isDepressedEffectApplied = true
         invalidate()
     }
 }
