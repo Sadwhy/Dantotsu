@@ -508,7 +508,7 @@ private fun applySubtitleStyles(textView: TextView) {
     }
     
     textView.apply {
-        when (outlineType
+        when (outlineType) {
             EDGE_TYPE_OUTLINE -> {
                 applyOutline(outlineStrokeColor = Color.BLACK, outlineThickness = 6f)  // Apply outline effect
             }
@@ -522,48 +522,8 @@ private fun applySubtitleStyles(textView: TextView) {
                 // No effect, just regular text
             }
         }
-    }
-
-// Function to apply outline (stroke effect)
-private fun applyOutline(textView: TextView) {
-    textView.setLayerType(View.LAYER_TYPE_SOFTWARE, null) // Required for shadow and outline effects
-    textView.paint.apply {
-        style = Paint.Style.FILL_AND_STROKE
-        strokeWidth = 4f // Outline thickness
-        color = Color.BLACK // Outline color
-    }
-}
-// Function to apply shine effect (gradient effect)
-private fun applyShine(textView: TextView) {
-    val text = textView.text.toString()
-    val spannable = SpannableString(text)
-
-    // Black shadow on the top-left
-    val blackShadowSpan = object : CharacterStyle() {
-        override fun updateDrawState(textPaint: TextPaint) {
-            textPaint.setShadowLayer(4f, -2f, -2f, Color.BLACK)
-        }
-    }
-
-    // White shadow on the bottom-right
-    val whiteShadowSpan = object : CharacterStyle() {
-        override fun updateDrawState(textPaint: TextPaint) {
-            textPaint.setShadowLayer(4f, 2f, 2f, Color.WHITE)
-        }
-    }
-
-    // Apply both spans
-    spannable.setSpan(blackShadowSpan, 0, text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-    spannable.setSpan(whiteShadowSpan, 0, text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-    // Set the Spannable to the TextView
-    textView.text = spannable
-}
-
-// Function to apply drop shadow
-private fun applyDropShadow(textView: TextView) {
-    textView.setShadowLayer(8f, 4f, 4f, Color.BLACK) // Apply a black drop shadow
-}
+     }
+  }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
