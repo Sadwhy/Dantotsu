@@ -1561,14 +1561,15 @@ private fun applySubtitleStyles(textView: Xubtitle) {
             }
 
         //Subtitles
-        val useTextViewSubs = PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)
         hasExtSubtitles = ext.subtitles.isNotEmpty()
         if (hasExtSubtitles) {
-          if (!useTextViewSubs) exoSubtitle.isVisible = hasExtSubtitles
-            exoSubtitle.setOnClickListener {
-                subClick()
-            }
-        }
+          if (!PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) { 
+          exoSubtitle.isVisible = hasExtSubtitles
+          }
+          exoSubtitle.setOnClickListener {
+              subClick()
+          }
+      }
         val sub: MutableList<MediaItem.SubtitleConfiguration> =
             emptyList<MediaItem.SubtitleConfiguration>().toMutableList()
         ext.subtitles.forEach { subtitle ->
@@ -1841,7 +1842,7 @@ private fun applySubtitleStyles(textView: Xubtitle) {
 
       exoPlayer.addListener(object : Player.Listener {
               override fun onCues(cues: List<Cue>) {
-                  if (cues.isNotEmpty() && useTextViewSubs) {
+                  if (cues.isNotEmpty() && PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
                       customSubtitleView.visibility = View.VISIBLE
                       customSubtitleView.text = cues.joinToString("\n") { it.text.toString() }
                   } else {
