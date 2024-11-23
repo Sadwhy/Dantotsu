@@ -20,6 +20,7 @@ class Xubtitle @JvmOverloads constructor(
     private var isOutlineApplied: Boolean = false
     private var isShineEffectApplied: Boolean = false
     private var isDepressedEffectApplied: Boolean = false
+    private var isDropShadowApplied: Boolean = false
 
     init {
         context.theme.obtainStyledAttributes(attrs, R.styleable.Xubtitle, 0, 0).apply {
@@ -70,6 +71,11 @@ class Xubtitle @JvmOverloads constructor(
         if (isDepressedEffectApplied) {
             applyDepressedEffect(canvas)
         }
+
+        // Apply drop shadow effect if enabled
+        if (isDropShadowApplied) {
+            applyDropShadow(canvas)
+        }
     }
 
     // Apply shine effect (gradient effect)
@@ -91,7 +97,18 @@ class Xubtitle @JvmOverloads constructor(
     // Apply depressed (embossed) effect
     private fun applyDepressedEffect(canvas: Canvas) {
         setLayerType(LAYER_TYPE_SOFTWARE, null)
-        paint.setShadowLayer(10f, 5f, 5f, Color.BLACK)
+        paint.setShadowLayer(10f, 4f, 4f, Color.DKGRAY)  // Darker shadow to simulate depression
+        canvas.save()
+        canvas.translate(0f, 0f)
+        paint.color = currentTextColor
+        canvas.drawText(text.toString(), 0f, baseline.toFloat(), paint)
+        canvas.restore()
+    }
+
+    // Apply drop shadow effect
+    private fun applyDropShadow(canvas: Canvas) {
+        setLayerType(LAYER_TYPE_SOFTWARE, null)
+        paint.setShadowLayer(8f, 4f, 4f, Color.BLACK)  // Standard drop shadow
         canvas.save()
         canvas.translate(0f, 0f)
         paint.color = currentTextColor
@@ -119,8 +136,17 @@ class Xubtitle @JvmOverloads constructor(
         invalidate()
     }
 
+    // Enable drop shadow effect
     fun applyDropShadow() {
-      setLayerType(LAYER_TYPE_SOFTWARE, null)
-      paint.setShadowLayer(8f, 4f, 4f, Color.BLACK)
+        isDropShadowApplied = true
+        invalidate()
+    }
+
+    // Method to remove all effects
+    fun removeAllEffects() {
+        isShineEffectApplied = false
+        isDepressedEffectApplied = false
+        isDropShadowApplied = false
+        invalidate()
     }
 }
