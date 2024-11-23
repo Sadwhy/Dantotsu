@@ -23,13 +23,13 @@ class Xubtitle @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : androidx.appcompat.widget.AppCompatTextView(context, attrs, defStyleAttr) {
 
-    private var outlineColor: Int = Color.BLACK
+    private var outlineStrokeColor: Int = Color.BLACK
     private var outlineThickness: Float = 4f
 
     init {
         context.theme.obtainStyledAttributes(attrs, R.styleable.Xubtitle, 0, 0).apply {
             try {
-                outlineColor = getColor(R.styleable.Xubtitle_outlineColor, Color.BLACK)
+                outlineStrokeColor = getColor(R.styleable.Xubtitle_outlineStrokeColor, Color.BLACK)
                 outlineThickness = getDimension(R.styleable.Xubtitle_outlineThickness, 4f)
             } finally {
                 recycle()
@@ -44,7 +44,7 @@ class Xubtitle @JvmOverloads constructor(
         // Draw outline (custom color and thickness)
         textPaint.style = Paint.Style.STROKE
         textPaint.strokeWidth = outlineThickness
-        textPaint.color = outlineColor
+        textPaint.color = outlineStrokeColor
         canvas.drawText(text, 0f, baseline.toFloat(), textPaint)
 
         // Draw fill (default text color)

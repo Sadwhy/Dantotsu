@@ -508,9 +508,9 @@ private fun applySubtitleStyles(textView: TextView) {
     }
     
     textView.apply {
-        when (outlineType) {
+        when (outlineType
             EDGE_TYPE_OUTLINE -> {
-                applyOutline(outlineColor = Color.BLACK, outlineThickness = 6f)  // Apply outline effect
+                applyOutline(outlineStrokeColor = Color.BLACK, outlineThickness = 6f)  // Apply outline effect
             }
             EDGE_TYPE_DEPRESSED -> {
                 applyShine()  // Apply shine (gradient) effect
