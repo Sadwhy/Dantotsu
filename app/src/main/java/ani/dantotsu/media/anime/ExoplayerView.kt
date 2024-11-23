@@ -525,7 +525,7 @@ private fun applyOutline(textView: TextView) {
     textView.setTextColor(Color.WHITE) // Text fill color
 }
 // Function to apply shine effect (gradient effect)
-private fun applyDepressedEffect(textView: TextView) {
+private fun applyShine(textView: TextView) {
     val text = textView.text.toString()
     val spannable = SpannableString(text)
 
