@@ -33,47 +33,50 @@ class Xubtitle @JvmOverloads constructor(
         }
     }
 
-    override fun onDraw(canvas: Canvas) {
-        val text = text.toString()
-        val textPaint = paint
-
-        // Create StaticLayout for line breaks and proper text alignment
-        val staticLayout = StaticLayout.Builder.obtain(text, 0, text.length, textPaint, width)
-            .setAlignment(Layout.Alignment.ALIGN_CENTER)  // Center-align text
-            .setLineSpacing(0f, 1f)
-            .build()
-
-        // Draw text with effects based on applied flags
-        canvas.save()
-        if (isOutlineApplied) {
-            textPaint.style = Paint.Style.STROKE
-            textPaint.strokeWidth = outlineThickness
-            textPaint.color = outlineStrokeColor
-            staticLayout.draw(canvas) // Draw only outline
-        }
-
-        // Draw the fill color (default text color)
-        textPaint.style = Paint.Style.FILL
-        textPaint.color = currentTextColor
-        staticLayout.draw(canvas)  // Draw the filled text
-
-        canvas.restore()
-
-        // Apply shine effect if enabled
-        if (isShineEffectApplied) {
-            applyShineEffect(canvas)
-        }
-
-        // Apply depressed effect if enabled
-        if (isDepressedEffectApplied) {
-            applyDepressedEffect(canvas)
-        }
-
-        // Apply drop shadow effect if enabled
-        if (isDropShadowApplied) {
-            applyDropShadow(canvas)
-        }
-    }
+      override fun onDraw(canvas: Canvas) {
+          val text = text.toString()
+          val textPaint = paint
+      
+          // Create StaticLayout for line breaks and proper text alignment
+          val staticLayout = StaticLayout.Builder.obtain(text, 0, text.length, textPaint, width)
+              .setAlignment(Layout.Alignment.ALIGN_CENTER)  // Center-align text
+              .setLineSpacing(0f, 1f)
+              .build()
+      
+          // Save canvas state before drawing
+          canvas.save()
+      
+          // Draw outline if it's applied
+          if (isOutlineApplied) {
+              textPaint.style = Paint.Style.STROKE
+              textPaint.strokeWidth = outlineThickness
+              textPaint.color = outlineStrokeColor
+              staticLayout.draw(canvas)  // Draw only outline
+          } else {
+              // If outline is not applied, draw filled text normally
+              textPaint.style = Paint.Style.FILL
+              textPaint.color = currentTextColor
+              staticLayout.draw(canvas)  // Draw filled text
+          }
+      
+          // Restore canvas after drawing text
+          canvas.restore()
+      
+          // Apply shine effect if enabled
+          if (isShineEffectApplied) {
+              applyShineEffect(canvas)
+          }
+      
+          // Apply depressed effect if enabled
+          if (isDepressedEffectApplied) {
+              applyDepressedEffect(canvas)
+          }
+      
+          // Apply drop shadow effect if enabled
+          if (isDropShadowApplied) {
+              applyDropShadow(canvas)
+          }
+      }
 
     // Apply shine effect (gradient effect)
     private fun applyShineEffect(canvas: Canvas) {
@@ -84,16 +87,6 @@ class Xubtitle @JvmOverloads constructor(
             Shader.TileMode.CLAMP
         )
         paint.shader = shader
-        canvas.save()
-        paint.color = currentTextColor
-        canvas.drawText(text.toString(), 0f, baseline.toFloat(), paint)
-        canvas.restore()
-    }
-
-    // Apply depressed (embossed) effect
-    private fun applyDepressedEffect(canvas: Canvas) {
-        setLayerType(LAYER_TYPE_SOFTWARE, null)
-        paint.setShadowLayer(10f, 4f, 4f, Color.DKGRAY)  // Darker shadow to simulate depression
         canvas.save()
         paint.color = currentTextColor
         canvas.drawText(text.toString(), 0f, baseline.toFloat(), paint)
@@ -115,18 +108,12 @@ class Xubtitle @JvmOverloads constructor(
         this.outlineStrokeColor = outlineStrokeColor
         this.outlineThickness = outlineThickness
         isOutlineApplied = true  // Enable outline drawing
-        invalidate()  // Redraw with outline
+        invalidate()
     }
 
     // Enable shine effect
     fun applyShineEffect() {
         isShineEffectApplied = true
-        invalidate()
-    }
-
-    // Enable depressed effect
-    fun applyDepressedEffect() {
-        isDepressedEffectApplied = true
         invalidate()
     }
 
