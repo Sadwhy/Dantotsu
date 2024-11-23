@@ -118,4 +118,9 @@ class Xubtitle @JvmOverloads constructor(
         isDepressedEffectApplied = true
         invalidate()
     }
+
+    fun applyDropShadow() {
+      setLayerType(LAYER_TYPE_SOFTWARE, null)
+      paint.setShadowLayer(8f, 4f, 4f, Color.BLACK)
+    }
 }
