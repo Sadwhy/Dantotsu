@@ -523,7 +523,6 @@ private fun applySubtitleStyles(textView: TextView) {
             }
         }
     }
-}
 
 // Function to apply outline (stroke effect)
 private fun applyOutline(textView: TextView) {
