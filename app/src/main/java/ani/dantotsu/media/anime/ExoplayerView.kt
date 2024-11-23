@@ -516,16 +516,41 @@ private fun applySubtitleStyles(textView: TextView) {
 
 // Function to apply outline (stroke effect)
 private fun applyOutline(textView: TextView) {
-    textView.setShadowLayer(2f, 4f, 4f, Color.BLACK)  // Adjust the radius and offset for outline effect
+    textView.setLayerType(View.LAYER_TYPE_SOFTWARE, null) // Disable hardware acceleration for shadow layer
+    
+    val paint = textView.paint
+    val outlineColor = Color.BLACK
+    val textColor = textView.currentTextColor
+
+    // First, draw the outline
+    paint.style = Paint.Style.STROKE
+    paint.strokeWidth = 4f // Width of the outline
+    paint.color = outlineColor
+    textView.invalidate() // Force re-draw
+
+    // Then, fill the text
+    paint.style = Paint.Style.FILL
+    paint.color = textColor
 }
 // Function to apply shine effect (gradient effect)
 private fun applyShine(textView: TextView) {
-        textView.paint.shader = LinearGradient(
-            0f, 0f, textView.width.toFloat(), 0f,
-            intArrayOf(Color.BLACK, Color.WHITE, Color.WHITE),
-            null,
-            Shader.TileMode.CLAMP
-        )
+    // Set shadow layer to simulate inset effect
+    textView.setShadowLayer(
+        4f, // Blur radius
+        2f, 2f, // x-offset, y-offset
+        Color.DKGRAY // Shadow color
+    )
+
+    // Apply a gradient for a slight shine
+    textView.paint.shader = LinearGradient(
+        0f, 0f, textView.width.toFloat(), textView.height.toFloat(),
+        intArrayOf(Color.LTGRAY, Color.DKGRAY),
+        floatArrayOf(0.3f, 0.7f), // Position of the gradient stops
+        Shader.TileMode.CLAMP
+    )
+
+    // Force redraw
+    textView.invalidate()
 }
 
 // Function to apply drop shadow
