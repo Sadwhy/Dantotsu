@@ -33,45 +33,45 @@ class Xubtitle @JvmOverloads constructor(
         }
     }
 
-      override fun onDraw(canvas: Canvas) {
-          val text = text.toString()
-          val textPaint = paint
-      
-          // Create StaticLayout for line breaks and proper text alignment
-          val staticLayout = StaticLayout.Builder.obtain(text, 0, text.length, textPaint, width)
-              .setAlignment(Layout.Alignment.ALIGN_CENTER)  // Center-align text
-              .setLineSpacing(0f, 1f)
-              .build()
-      
-          // Save canvas state before drawing
-          canvas.save()
-      
-          // Draw outline if it's applied
-          if (isOutlineApplied) {
-              textPaint.style = Paint.Style.STROKE
-              textPaint.strokeWidth = outlineThickness
-              textPaint.color = outlineStrokeColor
-              staticLayout.draw(canvas)  // Draw only outline
-          } else {
-              // If outline is not applied, draw filled text normally
-              textPaint.style = Paint.Style.FILL
-              textPaint.color = currentTextColor
-              staticLayout.draw(canvas)  // Draw filled text
-          }
-      
-          // Restore canvas after drawing text
-          canvas.restore()
-      
-          // Apply shine effect if enabled
-          if (isShineEffectApplied) {
-              applyShineEffect(canvas)
-          }
+    override fun onDraw(canvas: Canvas) {
+        val text = text.toString()
+        val textPaint = paint
 
-          // Apply drop shadow effect if enabled
-          if (isDropShadowApplied) {
-              applyDropShadow(canvas)
-          }
-      }
+        // Create StaticLayout for line breaks and proper text alignment
+        val staticLayout = StaticLayout.Builder.obtain(text, 0, text.length, textPaint, width)
+            .setAlignment(Layout.Alignment.ALIGN_CENTER)  // Center-align text
+            .setLineSpacing(0f, 1f)
+            .build()
+
+        // Save canvas state before drawing
+        canvas.save()
+
+        // Draw outline if it's applied
+        if (isOutlineApplied) {
+            textPaint.style = Paint.Style.STROKE
+            textPaint.strokeWidth = outlineThickness
+            textPaint.color = outlineStrokeColor
+            staticLayout.draw(canvas)  // Draw only outline
+        }
+
+        // Draw filled text
+        textPaint.style = Paint.Style.FILL
+        textPaint.color = currentTextColor
+        staticLayout.draw(canvas)  // Draw filled text
+
+        // Restore canvas after drawing text
+        canvas.restore()
+
+        // Apply shine effect if enabled
+        if (isShineEffectApplied) {
+            applyShineEffect(canvas)
+        }
+
+        // Apply drop shadow effect if enabled
+        if (isDropShadowApplied) {
+            applyDropShadow(canvas)
+        }
+    }
 
     // Apply shine effect (gradient effect)
     private fun applyShineEffect(canvas: Canvas) {
@@ -84,6 +84,7 @@ class Xubtitle @JvmOverloads constructor(
         paint.shader = shader
         canvas.save()
         paint.color = currentTextColor
+        // Draw the filled text with shine effect applied
         canvas.drawText(text.toString(), 0f, baseline.toFloat(), paint)
         canvas.restore()
     }
@@ -94,6 +95,7 @@ class Xubtitle @JvmOverloads constructor(
         paint.setShadowLayer(8f, 4f, 4f, Color.BLACK)  // Standard drop shadow
         canvas.save()
         paint.color = currentTextColor
+        // Draw the filled text with drop shadow effect applied
         canvas.drawText(text.toString(), 0f, baseline.toFloat(), paint)
         canvas.restore()
     }
