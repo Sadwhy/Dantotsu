@@ -516,41 +516,39 @@ private fun applySubtitleStyles(textView: TextView) {
 
 // Function to apply outline (stroke effect)
 private fun applyOutline(textView: TextView) {
-    textView.setLayerType(View.LAYER_TYPE_SOFTWARE, null) // Disable hardware acceleration for shadow layer
-    
-    val paint = textView.paint
-    val outlineColor = Color.BLACK
-    val textColor = textView.currentTextColor
-
-    // First, draw the outline
-    paint.style = Paint.Style.STROKE
-    paint.strokeWidth = 4f // Width of the outline
-    paint.color = outlineColor
-    textView.invalidate() // Force re-draw
-
-    // Then, fill the text
-    paint.style = Paint.Style.FILL
-    paint.color = textColor
+    textView.setLayerType(View.LAYER_TYPE_SOFTWARE, null) // Required for shadow and outline effects
+    textView.paint.apply {
+        style = Paint.Style.FILL_AND_STROKE
+        strokeWidth = 4f // Outline thickness
+        color = Color.BLACK // Outline color
+    }
+    textView.setTextColor(Color.WHITE) // Text fill color
 }
 // Function to apply shine effect (gradient effect)
-private fun applyShine(textView: TextView) {
-    // Set shadow layer to simulate inset effect
-    textView.setShadowLayer(
-        4f, // Blur radius
-        2f, 2f, // x-offset, y-offset
-        Color.DKGRAY // Shadow color
-    )
+private fun applyDepressedEffect(textView: TextView) {
+    val text = textView.text.toString()
+    val spannable = SpannableString(text)
 
-    // Apply a gradient for a slight shine
-    textView.paint.shader = LinearGradient(
-        0f, 0f, textView.width.toFloat(), textView.height.toFloat(),
-        intArrayOf(Color.LTGRAY, Color.DKGRAY),
-        floatArrayOf(0.3f, 0.7f), // Position of the gradient stops
-        Shader.TileMode.CLAMP
-    )
+    // Black shadow on the top-left
+    val blackShadowSpan = object : CharacterStyle() {
+        override fun updateDrawState(textPaint: TextPaint) {
+            textPaint.setShadowLayer(4f, -2f, -2f, Color.BLACK)
+        }
+    }
 
-    // Force redraw
-    textView.invalidate()
+    // White shadow on the bottom-right
+    val whiteShadowSpan = object : CharacterStyle() {
+        override fun updateDrawState(textPaint: TextPaint) {
+            textPaint.setShadowLayer(4f, 2f, 2f, Color.WHITE)
+        }
+    }
+
+    // Apply both spans
+    spannable.setSpan(blackShadowSpan, 0, text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+    spannable.setSpan(whiteShadowSpan, 0, text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+    // Set the Spannable to the TextView
+    textView.text = spannable
 }
 
 // Function to apply drop shadow
