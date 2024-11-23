@@ -68,6 +68,13 @@ class Xubtitle @JvmOverloads constructor(
         invalidate()
     }
 
+    // New method to apply outline with parameters
+    fun applyOutline(outlineStrokeColor: Int = this.outlineStrokeColor, outlineThickness: Float = this.outlineThickness) {
+        this.outlineStrokeColor = outlineStrokeColor
+        this.outlineThickness = outlineThickness
+        invalidate()  // Redraw with updated outline
+    }
+
     // Custom XML attributes for outline properties
     fun setOutlineStrokeColor(color: Int) {
         outlineStrokeColor = color
