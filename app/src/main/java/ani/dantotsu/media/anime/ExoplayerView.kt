@@ -499,27 +499,44 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         false -> 0f
     }
 
+    val secondaryColor = when (PrefManager.getVal<Int>(PrefName.SecondaryColor)) {
+        0 -> Color.BLACK
+        1 -> Color.DKGRAY
+        2 -> Color.GRAY
+        3 -> Color.LTGRAY
+        4 -> Color.WHITE
+        5 -> Color.RED
+        6 -> Color.YELLOW
+        7 -> Color.GREEN
+        8 -> Color.CYAN
+        9 -> Color.BLUE
+        10 -> Color.MAGENTA
+        11 -> Color.TRANSPARENT
+        else -> Color.BLACK
+    }
+
+
 val outlineType = when (PrefManager.getVal<Int>(PrefName.Outline)) {
-    0 -> EDGE_TYPE_OUTLINE  // Normal outline
-    1 -> EDGE_TYPE_DEPRESSED  // Shine effect
-    2 -> EDGE_TYPE_DROP_SHADOW  // Drop shadow
-    3 -> EDGE_TYPE_NONE  // No outline
-    else -> EDGE_TYPE_OUTLINE  // Default to normal outline
+    0 -> EDGE_TYPE_OUTLINE
+    1 -> EDGE_TYPE_SHINE
+    2 -> EDGE_TYPE_DROP_SHADOW
+    3 -> EDGE_TYPE_NONE
+    else -> EDGE_TYPE_OUTLINE
 }
 
 customSubtitleView.apply {
     when (outlineType) {
         EDGE_TYPE_OUTLINE -> {
-            applyOutline(outlineStrokeColor = Color.BLACK, outlineThickness = 6f)  // Apply outline effect
+            applyOutline(secondaryColor, 6f)  // Apply outline effect
         }
-        EDGE_TYPE_DEPRESSED -> {
-            applyShineEffect()  // Apply shine (gradient) effect
+        EDGE_TYPE_SHINE -> {
+            applyShineEffect(secondaryColor)  // Apply shine (gradient) effect
         }
         EDGE_TYPE_DROP_SHADOW -> {
-            applyDropShadow()  // Apply drop shadow effect
+            applyDropShadow(secondaryColor)  // Apply drop shadow effect
         }
         EDGE_TYPE_NONE -> {
-            // No effect, just regular text
+           
         }
     }
   } 

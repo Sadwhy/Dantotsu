@@ -16,10 +16,9 @@ class Xubtitle @JvmOverloads constructor(
 
     private var outlineStrokeColor: Int = Color.BLACK
     private var outlineThickness: Float = 4f
-    
-    // Single enum to track the current effect
+    private var effectColor: Int = currentTextColor
     private var currentEffect: Effect = Effect.NONE
-    
+
     enum class Effect {
         NONE,
         OUTLINE,
@@ -42,27 +41,7 @@ class Xubtitle @JvmOverloads constructor(
         val text = text.toString()
         val textPaint = paint
 
-        // Configure effect before drawing
-        when (currentEffect) {
-            Effect.DROP_SHADOW -> {
-                setLayerType(LAYER_TYPE_SOFTWARE, null)
-                textPaint.setShadowLayer(8f, 4f, 4f, Color.BLACK)
-            }
-            Effect.SHINE -> {
-                val shader = LinearGradient(
-                    0f, 0f, width.toFloat(), height.toFloat(),
-                    intArrayOf(Color.BLACK, Color.WHITE, Color.BLACK),
-                    null,
-                    Shader.TileMode.CLAMP
-                )
-                textPaint.shader = shader
-            }
-            else -> {
-                // No special configuration needed for NONE or OUTLINE
-            }
-        }
-
-        // Create StaticLayout for line breaks and proper text alignment
+        // Create StaticLayout for proper line breaking and alignment
         val staticLayout = StaticLayout.Builder.obtain(text, 0, text.length, textPaint, width)
             .setAlignment(Layout.Alignment.ALIGN_CENTER)
             .setLineSpacing(0f, 1f)
@@ -70,54 +49,56 @@ class Xubtitle @JvmOverloads constructor(
 
         canvas.save()
 
-        // Draw outline if it's the current effect
-        if (currentEffect == Effect.OUTLINE) {
-            textPaint.style = Paint.Style.STROKE
-            textPaint.strokeWidth = outlineThickness
-            textPaint.color = outlineStrokeColor
-            staticLayout.draw(canvas)
+        when (currentEffect) {
+            Effect.OUTLINE -> {
+                textPaint.style = Paint.Style.STROKE
+                textPaint.strokeWidth = outlineThickness
+                textPaint.color = effectColor
+                staticLayout.draw(canvas)
+            }
+            Effect.SHINE -> {
+                val shader = LinearGradient(
+                    0f, 0f, width.toFloat(), height.toFloat(),
+                    intArrayOf(effectColor, Color.WHITE, effectColor),
+                    null,
+                    Shader.TileMode.CLAMP
+                )
+                textPaint.shader = shader
+                textPaint.style = Paint.Style.FILL
+                staticLayout.draw(canvas)
+                textPaint.shader = null // Reset shader after use
+            }
+            Effect.DROP_SHADOW -> {
+                setLayerType(LAYER_TYPE_SOFTWARE, null)
+                textPaint.setShadowLayer(8f, 4f, 4f, effectColor)
+                textPaint.style = Paint.Style.FILL
+                staticLayout.draw(canvas)
+                textPaint.clearShadowLayer() // Reset shadow after use
+            }
+            else -> {
+                // Default effect (None)
+                textPaint.style = Paint.Style.FILL
+                textPaint.color = currentTextColor
+                staticLayout.draw(canvas)
+            }
         }
-
-        // Draw filled text with any active effect
-        textPaint.style = Paint.Style.FILL
-        textPaint.color = currentTextColor
-        staticLayout.draw(canvas)
 
         canvas.restore()
-        
-        // Reset paint properties
-        textPaint.shader = null
-        if (currentEffect == Effect.DROP_SHADOW) {
-            textPaint.clearShadowLayer()
-        }
     }
 
-    // Apply outline effect
-    fun applyOutline(outlineStrokeColor: Int = this.outlineStrokeColor, outlineThickness: Float = this.outlineThickness) {
-        this.outlineStrokeColor = outlineStrokeColor
+    fun applyOutline(outlineStrokeColor: Int, outlineThickness: Float) {
+        this.effectColor = outlineStrokeColor
         this.outlineThickness = outlineThickness
         currentEffect = Effect.OUTLINE
-        invalidate()
     }
 
-    // Enable shine effect
-    fun applyShineEffect() {
+    fun applyShineEffect(color: Int) {
+        this.effectColor = color
         currentEffect = Effect.SHINE
-        invalidate()
     }
 
-    // Enable drop shadow effect
-    fun applyDropShadow() {
+    fun applyDropShadow(color: Int) {
+        this.effectColor = color
         currentEffect = Effect.DROP_SHADOW
-        invalidate()
     }
-
-    // Remove all effects
-    fun removeAllEffects() {
-        currentEffect = Effect.NONE
-        invalidate()
-    }
-
-    // Get current effect
-    fun getCurrentEffect(): Effect = currentEffect
 }
