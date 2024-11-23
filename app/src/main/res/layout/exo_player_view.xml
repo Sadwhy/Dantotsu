@@ -60,9 +60,7 @@
     android:padding="8dp"
     android:adjustViewBounds="true"
     android:layout_weight="1"
-    android:visibility="gone"
-    app:outlineStrokeColor="@android:color/black"
-    app:outlineThickness="6dp" />
+    android:visibility="gone"/>
 
     </androidx.media3.ui.SubtitleView>
 
