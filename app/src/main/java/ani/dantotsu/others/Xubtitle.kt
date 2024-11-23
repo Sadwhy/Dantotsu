@@ -16,7 +16,6 @@ class Xubtitle @JvmOverloads constructor(
 
     private var outlineStrokeColor: Int = Color.BLACK
     private var outlineThickness: Float = 4f
-    private var effectColor: Int = currentTextColor
     private var currentEffect: Effect = Effect.NONE
 
     enum class Effect {
@@ -41,7 +40,27 @@ class Xubtitle @JvmOverloads constructor(
         val text = text.toString()
         val textPaint = paint
 
-        // Create StaticLayout for proper line breaking and alignment
+        // Configure effect before drawing
+        when (currentEffect) {
+            Effect.DROP_SHADOW -> {
+                setLayerType(LAYER_TYPE_SOFTWARE, null)
+                textPaint.setShadowLayer(8f, 4f, 4f, Color.BLACK)
+            }
+            Effect.SHINE -> {
+                val shader = LinearGradient(
+                    0f, 0f, width.toFloat(), height.toFloat(),
+                    intArrayOf(Color.BLACK, Color.WHITE, Color.BLACK),
+                    null,
+                    Shader.TileMode.CLAMP
+                )
+                textPaint.shader = shader
+            }
+            else -> {
+                // No special configuration needed for NONE or OUTLINE
+            }
+        }
+
+        // Create StaticLayout for line breaks and proper text alignment
         val staticLayout = StaticLayout.Builder.obtain(text, 0, text.length, textPaint, width)
             .setAlignment(Layout.Alignment.ALIGN_CENTER)
             .setLineSpacing(0f, 1f)
@@ -49,56 +68,46 @@ class Xubtitle @JvmOverloads constructor(
 
         canvas.save()
 
-        when (currentEffect) {
-            Effect.OUTLINE -> {
-                textPaint.style = Paint.Style.STROKE
-                textPaint.strokeWidth = outlineThickness
-                textPaint.color = effectColor
-                staticLayout.draw(canvas)
-            }
-            Effect.SHINE -> {
-                val shader = LinearGradient(
-                    0f, 0f, width.toFloat(), height.toFloat(),
-                    intArrayOf(effectColor, Color.WHITE, effectColor),
-                    null,
-                    Shader.TileMode.CLAMP
-                )
-                textPaint.shader = shader
-                textPaint.style = Paint.Style.FILL
-                staticLayout.draw(canvas)
-                textPaint.shader = null // Reset shader after use
-            }
-            Effect.DROP_SHADOW -> {
-                setLayerType(LAYER_TYPE_SOFTWARE, null)
-                textPaint.setShadowLayer(8f, 4f, 4f, effectColor)
-                textPaint.style = Paint.Style.FILL
-                staticLayout.draw(canvas)
-                textPaint.clearShadowLayer() // Reset shadow after use
-            }
-            else -> {
-                // Default effect (None)
-                textPaint.style = Paint.Style.FILL
-                textPaint.color = currentTextColor
-                staticLayout.draw(canvas)
-            }
+        // Draw outline if it's the current effect
+        if (currentEffect == Effect.OUTLINE) {
+            textPaint.style = Paint.Style.STROKE
+            textPaint.strokeWidth = outlineThickness
+            textPaint.color = outlineStrokeColor
+            staticLayout.draw(canvas)
         }
 
+        // Draw filled text with any active effect
+        textPaint.style = Paint.Style.FILL
+        textPaint.color = currentTextColor
+        staticLayout.draw(canvas)
+
         canvas.restore()
+
+        // Reset paint properties
+        textPaint.shader = null
+        if (currentEffect == Effect.DROP_SHADOW) {
+            textPaint.clearShadowLayer()
+        }
     }
 
+    // Apply outline effect with color and thickness
     fun applyOutline(outlineStrokeColor: Int, outlineThickness: Float) {
-        this.effectColor = outlineStrokeColor
+        this.outlineStrokeColor = outlineStrokeColor
         this.outlineThickness = outlineThickness
         currentEffect = Effect.OUTLINE
+        invalidate()
     }
 
-    fun applyShineEffect(color: Int) {
-        this.effectColor = color
+    // Apply shine effect with custom gradient colors
+    fun applyShineEffect(colors: IntArray = intArrayOf(Color.BLACK, Color.WHITE, Color.BLACK)) {
         currentEffect = Effect.SHINE
+        invalidate()
     }
 
-    fun applyDropShadow(color: Int) {
-        this.effectColor = color
+    // Apply drop shadow with custom shadow color
+    fun applyDropShadow(shadowColor: Int = Color.BLACK) {
+        paint.setShadowLayer(8f, 4f, 4f, shadowColor)
         currentEffect = Effect.DROP_SHADOW
+        invalidate()
     }
 }
