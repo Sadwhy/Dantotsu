@@ -625,7 +625,6 @@ private fun applySubtitleStyles(textView: Xubtitle) {
                 it.visibility = View.GONE
             }
         }
-        setupSubFormatting(playerView)
 
         if (savedInstanceState != null) {
             currentWindow = savedInstanceState.getInt(resumeWindow)
@@ -1838,29 +1837,21 @@ private fun applySubtitleStyles(textView: Xubtitle) {
 
       exoPlayer.addListener(object : Player.Listener {
     override fun onCues(cues: List<Cue>) {
-        // Assuming customSubtitleView and exoSubtitleView are already initialized
-        if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
-            // Disable the default SubtitleView
-            exoSubtitleView.visibility = View.GONE
-
-            // Display the custom TextView for subtitles
-            if (cues.isNotEmpty()) {
+        if (cues.isNotEmpty() && PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
                 customSubtitleView.visibility = View.VISIBLE
                 customSubtitleView.text = cues.joinToString("\n") { it.text ?: "" }
+                exoSubtitleView.visibility = View.GONE
             } else {
+                exoSubtitleView.visibility = View.VISIBLE
                 customSubtitleView.visibility = View.GONE
                 customSubtitleView.text = ""
             }
-        } else {
-            // Show the default SubtitleView and hide the custom TextView
-            exoSubtitleView.visibility = View.VISIBLE
-            customSubtitleView.visibility = View.GONE
-            customSubtitleView.text = ""
         }
     }
-})
+)
 
         applySubtitleStyles(customSubtitleView)
+        setupSubFormatting(playerView)
 
         try {
             val rightNow = Calendar.getInstance()
