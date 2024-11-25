@@ -237,6 +237,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     private lateinit var videoInfo: TextView
     private lateinit var episodeTitle: Spinner
     private lateinit var customSubtitleView: Xubtitle
+    private lateinit var subtitleManager: SubtitleManager
 
     private var orientationListener: OrientationEventListener? = null
 
@@ -1816,6 +1817,8 @@ private fun applySubtitleStyles(textView: Xubtitle) {
              .setEnableDecoderFallback(true)
              .setExtensionRendererMode(decoder)
         
+        subtitleManager = SubtitleManager(customSubtitleView)
+        
         exoPlayer = ExoPlayer.Builder(this, renderersFactory)
             .setMediaSourceFactory(DefaultMediaSourceFactory(cacheFactory))
             .setTrackSelector(trackSelector)
@@ -1825,6 +1828,7 @@ private fun applySubtitleStyles(textView: Xubtitle) {
                 this.playbackParameters = this@ExoplayerView.playbackParameters
                 setMediaSource(mediaSource)
                 prepare()
+                addListener(subtitleManager)
                 PrefManager.getCustomVal(
                     "${media.id}_${media.anime!!.selectedEpisode}_max",
                     Long.MAX_VALUE
@@ -1835,20 +1839,60 @@ private fun applySubtitleStyles(textView: Xubtitle) {
             }
         playerView.player = exoPlayer
 
-      exoPlayer.addListener(object : Player.Listener {
+      class SubtitleManager(private val customSubtitleView: TextView) : Player.Listener {
+    private val activeCues = mutableListOf<SubtitleCue>()
+
+    data class SubtitleCue(
+        val text: String, 
+        val endTimeMs: Long
+    )
+
     override fun onCues(cues: List<Cue>) {
-        if (cues.isNotEmpty() && PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
-                customSubtitleView.visibility = View.VISIBLE
-                customSubtitleView.text = cues.joinToString("\n") { it.text ?: "" }
-                exoSubtitleView.visibility = View.INVISIBLE
-            } else {
-                exoSubtitleView.visibility = View.VISIBLE
-                customSubtitleView.visibility = View.INVISIBLE
-                customSubtitleView.text = ""
+        // Only process if subtitles are enabled in preferences
+        if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+            // Clear expired subtitles
+            cleanExpiredCues(System.currentTimeMillis())
+
+            // Add new cues
+            val currentTime = System.currentTimeMillis()
+            cues.forEach { cue ->
+                // Only add non-empty cues
+                cue.text?.takeIf { it.isNotBlank() }?.let { text ->
+                    activeCues.add(
+                        SubtitleCue(
+                            text = text, 
+                            endTimeMs = currentTime + (cue.endTimeMs - cue.startTimeMs)
+                        )
+                    )
+                }
             }
+
+            // Update subtitle view
+            updateSubtitleView()
+        } else {
+            // Clear subtitles when disabled
+            activeCues.clear()
+            updateSubtitleView()
         }
     }
- )
+
+    private fun cleanExpiredCues(currentTimeMs: Long) {
+        // Remove cues that have expired
+        activeCues.removeAll { it.endTimeMs <= currentTimeMs }
+    }
+
+    private fun updateSubtitleView() {
+        if (activeCues.isNotEmpty()) {
+            customSubtitleView.visibility = View.VISIBLE
+            customSubtitleView.text = activeCues.map { it.text }.joinToString("\n")
+            exoSubtitleView.visibility = View.INVISIBLE
+        } else {
+            customSubtitleView.visibility = View.INVISIBLE
+            customSubtitleView.text = ""
+            exoSubtitleView.visibility = View.VISIBLE
+        }
+    }
+}
 
 
         applySubtitleStyles(customSubtitleView)
