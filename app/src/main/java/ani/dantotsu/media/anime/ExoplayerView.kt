@@ -1851,7 +1851,7 @@ private fun applySubtitleStyles(textView: Xubtitle) {
 
         // Keep exoSubtitleView state independent
         exoSubtitleView.visibility = if (subtitleText.isNotEmpty()) View.VISIBLE else View.INVISIBLE
-        exoSubtitleView.translationY = -100f
+        exoSubtitleView.alpha = 0f
     }
 })
 
