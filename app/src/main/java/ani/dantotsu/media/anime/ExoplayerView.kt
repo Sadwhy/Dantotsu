@@ -428,10 +428,12 @@ private fun setupSubFormatting(playerView: PlayerView) {
         )
 
         subtitles.alpha =
-            when (PrefManager.getVal<Boolean>(PrefName.Subtitles) && !PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
-                true -> PrefManager.getVal(PrefName.SubAlpha)
-                false -> 0f
-            }
+                if (PrefManager.getVal<Boolean>(PrefName.Subtitles) && 
+                    !PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+                    PrefManager.getVal(PrefName.SubAlpha)
+                } else {
+                    0f
+                }
 
         subtitles.setFixedTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
     }
@@ -484,20 +486,21 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
     }
 
-    // Set the font size
     val fontSize = PrefManager.getVal<Int>(PrefName.FontSize).toFloat()
 
-    // Apply the background, text color, font, and size
     textView.setBackgroundColor(subBackground)
     textView.setTextColor(primaryColor)
     textView.typeface = font
     textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
 
     // Apply transparency if subtitles are enabled
-    textView.alpha = when (PrefManager.getVal<Boolean>(PrefName.Subtitles) && PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
-        true -> PrefManager.getVal(PrefName.SubAlpha)
-        false -> 0f
-    }
+    subtitles.alpha =
+        if (PrefManager.getVal<Boolean>(PrefName.Subtitles) && 
+            PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+            PrefManager.getVal(PrefName.SubAlpha)
+        } else {
+            0f
+        }
 
     val secondaryColor = when (PrefManager.getVal<Int>(PrefName.SecondaryColor)) {
         0 -> Color.BLACK
