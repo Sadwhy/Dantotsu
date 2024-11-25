@@ -1838,17 +1838,12 @@ private fun applySubtitleStyles(textView: Xubtitle) {
 
       exoPlayer.addListener(object : Player.Listener {
     override fun onCues(cues: List<Cue>) {
-        val customSubtitleView = findViewById<TextView>(R.id.custom_subtitle_view)
-        val playerView = findViewById<PlayerView>(R.id.player_view)
-
-        // If TextView-based subtitles are enabled in preferences
+        // Assuming customSubtitleView and exoSubtitleView are already initialized
         if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
-            // Disable the SubtitleView (if it exists) and show the custom TextView
-            playerView.subtitleView?.let {
-                playerView.subtitleView = null // Disable SubtitleView
-            }
+            // Disable the default SubtitleView
+            exoSubtitleView.visibility = View.GONE
 
-            // Show the custom subtitle TextView and update the text
+            // Display the custom TextView for subtitles
             if (cues.isNotEmpty()) {
                 customSubtitleView.visibility = View.VISIBLE
                 customSubtitleView.text = cues.joinToString("\n") { it.text ?: "" }
@@ -1857,13 +1852,8 @@ private fun applySubtitleStyles(textView: Xubtitle) {
                 customSubtitleView.text = ""
             }
         } else {
-            // Re-enable SubtitleView if custom TextView-based subtitles are not used
-            if (playerView.subtitleView == null) {
-                // Enable SubtitleView back
-                playerView.subtitleView = playerView.findViewById(R.id.exo_subtitle_view)
-            }
-
-            // Hide the custom TextView if it's not being used
+            // Show the default SubtitleView and hide the custom TextView
+            exoSubtitleView.visibility = View.VISIBLE
             customSubtitleView.visibility = View.GONE
             customSubtitleView.text = ""
         }
