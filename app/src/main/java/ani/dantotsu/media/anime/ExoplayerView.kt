@@ -433,10 +433,6 @@ private fun setupSubFormatting(playerView: PlayerView) {
                  false -> 0f
             }
 
-            if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
-                subtitles.translationY = 10000f
-            }
-
         subtitles.setFixedTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
     }
 }
@@ -1841,16 +1837,38 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         playerView.player = exoPlayer
 
       exoPlayer.addListener(object : Player.Listener {
-              override fun onCues(cues: List<Cue>) {
-                  if (cues.isNotEmpty() && PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
-                      customSubtitleView.visibility = View.VISIBLE
-                      customSubtitleView.text = cues.joinToString("\n") { it.text.toString() }
-                  } else {
-                      customSubtitleView.visibility = View.GONE
-                      customSubtitleView.text = ""
-                  }
-              }
-          })
+    override fun onCues(cues: List<Cue>) {
+        val customSubtitleView = findViewById<TextView>(R.id.custom_subtitle_view)
+        val playerView = findViewById<PlayerView>(R.id.player_view)
+
+        // If TextView-based subtitles are enabled in preferences
+        if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+            // Disable the SubtitleView (if it exists) and show the custom TextView
+            playerView.subtitleView?.let {
+                playerView.subtitleView = null // Disable SubtitleView
+            }
+
+            // Show the custom subtitle TextView and update the text
+            if (cues.isNotEmpty()) {
+                customSubtitleView.visibility = View.VISIBLE
+                customSubtitleView.text = cues.joinToString("\n") { it.text ?: "" }
+            } else {
+                customSubtitleView.visibility = View.GONE
+                customSubtitleView.text = ""
+            }
+        } else {
+            // Re-enable SubtitleView if custom TextView-based subtitles are not used
+            if (playerView.subtitleView == null) {
+                // Enable SubtitleView back
+                playerView.subtitleView = playerView.findViewById(R.id.exo_subtitle_view)
+            }
+
+            // Hide the custom TextView if it's not being used
+            customSubtitleView.visibility = View.GONE
+            customSubtitleView.text = ""
+        }
+    }
+})
 
         applySubtitleStyles(customSubtitleView)
 
