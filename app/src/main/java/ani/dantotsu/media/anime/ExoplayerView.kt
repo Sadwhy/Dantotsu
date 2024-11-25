@@ -428,7 +428,7 @@ private fun setupSubFormatting(playerView: PlayerView) {
         )
 
         subtitles.alpha =
-            when (PrefManager.getVal<Boolean>(PrefName.Subtitles)) {
+            when (PrefManager.getVal<Boolean>(PrefName.Subtitles) && !PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
                 true -> PrefManager.getVal(PrefName.SubAlpha)
                 false -> 0f
             }
@@ -494,7 +494,7 @@ private fun applySubtitleStyles(textView: Xubtitle) {
     textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
 
     // Apply transparency if subtitles are enabled
-    textView.alpha = when (PrefManager.getVal<Boolean>(PrefName.Subtitles)) {
+    textView.alpha = when (PrefManager.getVal<Boolean>(PrefName.Subtitles) && PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
         true -> PrefManager.getVal(PrefName.SubAlpha)
         false -> 0f
     }
@@ -1563,12 +1563,9 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         //Subtitles
         hasExtSubtitles = ext.subtitles.isNotEmpty()
         if (hasExtSubtitles) {
-          if (!PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) { 
           exoSubtitle.isVisible = hasExtSubtitles
-          }
-          exoSubtitle.setOnClickListener {
+          exoSubtitle.setOnClickListener 
               subClick()
-          }
       }
         val sub: MutableList<MediaItem.SubtitleConfiguration> =
             emptyList<MediaItem.SubtitleConfiguration>().toMutableList()
@@ -1842,7 +1839,7 @@ private fun applySubtitleStyles(textView: Xubtitle) {
 
       exoPlayer.addListener(object : Player.Listener {
               override fun onCues(cues: List<Cue>) {
-                  if (cues.isNotEmpty() && PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+                  if (cues.isNotEmpty()) {
                       customSubtitleView.visibility = View.VISIBLE
                       customSubtitleView.text = cues.joinToString("\n") { it.text.toString() }
                   } else {
