@@ -494,7 +494,7 @@ private fun applySubtitleStyles(textView: Xubtitle) {
     textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
 
     // Apply transparency if subtitles are enabled
-    subtitles.alpha =
+    textView.alpha =
         if (PrefManager.getVal<Boolean>(PrefName.Subtitles) && 
             PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
             PrefManager.getVal(PrefName.SubAlpha)
