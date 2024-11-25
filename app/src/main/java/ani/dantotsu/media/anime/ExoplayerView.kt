@@ -254,13 +254,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         private const val BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS = 5000
     }
 
-    private val activeCues = mutableListOf<SubtitleCue>()
-    
-    private data class SubtitleCue(
-        val text: String, 
-        val endTimeMs: Long
-    )
-
     private lateinit var episode: Episode
     private lateinit var episodes: MutableMap<String, Episode>
     private lateinit var episodeArr: List<String>
@@ -1822,7 +1815,7 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         val renderersFactory = NextRenderersFactory(this)
              .setEnableDecoderFallback(true)
              .setExtensionRendererMode(decoder)
-
+        
         exoPlayer = ExoPlayer.Builder(this, renderersFactory)
             .setMediaSourceFactory(DefaultMediaSourceFactory(cacheFactory))
             .setTrackSelector(trackSelector)
@@ -1832,7 +1825,6 @@ private fun applySubtitleStyles(textView: Xubtitle) {
                 this.playbackParameters = this@ExoplayerView.playbackParameters
                 setMediaSource(mediaSource)
                 prepare()
-                addListener(subtitleManager)
                 PrefManager.getCustomVal(
                     "${media.id}_${media.anime!!.selectedEpisode}_max",
                     Long.MAX_VALUE
@@ -1842,6 +1834,42 @@ private fun applySubtitleStyles(textView: Xubtitle) {
                 seekTo(playbackPosition)
             }
         playerView.player = exoPlayer
+
+exoPlayer.addListener(object : Player.Listener {
+    // Maintain a mutable list to track active subtitles
+    private val activeSubtitles = mutableListOf<Cue>()
+    private var lastDisplayedText: String = ""
+
+    override fun onCues(cues: List<Cue>) {
+        if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+            if (cues.isNotEmpty()) {
+                // Add new cues at the beginning of the list
+                activeSubtitles.addAll(0, cues)
+
+                // Remove expired cues
+                activeSubtitles.retainAll { it.text != null }
+
+                // Generate combined text
+                val combinedText = activeSubtitles.joinToString("\n") { it.text ?: "" }
+
+                // Update the subtitle view only if the text has changed
+                if (combinedText != lastDisplayedText) {
+                    lastDisplayedText = combinedText
+                    customSubtitleView.text = combinedText
+                }
+            } else {
+                // Clear subtitles when no cues are active
+                if (lastDisplayedText.isNotEmpty()) {
+                    customSubtitleView.text = ""
+                    lastDisplayedText = ""
+                }
+                activeSubtitles.clear()
+            }
+            customSubtitleView.visibility = View.VISIBLE
+            exoSubtitleView.visibility = View.GONE
+        }
+    }
+})
 
         applySubtitleStyles(customSubtitleView)
         setupSubFormatting(playerView)
@@ -1868,48 +1896,6 @@ private fun applySubtitleStyles(textView: Xubtitle) {
             .buildUpon()
             .setTrackTypeDisabled(TRACK_TYPE_TEXT, isDisabled)
             .build()
-    }
-
-    private fun setupSubtitleListener() {
-        exoPlayer.addListener(object : Player.Listener {
-            override fun onCues(cues: List<Cue>) {
-                if (cues.isNotEmpty() && PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
-                    val currentTime = System.currentTimeMillis()
-                    
-                    // Remove expired subtitles
-                    activeCues.removeAll { it.endTimeMs <= currentTime }
-                    
-                    // Add new subtitles
-                    cues.forEach { cue ->
-                        cue.text?.takeIf { it.isNotBlank() }?.let { text ->
-                            activeCues.add(
-                                SubtitleCue(
-                                    text = text.toString(), 
-                                    endTimeMs = currentTime + (cue.endTimeMs - cue.startTimeMs)
-                                )
-                            )
-                        }
-                    }
-                    
-                    // Update subtitle view
-                    if (activeCues.isNotEmpty()) {
-                        customSubtitleView.visibility = View.VISIBLE
-                        customSubtitleView.text = activeCues.map { it.text }.joinToString("\n")
-                        exoSubtitleView.visibility = View.INVISIBLE
-                    } else {
-                        customSubtitleView.visibility = View.INVISIBLE
-                        customSubtitleView.text = ""
-                        exoSubtitleView.visibility = View.VISIBLE
-                    }
-                } else {
-                    // Clear subtitles when disabled
-                    activeCues.clear()
-                    customSubtitleView.visibility = View.INVISIBLE
-                    customSubtitleView.text = ""
-                    exoSubtitleView.visibility = View.VISIBLE
-                }
-            }
-        })
     }
 
     private fun releasePlayer() {

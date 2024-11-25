@@ -123,14 +123,12 @@ class Xubtitle @JvmOverloads constructor(
         this.outlineStrokeColor = outlineStrokeColor
         this.outlineThickness = outlineThickness
         currentEffect = Effect.OUTLINE
-        invalidate()
     }
 
     // Apply shine effect with custom gradient colors
     fun applyShineEffect(color: Int) {
         this.effectColor = color
         currentEffect = Effect.SHINE
-        invalidate()
     }
 
     // Apply drop shadow with custom shadow color
@@ -138,6 +136,5 @@ class Xubtitle @JvmOverloads constructor(
         this.effectColor = color
         paint.setShadowLayer(8f, 4f, 4f, color)
         currentEffect = Effect.DROP_SHADOW
-        invalidate()
     }
 }
