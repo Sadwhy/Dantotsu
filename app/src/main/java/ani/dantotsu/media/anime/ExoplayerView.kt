@@ -1836,28 +1836,35 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         playerView.player = exoPlayer
 
 exoPlayer.addListener(object : Player.Listener {
-    // Maintain a mutable list to track active subtitles
-    private val activeSubtitles = mutableListOf<Cue>()
+    // Maintain a mutable list to track active subtitles with their expiry times
+    private val activeSubtitles = mutableListOf<Pair<Cue, Long>>()
     private var lastDisplayedText: String = ""
 
     override fun onCues(cues: List<Cue>) {
         if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
             if (cues.isNotEmpty()) {
-                // Filter out cues that are already in activeSubtitles with the same text and expiry times
+                // Get current playback position in milliseconds
+                val currentTime = exoPlayer.currentPosition
+
+                // Add new cues if not already present (with the same expiry time)
                 val newCues = cues.filter { cue ->
-                    activeSubtitles.none { 
-                        it.text == cue.text && it.startTimeMs == cue.startTimeMs && it.endTimeMs == cue.endTimeMs
+                    activeSubtitles.none { (existingCue, _) ->
+                        existingCue.text == cue.text
                     }
                 }
 
-                // Add only the new cues at the beginning of the list
-                activeSubtitles.addAll(0, newCues)
+                // Add new cues to activeSubtitles with calculated expiry times
+                activeSubtitles.addAll(newCues.map { cue ->
+                    cue to (cue.windowEndTimeMs ?: Long.MAX_VALUE)
+                })
 
-                // Remove expired cues (cues with null text or already expired)
-                activeSubtitles.retainAll { it.text != null }
+                // Remove expired cues (currentTime exceeds expiry)
+                activeSubtitles.retainAll { (_, expiryTime) ->
+                    expiryTime > currentTime
+                }
 
-                // Generate combined text
-                val combinedText = activeSubtitles.joinToString("\n") { it.text ?: "" }
+                // Generate combined text from active cues
+                val combinedText = activeSubtitles.joinToString("\n") { it.first.text ?: "" }
 
                 // Update the subtitle view only if the text has changed
                 if (combinedText != lastDisplayedText) {
@@ -1878,7 +1885,6 @@ exoPlayer.addListener(object : Player.Listener {
     }
 })
 
-        applySubtitleStyles(customSubtitleView)
         setupSubFormatting(playerView)
 
         try {
