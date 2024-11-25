@@ -1836,24 +1836,20 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         playerView.player = exoPlayer
 
       exoPlayer.addListener(object : Player.Listener {
-    override fun onCues(cues: MutableList<Cue>) {
-        // Extract subtitle text directly from cues
-        val subtitleText = cues.joinToString("\n") { it.text?.toString().orEmpty() }
-
-        // Display subtitles in the custom view if enabled in preferences
-        if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
-            customSubtitleView.visibility = if (subtitleText.isNotEmpty()) View.VISIBLE else View.INVISIBLE
-            customSubtitleView.text = subtitleText
-        } else {
-            customSubtitleView.visibility = View.INVISIBLE
-            customSubtitleView.text = ""
+    override fun onCues(cues: List<Cue>) {
+        if (cues.isNotEmpty() && PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+                customSubtitleView.visibility = View.VISIBLE
+                customSubtitleView.text = cues.joinToString("\n") { it.text ?: "" }
+                exoSubtitleView.visibility = View.INVISIBLE
+            } else {
+                exoSubtitleView.visibility = View.VISIBLE
+                customSubtitleView.visibility = View.INVISIBLE
+                customSubtitleView.text = ""
+            }
         }
-
-        // Keep exoSubtitleView state independent
-        exoSubtitleView.visibility = if (subtitleText.isNotEmpty()) View.VISIBLE else View.INVISIBLE
-        exoSubtitleView.alpha = 0f
     }
-})
+ )
+
 
         applySubtitleStyles(customSubtitleView)
         setupSubFormatting(playerView)
