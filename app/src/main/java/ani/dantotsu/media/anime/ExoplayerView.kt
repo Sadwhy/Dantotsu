@@ -1564,8 +1564,9 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         hasExtSubtitles = ext.subtitles.isNotEmpty()
         if (hasExtSubtitles) {
           exoSubtitle.isVisible = hasExtSubtitles
-          exoSubtitle.setOnClickListener 
+          exoSubtitle.setOnClickListener {
               subClick()
+          }
       }
         val sub: MutableList<MediaItem.SubtitleConfiguration> =
             emptyList<MediaItem.SubtitleConfiguration>().toMutableList()
