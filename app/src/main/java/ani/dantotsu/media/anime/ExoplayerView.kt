@@ -1848,6 +1848,7 @@ private fun applySubtitleStyles(textView: Xubtitle) {
             }
         }
     }
+ )
 
 
         applySubtitleStyles(customSubtitleView)
