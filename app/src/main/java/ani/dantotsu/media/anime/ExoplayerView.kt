@@ -1843,10 +1843,17 @@ exoPlayer.addListener(object : Player.Listener {
     override fun onCues(cues: List<Cue>) {
         if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
             if (cues.isNotEmpty()) {
-                // Add new cues at the beginning of the list
-                activeSubtitles.addAll(0, cues)
+                // Filter out cues that are already in activeSubtitles with the same text and expiry times
+                val newCues = cues.filter { cue ->
+                    activeSubtitles.none { 
+                        it.text == cue.text && it.startTimeMs == cue.startTimeMs && it.endTimeMs == cue.endTimeMs
+                    }
+                }
 
-                // Remove expired cues
+                // Add only the new cues at the beginning of the list
+                activeSubtitles.addAll(0, newCues)
+
+                // Remove expired cues (cues with null text or already expired)
                 activeSubtitles.retainAll { it.text != null }
 
                 // Generate combined text
