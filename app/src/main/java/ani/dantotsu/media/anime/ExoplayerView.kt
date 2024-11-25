@@ -433,12 +433,8 @@ private fun setupSubFormatting(playerView: PlayerView) {
                  false -> 0f
             }
 
-        playerView.subtitleView?.visibility = 
-            if (PrefManager.getVal<Boolean>(PrefName.Subtitles) &&
-                !PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
-                View.VISIBLE
-            } else {
-                View.GONE
+            if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+                subtitles.translationY = 10000f
             }
 
         subtitles.setFixedTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
