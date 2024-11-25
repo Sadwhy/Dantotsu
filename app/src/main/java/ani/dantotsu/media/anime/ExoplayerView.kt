@@ -428,12 +428,18 @@ private fun setupSubFormatting(playerView: PlayerView) {
         )
 
         subtitles.alpha =
-                if (PrefManager.getVal<Boolean>(PrefName.Subtitles) && 
-                    !PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
-                    PrefManager.getVal(PrefName.SubAlpha)
-                } else {
-                    0f
-                }
+             when (PrefManager.getVal<Boolean>(PrefName.Subtitles)) {
+                 true -> PrefManager.getVal(PrefName.SubAlpha)
+                 false -> 0f
+            }
+
+        playerView.subtitleView?.visibility = 
+            if (PrefManager.getVal<Boolean>(PrefName.Subtitles) &&
+                !PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
 
         subtitles.setFixedTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
     }
@@ -493,14 +499,6 @@ private fun applySubtitleStyles(textView: Xubtitle) {
     textView.typeface = font
     textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
 
-    // Apply transparency if subtitles are enabled
-    textView.alpha =
-        if (PrefManager.getVal<Boolean>(PrefName.Subtitles) && 
-            PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
-            PrefManager.getVal(PrefName.SubAlpha)
-        } else {
-            0f
-        }
 
     val secondaryColor = when (PrefManager.getVal<Int>(PrefName.SecondaryColor)) {
         0 -> Color.BLACK
@@ -527,6 +525,13 @@ private fun applySubtitleStyles(textView: Xubtitle) {
               else -> applyOutline(secondaryColor, 4f)
           }
        }
+
+    // Apply transparency if subtitles are enabled
+    textView.alpha =
+        when (PrefManager.getVal<Boolean>(PrefName.Subtitles)) {
+            true -> PrefManager.getVal(PrefName.SubAlpha)
+            false -> 0f
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -1619,8 +1624,6 @@ private fun applySubtitleStyles(textView: Xubtitle) {
             ext.onVideoPlayed(video)
         }
 
-          applySubtitleStyles(customSubtitleView)
-
         val httpClient = okHttpClient.newBuilder().apply {
             ignoreAllSSLErrors()
             followRedirects(true)
@@ -1843,7 +1846,7 @@ private fun applySubtitleStyles(textView: Xubtitle) {
 
       exoPlayer.addListener(object : Player.Listener {
               override fun onCues(cues: List<Cue>) {
-                  if (cues.isNotEmpty()) {
+                  if (cues.isNotEmpty() && PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
                       customSubtitleView.visibility = View.VISIBLE
                       customSubtitleView.text = cues.joinToString("\n") { it.text.toString() }
                   } else {
@@ -1852,6 +1855,8 @@ private fun applySubtitleStyles(textView: Xubtitle) {
                   }
               }
           })
+
+        applySubtitleStyles(customSubtitleView)
 
         try {
             val rightNow = Calendar.getInstance()
