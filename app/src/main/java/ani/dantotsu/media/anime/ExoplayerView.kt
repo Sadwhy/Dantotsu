@@ -1837,12 +1837,10 @@ private fun applySubtitleStyles(textView: Xubtitle) {
 
       exoPlayer.addListener(object : Player.Listener {
     override fun onCues(cues: List<Cue>) {
-        if (cues.isNotEmpty() && PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+        if (cues.isNotEmpty()) {
                 customSubtitleView.visibility = View.VISIBLE
                 customSubtitleView.text = cues.joinToString("\n") { it.text ?: "" }
-                exoSubtitleView.visibility = View.GONE
             } else {
-                exoSubtitleView.visibility = View.VISIBLE
                 customSubtitleView.visibility = View.GONE
                 customSubtitleView.text = ""
             }
