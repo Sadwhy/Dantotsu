@@ -1844,39 +1844,47 @@ private fun applySubtitleStyles(textView: Xubtitle) {
             var lastSubtitle: String? = null
         
             override fun onCues(cueGroup: CueGroup) {
+                // Check if the user prefers subtitles
                 if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
                     customSubtitleView.visibility = View.VISIBLE
         
                     // Collect the new subtitles from the CueGroup
                     val newCues = cueGroup.cues.map { it.text.toString() ?: "" }
         
+                    // Check if all cues are empty
+                    if (newCues.all { it.isEmpty() }) {
+                        // Clear subtitles if all cues are empty
+                        customSubtitleView.text = ""
+                        activeSubtitles.clear()
+                        lastSubtitle = null
+                        return
+                    }
+        
                     // Compare the last subtitle added with the new subtitles
                     newCues.forEach { newCue ->
                         if (newCue != lastSubtitle) {
-                            // If new subtitle is different from the last one, add it
+                            // If the new subtitle is different, add it
                             activeSubtitles.add(newCue)
         
-                            // If the list has more than 3 items, remove the first two added subtitles (from the front of the list)
-                            if (activeSubtitles.size > 3) {
-                                // Remove the first two items (the ones added first)
-                                activeSubtitles.removeAt(0)
-                                activeSubtitles.removeAt(0)
+                            // If the list has more than 2 items, remove the first two added subtitles
+                            if (activeSubtitles.size > 2) {
+                                activeSubtitles.removeAt(0)  // Remove the first subtitle (the earliest added)
                             }
         
                             // Update the last subtitle added
-                            lastSubtitle = newCue.toString()
+                            lastSubtitle = newCue
                         }
                     }
         
-                    // Join the active subtitles to display them in customSubtitleView
+                    // Join the active subtitles to display them in the customTextView
                     customSubtitleView.text = activeSubtitles.joinToString("\n")
         
                     // Hide the default ExoPlayer subtitle view
                     exoSubtitleView.visibility = View.INVISIBLE
                 } else {
-                    exoSubtitleView.visibility = View.VISIBLE
-                    customSubtitleView.visibility = View.INVISIBLE
+                    // If subtitles are turned off, clear the text and hide the customSubtitleView
                     customSubtitleView.text = ""
+                    customSubtitleView.visibility = View.INVISIBLE
                 }
             }
         })
