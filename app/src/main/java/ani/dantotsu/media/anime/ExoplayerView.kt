@@ -1837,7 +1837,7 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         playerView.player = exoPlayer
 
         exoPlayer.addListener(object : Player.Listener {
-            private var subtitleList = mutableListOf<Pair<String, Long>>() // Tracks active subtitles with their expiration time
+            private var subtitleList = mutableListOf<Pair<String, Long>>() // List of active subtitles with their end time
             private var lastUpdatePosition = 0L // Tracks the last update position
         
             override fun onCues(cueGroup: CueGroup) {
@@ -1847,23 +1847,28 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         
                     val currentPosition = exoPlayer.currentPosition // Current playback position in milliseconds
         
-                    // Remove expired cues
-                    subtitleList.removeAll { (_, endTimeUs) ->
-                        currentPosition * 1000 >= endTimeUs // Check if current time exceeds end time
+                    // Remove expired cues (convert currentPosition to microseconds)
+                    subtitleList.removeAll { (_, presentationTimeUs) ->
+                        currentPosition * 1000 >= presentationTimeUs // Check if current time exceeds cue's presentation time
                     }
+        
+                    // Get the current period from the timeline
+                    val period = Timeline.Period()
+                    val currentPeriodIndex = exoPlayer.currentTimeline.getPeriod(exoPlayer.currentPeriodIndex, period)
         
                     // Add new active cues from the CueGroup
                     cueGroup.cues.forEach { cue ->
-                        val cueText = cue.text ?: ""
-                        val presentationTimeUs = cueGroup.presentationTimeUs + (cue.durationUs ?: 0)
+                        val cueText = cue.text?.toString() ?: ""
+                        // Calculate the absolute presentation time by adding the period start time (windowTimeUs)
+                        val absolutePresentationTimeUs = period.windowTimeUs + cue.presentationTimeUs
         
-                        // Check for duplicates before adding
+                        // Add cue to the list if it hasn't been added already
                         if (!subtitleList.any { it.first == cueText }) {
-                            subtitleList.add(cueText to presentationTimeUs)
+                            subtitleList.add(cueText to absolutePresentationTimeUs)
                         }
                     }
         
-                    // Update the subtitles view
+                    // Update the subtitles view with active cues
                     if (subtitleList.isNotEmpty()) {
                         customSubtitleView.text = subtitleList.joinToString("\n") { it.first }
                     } else {
