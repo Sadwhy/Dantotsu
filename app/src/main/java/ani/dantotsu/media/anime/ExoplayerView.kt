@@ -1839,25 +1839,43 @@ private fun applySubtitleStyles(textView: Xubtitle) {
     private var subtitleList = mutableListOf<String>() // List to hold the subtitles
     private var lastSub: String = "" // Track the last subtitle to avoid duplicates
 
+    exoPlayer.addListener(object : Player.Listener {
+    private var subtitleList = mutableListOf<String>() // List to hold the subtitles
+    private var lastSub: String = "" // Track the last subtitle to avoid duplicates
+    private var lastSubtitleTime: Long = 0 // Track the timestamp of the last subtitle
+    private val maxSubtitleCount = 4 // Maximum number of subtitles to display at once
+    private val subtitleMergeThreshold = 1500 // 1.5 seconds threshold in milliseconds
+
     override fun onCues(cues: List<Cue>) {
         if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
             customSubtitleView.visibility = View.VISIBLE
             exoSubtitleView.visibility = View.INVISIBLE
-            
+
             if (cues.isNotEmpty()) {
                 val newSub = cues.joinToString("\n") { it.text ?: "" }
+                val currentTime = System.currentTimeMillis()
 
-                // Check for duplicates and add the new subtitle if it's different
+                // Check for duplicates and process the subtitle
                 if (newSub != lastSub) {
-                    // Clear the list if there are 3 subtitles and add the new one
-                    if (subtitleList.size == 3) {
-                        subtitleList.clear() // Remove all existing subtitles
+                    if (currentTime - lastSubtitleTime <= subtitleMergeThreshold && subtitleList.isNotEmpty()) {
+                        // Combine the new subtitle with the previous ones if within 1.5 seconds
+                        subtitleList[subtitleList.size - 1] = "${subtitleList.last()}\n$newSub"
+                    } else {
+                        // Add as a new subtitle
+                        subtitleList.add(newSub)
                     }
-                    subtitleList.add(newSub)
+
+                    // Update the last subtitle and timestamp
                     lastSub = newSub
+                    lastSubtitleTime = currentTime
+
+                    // Clear the list if it exceeds the max count
+                    if (subtitleList.size > maxSubtitleCount) {
+                        subtitleList.clear()
+                    }
                 }
 
-                // Combine the subtitles into a single string
+                // Combine the subtitles into a single string for display
                 val combinedSub = subtitleList.joinToString("\n")
 
                 // Show custom subtitles and update text
@@ -1866,10 +1884,12 @@ private fun applySubtitleStyles(textView: Xubtitle) {
                 // Reset subtitles when no cues are active
                 customSubtitleView.text = ""
                 subtitleList.clear() // Clear the subtitle list when no cues are present
+                lastSubtitleTime = 0 // Reset the timestamp
             }
         }
     }
 })
+
         applySubtitleStyles(customSubtitleView)
         setupSubFormatting(playerView)
 
