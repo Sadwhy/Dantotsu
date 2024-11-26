@@ -78,7 +78,8 @@ import androidx.media3.common.MimeTypes
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
-import androidx.media3.common.text.Cue
+import androidx.media3.common.Cue
+import androidx.media3.common.Timeline
 import androidx.media3.common.text.CueGroup
 import androidx.media3.common.TrackGroup
 import androidx.media3.common.TrackSelectionOverride
@@ -1837,8 +1838,7 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         playerView.player = exoPlayer
 
         exoPlayer.addListener(object : Player.Listener {
-            private var subtitleList = mutableListOf<Pair<String, Long>>() // List of active subtitles with their end time
-            private var lastUpdatePosition = 0L // Tracks the last update position
+            private var subtitleList = mutableListOf<Pair<String, Long>>() // Tracks active subtitles with their absolute presentation time
         
             override fun onCues(cueGroup: CueGroup) {
                 if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
@@ -1860,7 +1860,7 @@ private fun applySubtitleStyles(textView: Xubtitle) {
                     cueGroup.cues.forEach { cue ->
                         val cueText = cue.text?.toString() ?: ""
                         // Calculate the absolute presentation time by adding the period start time (windowTimeUs)
-                        val absolutePresentationTimeUs = period.windowTimeUs + cue.presentationTimeUs
+                        val absolutePresentationTimeUs = period.windowTimeUs + cueGroup.presentationTimeUs
         
                         // Add cue to the list if it hasn't been added already
                         if (!subtitleList.any { it.first == cueText }) {
@@ -1874,9 +1874,6 @@ private fun applySubtitleStyles(textView: Xubtitle) {
                     } else {
                         customSubtitleView.text = "" // Clear view if no active cues
                     }
-        
-                    // Update the last playback position
-                    lastUpdatePosition = currentPosition
                 }
             }
         })
