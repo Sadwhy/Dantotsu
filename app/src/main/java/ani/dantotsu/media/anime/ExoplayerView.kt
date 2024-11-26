@@ -287,6 +287,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
     var rotation = 0
 
+    var lastSub: String = ""
+    var combinedSub: String = ""
+
     override fun onAttachedToWindow() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val displayCutout = window.decorView.rootWindowInsets.displayCutout
@@ -1835,47 +1838,34 @@ private fun applySubtitleStyles(textView: Xubtitle) {
             }
         playerView.player = exoPlayer
 
-        exoPlayer.addListener(object : Player.Listener {
-            private val activeSubtitles = mutableListOf<Cue>()
-            private var lastDisplayedText: String = ""
-        
-            override fun onCues(cues: List<Cue>) {
-                if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
-                    val currentTimeUs = exoPlayer.currentPosition * 1000 // Convert to microseconds
-        
-                    // Remove expired cues
-                    activeSubtitles.removeAll { cue ->
-                        cue.endTimeUs != C.TIME_UNSET && cue.endTimeUs <= currentTimeUs
-                    }
-        
-                    // Add new unique cues
-                    cues.forEach { cue ->
-                        if (cue.text != null && activeSubtitles.none { it.text == cue.text }) {
-                            activeSubtitles.add(cue)
-                        }
-                    }
-        
-                    // Combine text of active subtitles
-                    val combinedText = activeSubtitles.joinToString("\n") { it.text ?: "" }
-        
-                    // Update the text view only if the text has changed
-                    if (combinedText != lastDisplayedText) {
-                        lastDisplayedText = combinedText
-                        customSubtitleView.text = combinedText
-                    }
-        
-                    customSubtitleView.visibility = View.VISIBLE
-                    exoSubtitleView.visibility = View.GONE
-                } else {
-                    // Clear text when subtitles are disabled
-                    if (lastDisplayedText.isNotEmpty()) {
-                        customSubtitleView.text = ""
-                        lastDisplayedText = ""
-                    }
-                    activeSubtitles.clear()
-                }
-            }
-        })
+      exoPlayer.addListener(object : Player.Listener {
+          override fun onCues(cues: List<Cue>) {
+              if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+                  customSubtitleView.visibility = View.VISIBLE
+                  exoSubtitleView.visibility = View.INVISIBLE
+                  
+                  if (cues.isNotEmpty()) {
+                      val newSub = cues.joinToString("\n") { it.text ?: "" }
+      
+                      // Check for duplicates and combine subtitles
+                      if (newSub != lastSub) {
+                          lastSub = newSub
+                          combinedSub = if (combinedSub.isEmpty()) {
+                              newSub
+                          } else {
+                              "$newSub\n$combinedSub"
+                          }
+                      }
+      
+                      // Show custom subtitles and update text
+                      customSubtitleView.text = combinedSub
+                  } else {
+                      // Reset subtitles when no cues are active
+                      customSubtitleView.text = ""
+                  }
+              }
+          }
+      })
 
         applySubtitleStyles(customSubtitleView)
         setupSubFormatting(playerView)
