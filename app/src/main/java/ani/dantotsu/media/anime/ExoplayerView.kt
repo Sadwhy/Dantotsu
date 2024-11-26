@@ -1839,10 +1839,10 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         playerView.player = exoPlayer
 
         exoPlayer.addListener(object : Player.Listener {
-            // To store active subtitles, the latest subtitle added, and the time of the last update
+            // To store active subtitles, the latest subtitle added, and the position of the last update
             var activeSubtitles = mutableListOf<String>()
             var lastSubtitle: String? = null
-            var lastTimestamp: Long = 0  // Time when the last subtitle was added
+            var lastPosition: Long = 0  // Position of the last subtitle added (in milliseconds)
         
             override fun onCues(cueGroup: CueGroup) {
                 // Check if the user prefers subtitles
@@ -1858,15 +1858,15 @@ private fun applySubtitleStyles(textView: Xubtitle) {
                         customSubtitleView.text = ""
                         activeSubtitles.clear()
                         lastSubtitle = null
-                        lastTimestamp = 0
+                        lastPosition = 0
                         return
                     }
         
-                    // Get the current time in milliseconds
-                    val currentTime = System.currentTimeMillis()
+                    // Get the current player position in milliseconds
+                    val currentPosition = exoPlayer.currentPosition
         
                     // Check if the new subtitles are added 1.5 seconds after the last update
-                    if (lastTimestamp != 0 && currentTime - lastTimestamp > 3000) {
+                    if (lastPosition != 0L && currentPosition - lastPosition > 1500) {
                         // If more than 1.5 seconds have passed, clear the subtitles and add the new ones
                         activeSubtitles.clear()
                     }
@@ -1882,9 +1882,9 @@ private fun applySubtitleStyles(textView: Xubtitle) {
                                 activeSubtitles.removeAt(0)  // Remove the first subtitle
                             }
         
-                            // Update the last subtitle and timestamp
+                            // Update the last subtitle and position
                             lastSubtitle = newCue
-                            lastTimestamp = currentTime
+                            lastPosition = currentPosition
                         }
                     }
         
