@@ -510,15 +510,15 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         else -> Color.BLACK
     }
 
-    val subStroke = PrefManager.getVal<Int>(PrefName.SubStroke)
+    val subStroke = PrefManager.getVal<Float>(PrefName.SubStroke)
 
     customSubtitleView.apply {
           when (PrefManager.getVal<Int>(PrefName.Outline)) {
-              0 -> applyOutline(secondaryColor, subStroke.toFloat())
+              0 -> applyOutline(secondaryColor, subStroke)
               1 -> applyShineEffect(secondaryColor)
               2 -> applyDropShadow(secondaryColor)
               3 -> {}
-              else -> applyOutline(secondaryColor, subStroke.toFloat())
+              else -> applyOutline(secondaryColor, subStroke)
           }
        }
     // Apply transparency if subtitles are enabled
