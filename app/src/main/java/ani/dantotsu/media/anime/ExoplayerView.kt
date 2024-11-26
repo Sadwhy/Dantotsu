@@ -508,16 +508,17 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         else -> Color.BLACK
     }
 
+    val subStroke = PrefManager.getVal<Int>(PrefName.SubStroke)
+
     customSubtitleView.apply {
           when (PrefManager.getVal<Int>(PrefName.Outline)) {
-              0 -> applyOutline(secondaryColor, 4f)
+              0 -> applyOutline(secondaryColor, subStroke.toFloat())
               1 -> applyShineEffect(secondaryColor)
               2 -> applyDropShadow(secondaryColor)
               3 -> {}
-              else -> applyOutline(secondaryColor, 4f)
+              else -> applyOutline(secondaryColor, subStroke.toFloat())
           }
        }
-
     // Apply transparency if subtitles are enabled
     textView.alpha =
         when (PrefManager.getVal<Boolean>(PrefName.Subtitles)) {
@@ -1836,10 +1837,6 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         playerView.player = exoPlayer
 
         exoPlayer.addListener(object : Player.Listener {
-    private var subtitleList = mutableListOf<String>() // List to hold the subtitles
-    private var lastSub: String = "" // Track the last subtitle to avoid duplicates
-
-    exoPlayer.addListener(object : Player.Listener {
     private var subtitleList = mutableListOf<String>() // List to hold the subtitles
     private var lastSub: String = "" // Track the last subtitle to avoid duplicates
     private var lastSubtitleTime: Long = 0 // Track the timestamp of the last subtitle

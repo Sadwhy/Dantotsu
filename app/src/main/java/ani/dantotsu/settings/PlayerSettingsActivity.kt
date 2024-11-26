@@ -306,6 +306,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
                 binding.videoSubColorWindow,
                 binding.videoSubFont,
                 binding.videoSubAlpha,
+                binding.videoSubStroke,
                 binding.subtitleFontSizeText,
                 binding.subtitleFontSize
             ).forEach {
@@ -513,6 +514,15 @@ class PlayerSettingsActivity : AppCompatActivity() {
                 updateSubPreview()
             }
         })
+
+        binding.videoSubStroke.value = PrefManager.getVal(PrefName.SubStroke)
+        binding.videoSubStroke.addOnChangeListener(OnChangeListener { _, value, fromUser ->
+            if (fromUser) {
+                PrefManager.setVal(PrefName.SubStroke, value)
+                updateSubPreview()
+            }
+        })
+
 
         val fonts = arrayOf(
             "Poppins Semi Bold",
