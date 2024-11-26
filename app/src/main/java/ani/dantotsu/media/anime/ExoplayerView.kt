@@ -1839,11 +1839,39 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         playerView.player = exoPlayer
 
         exoPlayer.addListener(object : Player.Listener {
+            // To store active subtitles and the latest subtitle added
+            var activeSubtitles = mutableListOf<String>()
+            var lastSubtitle: String? = null
+        
             override fun onCues(cueGroup: CueGroup) {
                 if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
                     customSubtitleView.visibility = View.VISIBLE
-                    // Join the cues from the CueGroup and display them in customSubtitleView
-                    customSubtitleView.text = cueGroup.cues.joinToString("\n") { it.text ?: "" }
+        
+                    // Collect the new subtitles from the CueGroup
+                    val newCues = cueGroup.cues.map { it.text ?: "" }
+        
+                    // Compare the last subtitle added with the new subtitles
+                    newCues.forEach { newCue ->
+                        if (newCue != lastSubtitle) {
+                            // If new subtitle is different from the last one, add it
+                            activeSubtitles.add(newCue)
+        
+                            // If the list has more than 3 items, remove the first two added subtitles (from the front of the list)
+                            if (activeSubtitles.size > 3) {
+                                // Remove the first two items (the ones added first)
+                                activeSubtitles.removeAt(0)
+                                activeSubtitles.removeAt(0)
+                            }
+        
+                            // Update the last subtitle added
+                            lastSubtitle = newCue
+                        }
+                    }
+        
+                    // Join the active subtitles to display them in customSubtitleView
+                    customSubtitleView.text = activeSubtitles.joinToString("\n")
+        
+                    // Hide the default ExoPlayer subtitle view
                     exoSubtitleView.visibility = View.INVISIBLE
                 } else {
                     exoSubtitleView.visibility = View.VISIBLE
