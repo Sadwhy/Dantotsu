@@ -1848,7 +1848,7 @@ private fun applySubtitleStyles(textView: Xubtitle) {
                     customSubtitleView.visibility = View.VISIBLE
         
                     // Collect the new subtitles from the CueGroup
-                    val newCues = cueGroup.cues.map { it.text ?: "" }
+                    val newCues = cueGroup.cues.map { it.text.toString() ?: "" }
         
                     // Compare the last subtitle added with the new subtitles
                     newCues.forEach { newCue ->
@@ -1864,7 +1864,7 @@ private fun applySubtitleStyles(textView: Xubtitle) {
                             }
         
                             // Update the last subtitle added
-                            lastSubtitle = newCue
+                            lastSubtitle = newCue.toString()
                         }
                     }
         
