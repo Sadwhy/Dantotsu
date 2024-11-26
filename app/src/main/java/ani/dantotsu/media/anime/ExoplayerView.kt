@@ -1875,11 +1875,11 @@ private fun applySubtitleStyles(textView: Xubtitle) {
                     newCues.forEach { newCue ->
                         if (newCue != lastSubtitle) {
                             // If the new subtitle is different, add it
-                            activeSubtitles.add(newCue)
+                            activeSubtitles.add(0, newCue)
         
                             // If the list has more than 2 items, remove the first one (the earliest added)
                             if (activeSubtitles.size > 2) {
-                                activeSubtitles.removeAt(0)  // Remove the first subtitle
+                                activeSubtitles.removeAt(activeSubtitles.size -1)  // Remove the first subtitle
                             }
         
                             // Update the last subtitle and position
