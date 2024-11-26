@@ -132,9 +132,9 @@ class Xubtitle @JvmOverloads constructor(
     }
 
     // Apply drop shadow with custom shadow color
-    fun applyDropShadow(color: Int) {
+    fun applyDropShadow(color: Int, subStroke: Float) {
         this.effectColor = color
-        paint.setShadowLayer(8f, 4f, 4f, color)
+        paint.setShadowLayer(subStroke, 4f, 4f, color)
         currentEffect = Effect.DROP_SHADOW
     }
 }
