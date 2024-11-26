@@ -1837,49 +1837,49 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         playerView.player = exoPlayer
 
         exoPlayer.addListener(object : Player.Listener {
-    private var subtitleList = mutableListOf<String>() // Tracks subtitles in the list
-    private var lastSub = "" // Tracks the last subtitle to avoid duplicates
-    private var lastTimestamp = 0L // Tracks the last subtitle's timestamp
-
-    override fun onCues(cues: List<Cue>) {
-        if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
-            customSubtitleView.visibility = View.VISIBLE
-            exoSubtitleView.visibility = View.INVISIBLE
-
-            if (cues.isNotEmpty()) {
-                val newSub = cues.joinToString("\n") { it.text ?: "" }
-                val currentTime = System.currentTimeMillis() // Fully qualified
-
-                if (newSub != lastSub) { // Avoid duplicate subtitles
-                    if (subtitleList.isNotEmpty() &&
-                        (currentTime - lastTimestamp <= 1500)) {
-                        // Merge with the last subtitle if added within 1.5 seconds
-                        subtitleList[subtitleList.size - 1] = "${subtitleList.last()}\n$newSub"
+            private var subtitleList = mutableListOf<String>() // Tracks subtitles in the list
+            private var lastSub = "" // Tracks the last subtitle to avoid duplicates
+            private var lastPosition = 0L // Tracks the last subtitle's playback position
+        
+            override fun onCues(cues: List<Cue>) {
+                if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+                    customSubtitleView.visibility = View.VISIBLE
+                    exoSubtitleView.visibility = View.INVISIBLE
+        
+                    if (cues.isNotEmpty()) {
+                        val newSub = cues.joinToString("\n") { it.text ?: "" }
+                        val currentPosition = exoPlayer.currentPosition // Get the current playback position
+        
+                        if (newSub != lastSub) { // Avoid duplicate subtitles
+                            if (subtitleList.isNotEmpty() &&
+                                (currentPosition - lastPosition <= 1500)) {
+                                // Merge with the last subtitle if added within 1.5 seconds
+                                subtitleList[subtitleList.size - 1] = "${subtitleList.last()}\n$newSub"
+                            } else {
+                                // Otherwise, add as a new subtitle
+                                subtitleList.add(newSub)
+                            }
+        
+                            // Update the last subtitle and playback position
+                            lastSub = newSub
+                            lastPosition = currentPosition
+        
+                            // Clear subtitles if list size exceeds 4
+                            if (subtitleList.size > 4) subtitleList.clear()
+                        }
+        
+                        // Combine subtitles for display
+                        customSubtitleView.text = subtitleList.joinToString("\n")
                     } else {
-                        // Otherwise, add as a new subtitle
-                        subtitleList.add(newSub)
+                        // Reset subtitles if no cues are active
+                        customSubtitleView.text = ""
+                        subtitleList.clear()
+                        lastSub = "" // Reset the last subtitle
+                        lastPosition = 0L // Reset the playback position
                     }
-
-                    // Update the last subtitle and timestamp
-                    lastSub = newSub
-                    lastTimestamp = currentTime
-
-                    // Clear subtitles if list size exceeds 4
-                    if (subtitleList.size > 4) subtitleList.clear()
                 }
-
-                // Combine subtitles for display
-                customSubtitleView.text = subtitleList.joinToString("\n")
-            } else {
-                // Reset subtitles if no cues are active
-                customSubtitleView.text = ""
-                subtitleList.clear()
-                lastSub = "" // Reset the last subtitle
-                lastTimestamp = 0L // Reset the timestamp
             }
-        }
-    }
-})
+        })
 
         applySubtitleStyles(customSubtitleView)
         setupSubFormatting(playerView)
