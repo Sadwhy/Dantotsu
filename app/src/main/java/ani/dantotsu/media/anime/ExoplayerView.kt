@@ -1839,40 +1839,16 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         playerView.player = exoPlayer
 
         exoPlayer.addListener(object : Player.Listener {
-            private val activeCues = mutableListOf<Pair<String, Long>>() // List of cues with their expiration time
-            private var lastSub = "" // Track the last subtitle to avoid duplicates
-        
             override fun onCues(cueGroup: CueGroup) {
                 if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
                     customSubtitleView.visibility = View.VISIBLE
+                    // Join the cues from the CueGroup and display them in customSubtitleView
+                    customSubtitleView.text = cueGroup.cues.joinToString("\n") { it.text ?: "" }
                     exoSubtitleView.visibility = View.INVISIBLE
-        
-                    val currentPosition = exoPlayer.currentPosition * 1000 // Convert to microseconds
-        
-                    // Remove expired cues (where the cue's expiration time has passed)
-                    activeCues.removeAll { (_, expiryTime) -> currentPosition >= expiryTime }
-        
-                    // Add new cues to the activeCues list
-                    cueGroup.cues.forEach { cue ->
-                        val cueText = cue.text?.toString() ?: ""
-                        val cueDurationUs = cue.durationUs // Duration in microseconds, if available
-        
-                        // Calculate the expiry time for the cue: (currentPlayerPosition + cueDurationUs)
-                        val expiryTime = currentPosition + cueDurationUs
-        
-                        // Add the cue only if it's not a duplicate
-                        if (cueText != lastSub) {
-                            activeCues.add(cueText to expiryTime)
-                            lastSub = cueText
-                        }
-                    }
-        
-                    // Combine active cues for display (display them as a string)
-                    customSubtitleView.text = if (activeCues.isNotEmpty()) {
-                        activeCues.joinToString("\n") { it.first } // Combine the cues
-                    } else {
-                        "" // No active cues, clear the view
-                    }
+                } else {
+                    exoSubtitleView.visibility = View.VISIBLE
+                    customSubtitleView.visibility = View.INVISIBLE
+                    customSubtitleView.text = ""
                 }
             }
         })
