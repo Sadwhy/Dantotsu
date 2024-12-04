@@ -1839,70 +1839,50 @@ private fun applySubtitleStyles(textView: Xubtitle) {
         playerView.player = exoPlayer
 
         exoPlayer.addListener(object : Player.Listener {
-            // To store active subtitles, the latest subtitle added, and the position of the last update
             var activeSubtitles = mutableListOf<String>()
             var lastSubtitle: String? = null
-            var lastPosition: Long = 0  // Position of the last subtitle added (in milliseconds)
+            var lastPosition: Long = 0
         
             override fun onCues(cueGroup: CueGroup) {
-                // Check if the user prefers subtitles
                 if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+                    exoSubtitleView.visibility = View.GONE
                     customSubtitleView.visibility = View.VISIBLE
-        
-                    // Collect the new subtitles from the CueGroup
                     val newCues = cueGroup.cues.map { it.text.toString() ?: "" }
-        
-                    // Check if all cues are empty
                     if (newCues.all { it.isEmpty() }) {
-                        // Clear subtitles if all cues are empty
                         customSubtitleView.text = ""
                         activeSubtitles.clear()
                         lastSubtitle = null
                         lastPosition = 0
                         return
                     }
-        
-                    // Get the current player position in milliseconds
                     val currentPosition = exoPlayer.currentPosition
-        
-                    // Check if the new subtitles are added 1.5 seconds after the last update
                     if (lastPosition != 0L && currentPosition - lastPosition > 1500) {
-                        // If more than 1.5 seconds have passed, clear the subtitles and add the new ones
                         activeSubtitles.clear()
                     }
-        
-                    // Compare the new subtitles with the last subtitle added
                     newCues.forEach { newCue ->
                         if (newCue != lastSubtitle) {
-                            // If the new subtitle is different, add it
                             activeSubtitles.add(0, newCue)
-        
-                            // If the list has more than 2 items, remove the first one (the earliest added)
                             if (activeSubtitles.size > 2) {
-                                activeSubtitles.removeAt(activeSubtitles.size -1)  // Remove the first subtitle
+                                activeSubtitles.removeAt(activeSubtitles.size -1)
                             }
-        
-                            // Update the last subtitle and position
                             lastSubtitle = newCue
                             lastPosition = currentPosition
                         }
                     }
-        
-                    // Join the active subtitles and display them in the customTextView
                     customSubtitleView.text = activeSubtitles.joinToString("\n")
-        
-                    // Hide the default ExoPlayer subtitle view
-                    exoSubtitleView.visibility = View.INVISIBLE
                 } else {
-                    // If subtitles are turned off, clear the text and hide the customSubtitleView
                     customSubtitleView.text = ""
-                    customSubtitleView.visibility = View.INVISIBLE
+                    customSubtitleView.visibility = View.GONE
+                    exoSubtitleView.visibility = View.VISIBLE
                 }
             }
         })
 
-        applySubtitleStyles(customSubtitleView)
-        setupSubFormatting(playerView)
+        if (PrefManager.getVal<Boolean>(PrefName.TextviewSubtitles)) {
+          applySubtitleStyles(customSubtitleView)
+        } else {
+          setupSubFormatting(playerView)
+        }
 
         try {
             val rightNow = Calendar.getInstance()
